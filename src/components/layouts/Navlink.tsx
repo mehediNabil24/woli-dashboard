@@ -14,15 +14,26 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 
 export const navLink = [
-  {
-    name: "My Profile",
-    href: "/dashboard",
-    icon: RiDashboardFill,
-  },
+ 
 
   {
-    name: "Order History",
-    href: "/dashboard/order-list",
+    name: "Report",
+    href: "/dashboard/report",
+    icon: LuCalendarDays,
+  },
+  {
+    name: "Scoreboard",
+    href: "/dashboard/scoreboard",
+    icon: LuCalendarDays,
+  },
+  {
+    name: "Add Deal",
+    href: "/dashboard/addDeal",
+    icon: LuCalendarDays,
+  },
+  {
+    name: "Pending Deal",
+    href: "/dashboard/pendingDeal",
     icon: LuCalendarDays,
   },
 
