@@ -82,11 +82,8 @@ export default function ScoreBoard() {
       dataIndex: "totalChargebacks",
       key: "totalChargebacks",
       // Apply class for header and cell styling
-      className: "chargeback-column-style",
-      render: (text: string) => (
-        // Wrap text in a div to center it within the cell
-        <div className="flex items-center justify-center h-full w-full">{text}</div>
-      ),
+      className: "text-gray-700 font-medium",
+      
     },
     {
       title: "Total Sales",

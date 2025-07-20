@@ -3,11 +3,11 @@ import {  FaUsers } from 'react-icons/fa';
 import { FaShop,} from 'react-icons/fa6';
 
 import { GiNewspaper } from 'react-icons/gi';
-import { GoPlus, GoPlusCircle } from 'react-icons/go';
+import { GoPlus} from 'react-icons/go';
 
 
 import { LuCalendarDays } from 'react-icons/lu';
-import {  MdOutlineCategory, MdOutlinePayments } from 'react-icons/md';
+import {   MdOutlinePayments } from 'react-icons/md';
 import { PiNewspaperThin } from 'react-icons/pi';
 import { RiDashboardFill } from 'react-icons/ri';
 
@@ -18,7 +18,7 @@ export const navLink = [
 
   {
     name: "Report",
-    href: "/dashboard/report",
+    href: "/dashboard",
     icon: LuCalendarDays,
   },
   {
@@ -38,8 +38,8 @@ export const navLink = [
   },
 
   {
-    name: "Password Change",
-    href: "/dashboard/password",
+    name: "Profile",
+    href: "/dashboard/profile",
     icon: CiSettings,
   }
  
@@ -52,23 +52,10 @@ export const AdminNavLink = [
     href: "/admin",
     icon: RiDashboardFill,
   },
-  {
-    name: "Category",
-    href: "#",
-    icon: MdOutlineCategory,
-    subItems: [
-      {
-        name: 'Add Category',
-        href: '/admin/add-category',
-        icon: GoPlusCircle,
-      },
-      {
-        name: "Category List",
-        href: "/admin/category-list",
-        icon: MdOutlineCategory,
-      }
-    ]
-
+    {
+    name: "Individual P&L",
+    href: "/admin/individual",
+    icon: LuCalendarDays,
   },
   
   {

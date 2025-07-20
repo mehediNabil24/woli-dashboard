@@ -9,16 +9,18 @@ import { AdminNavLink, navLink } from "../components/layouts/Navlink";
 import AdminProfile from "../components/admin/AdminProfile";
 
 
-import PasswordChange from "../components/password/UserPassword";
 import AdminPasswordChange from "../components/password/adminPassword";
 
 
 import UnderConstruction from "../components/others/underConstructions";
-import ReportPage from "../components/agentDashboard/report/Report";
+
 import AgentRankingList from "../components/agentDashboard/scoreBoard/Scorebaord";
 
 import AddDeal from "../components/agentDashboard/addDeal/AddDeal";
 import PendingDeal from "../components/agentDashboard/pendingDeal/PendaingDeal";
+import ProfilePage from "../components/agentDashboard/agentProfile/AgentProfile";
+import ReportPage from "../components/agentDashboard/report/Report";
+import IndividualPl from "../components/individualPL/IndividualPl";
 
 // ⬇️ Import TokenHandler
 
@@ -35,13 +37,14 @@ const RouterProvider: React.FC = () => {
           {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}
           <Route >
             <Route path="/dashboard" element={<DashboardLayout navLink={navLink} />}>
+             <Route index element={<ReportPage />} />
               
-              <Route path="report" element={<ReportPage />} />
+              
               <Route path="scoreboard" element={<AgentRankingList />} />
               <Route path="addDeal" element={<AddDeal />} />
               <Route path="pendingDeal" element={<PendingDeal />} />
               
-              <Route path="password" element={<PasswordChange />} />
+              <Route path="profile" element={<ProfilePage />} />
               <Route path="my-service" element={<UnderConstruction name='string' />} />
             </Route>
           </Route>
@@ -51,8 +54,8 @@ const RouterProvider: React.FC = () => {
           <Route >
             <Route path="/admin" element={<DashboardLayout navLink={AdminNavLink} />}>
               <Route index element={<AdminDashboard />} />
-              <Route path="add-category" element={<UnderConstruction name="this" />} />
-              <Route path="category-list" element={<UnderConstruction name="this" />} />
+              <Route path="individual" element={<IndividualPl />} />
+              <Route path="individual/:id" element={<UnderConstruction name="this" />} />
               <Route path="add-product" element={<UnderConstruction name="this" />} />
               <Route path="product-list" element={<UnderConstruction name="this" />} />
               <Route path="product-list/:id" element={<UnderConstruction name="this" />} />

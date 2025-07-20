@@ -91,11 +91,8 @@ export default function ReportPage() {
       title: "Chargeback",
       dataIndex: "chargeback",
       key: "chargeback",
-    className: "chargeback-column-style",
-      render: (text: string) => (
-        // Wrap text in a div to center it within the cell
-        <div className="flex items-center justify-center h-full w-full">{text}</div>
-      ),
+    className: "text-gray-700 font-medium",
+    
     },
     {
       title: "Income",
@@ -225,18 +222,7 @@ export default function ReportPage() {
         }
          
         /* Custom styling for Total Chargebacks column */
-        .deals-table .ant-table-thead .ant-table-cell.chargeback-column-style {
-          background-color: #ef4444; /* Tailwind red-500 */
-          color: white;
-          font-weight: 600;
-          text-align: center; /* Center header text */
-        }
-
-        .deals-table .ant-table-tbody .ant-table-cell.chargeback-column-style {
-          background-color: #ef4444; /* Tailwind red-500 */
-          color: white;
-          padding: 0; /* Remove default padding to let inner div control it */
-        }
+ 
 
         
 
