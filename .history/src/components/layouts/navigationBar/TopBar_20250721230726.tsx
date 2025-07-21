@@ -46,7 +46,7 @@ export default function TopBar({
                 {/* User Info */}
                 <div className="flex items-center gap-3 px-3 py-3">
                     {/* Avatar */}
-                  <img src=" " alt="" />
+                  <img src="" alt="" />
                     <div className="flex-1">
                         <div className={`font-medium ${dark ? "text-black" : "text-gray-500"}`}>
                             {user?.name || "John Doe"}
