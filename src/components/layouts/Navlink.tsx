@@ -1,4 +1,4 @@
-import {  CiFolderOn, CiSettings} from 'react-icons/ci';
+import {   CiSettings} from 'react-icons/ci';
 import {  FaUsers } from 'react-icons/fa';
 import { FaShop,} from 'react-icons/fa6';
 
@@ -57,38 +57,54 @@ export const AdminNavLink = [
     href: "/admin/individual",
     icon: LuCalendarDays,
   },
+    {
+    name: "Agent List",
+    href: "/admin/agent",
+    icon: LuCalendarDays,
+  },
   
   {
-    name: "Product",
+    name: "Deals",
     href: "#",
     icon: FaShop,
     subItems: [
 
       {
-        name: "Add Product",
-        href: "/admin/add-product",
+        name: "Add Deal",
+        href: "/admin/add-deal",
         icon: GoPlus,
 
       },
       {
         
-          name: "Product List",
-          href: "/admin/product-list",
+          name: "Deal List",
+          href: "/admin/deal-list",
           icon: FaShop,
       },
-      
       {
-        name:"Add Material",
-        href: '/admin/add-material',
-        icon: GoPlus
+        name: "Deal Request",
+        href: "/admin/deal-request",
+        icon: FaShop,
       },
-      {
-        name:"Material List",
-        href:'/admin/material-list',
-        icon: CiFolderOn,
-      }
+      
+   
 
     ]
+  },
+    {
+    name: "Report",
+    href: "/admin/report",
+    icon: LuCalendarDays,
+  },
+    {
+    name: "Level",
+    href: "/admin/level",
+    icon: LuCalendarDays,
+  },
+    {
+    name: "Closers P&L",
+    href: "/admin/closers",
+    icon: LuCalendarDays,
   },
   // {
   //   name: "Locations",

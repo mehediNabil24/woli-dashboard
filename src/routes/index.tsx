@@ -21,6 +21,15 @@ import PendingDeal from "../components/agentDashboard/pendingDeal/PendaingDeal";
 import ProfilePage from "../components/agentDashboard/agentProfile/AgentProfile";
 import ReportPage from "../components/agentDashboard/report/Report";
 import IndividualPl from "../components/individualPL/IndividualPl";
+import DealListPage from "../components/dealList/DealList";
+import AddDealPage from "../components/dealList/AddDeal";
+import DealRequestPage from "../components/dealList/DealRequest";
+import ReportAdmin from "../components/report/ReportAdmin";
+import LevelPage from "../components/level/Level";
+import ClosersPage from "../components/closers/Closers";
+import AgentListPage from "../components/agent/Agent";
+// import AgentDetailsPage from "../components/agent/AgentDeatils";
+
 
 // ⬇️ Import TokenHandler
 
@@ -55,14 +64,18 @@ const RouterProvider: React.FC = () => {
             <Route path="/admin" element={<DashboardLayout navLink={AdminNavLink} />}>
               <Route index element={<AdminDashboard />} />
               <Route path="individual" element={<IndividualPl />} />
+
               <Route path="individual/:id" element={<UnderConstruction name="this" />} />
-              <Route path="add-product" element={<UnderConstruction name="this" />} />
-              <Route path="product-list" element={<UnderConstruction name="this" />} />
+              <Route path="agent" element={<AgentListPage />} />
+              {/* <Route path="agent/:id" element={<UnderConstruction name='this' />} /> */}
+
+              <Route path="add-deal" element={<AddDealPage />} />
+              <Route path="deal-list" element={<DealListPage />} />
               <Route path="product-list/:id" element={<UnderConstruction name="this" />} />
-              <Route path="add-material" element={<UnderConstruction name='this' />} />
-              <Route path="material-list" element={<UnderConstruction name='this' />} />
-              <Route path="customer-list" element={<UnderConstruction name='this' />} />
-              <Route path="order-list" element={<UnderConstruction name='this' />} />
+              <Route path="deal-request" element={<DealRequestPage />} />
+              <Route path="report" element={<ReportAdmin />} />
+              <Route path="level" element={<LevelPage />} />
+              <Route path="closers" element={<ClosersPage />} />
               <Route path="add-blog" element={<UnderConstruction name='this' />} />
               <Route path="all-blog" element={<UnderConstruction name='this' />} />
               <Route path="blog-details" element={<UnderConstruction name='this' />} />
