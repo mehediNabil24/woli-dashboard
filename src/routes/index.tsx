@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import DashboardLayout from "../components/layouts/Dashboard";
-import SignInPage from "../components/pages/auth/signIn/SignIn";
+import SignInPage from "../components/pages/auth/SignIn";
 import AdminDashboard from "../components/pages/adminDashboard/AdminDashBoard";
 import { AdminNavLink, navLink } from "../components/layouts/Navlink";
 
@@ -22,6 +22,9 @@ import ProfilePage from "../components/agentDashboard/agentProfile/AgentProfile"
 import ReportPage from "../components/agentDashboard/report/Report";
 import IndividualPl from "../components/individualPL/IndividualPl";
 import AgentRequest from "../components/pages/auth/AgentRequest";
+import ForgetPassword from "../components/pages/auth/ForgetPassword";
+import VerificationCode from "../components/pages/auth/VerificationCode";
+import SetNewPassword from "../components/pages/auth/SetNewPassword";
 
 // ⬇️ Import TokenHandler
 
@@ -34,6 +37,9 @@ const RouterProvider: React.FC = () => {
       <Routes>
         <Route path="/" element={<SignInPage />} />
         <Route path="/agent-request" element={<AgentRequest />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/verification-code" element={<VerificationCode />} />
+        <Route path="/set-new-password" element={<SetNewPassword />} />
 
         {/* USER ROLE ROUTES */}
         {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}
