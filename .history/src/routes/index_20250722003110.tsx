@@ -33,7 +33,7 @@ const RouterProvider: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<SignInPage />} />
-        <Route path="/agent-request" element={<AgentRequest />} />
+        <Route path="/AgentRequest" element={<AgentRequest />} />
 
         {/* USER ROLE ROUTES */}
         {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}

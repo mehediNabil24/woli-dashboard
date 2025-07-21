@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+
+body{
+  font
+}
+@theme {
+  --color-primary: #FFA600;
+}

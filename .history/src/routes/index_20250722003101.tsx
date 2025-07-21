@@ -21,7 +21,6 @@ import PendingDeal from "../components/agentDashboard/pendingDeal/PendaingDeal";
 import ProfilePage from "../components/agentDashboard/agentProfile/AgentProfile";
 import ReportPage from "../components/agentDashboard/report/Report";
 import IndividualPl from "../components/individualPL/IndividualPl";
-import AgentRequest from "../components/pages/auth/AgentRequest";
 
 // ⬇️ Import TokenHandler
 
@@ -33,7 +32,7 @@ const RouterProvider: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<SignInPage />} />
-        <Route path="/agent-request" element={<AgentRequest />} />
+        <Route path="/" element={< />} />
 
         {/* USER ROLE ROUTES */}
         {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}
