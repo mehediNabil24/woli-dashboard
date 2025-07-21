@@ -21,10 +21,22 @@ import PendingDeal from "../components/agentDashboard/pendingDeal/PendaingDeal";
 import ProfilePage from "../components/agentDashboard/agentProfile/AgentProfile";
 import ReportPage from "../components/agentDashboard/report/Report";
 import IndividualPl from "../components/individualPL/IndividualPl";
+<<<<<<< HEAD
 import AgentRequest from "../components/pages/auth/AgentRequest";
 import ForgetPassword from "../components/pages/auth/ForgetPassword";
 import VerificationCode from "../components/pages/auth/VerificationCode";
 import SetNewPassword from "../components/pages/auth/SetNewPassword";
+=======
+import DealListPage from "../components/dealList/DealList";
+import AddDealPage from "../components/dealList/AddDeal";
+import DealRequestPage from "../components/dealList/DealRequest";
+import ReportAdmin from "../components/report/ReportAdmin";
+import LevelPage from "../components/level/Level";
+import ClosersPage from "../components/closers/Closers";
+import AgentListPage from "../components/agent/Agent";
+// import AgentDetailsPage from "../components/agent/AgentDeatils";
+
+>>>>>>> cd5fa2fe8ee26add31c2e285a4035677fc5ba284
 
 // ⬇️ Import TokenHandler
 
@@ -41,6 +53,7 @@ const RouterProvider: React.FC = () => {
         <Route path="/verification-code" element={<VerificationCode />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
 
+<<<<<<< HEAD
         {/* USER ROLE ROUTES */}
         {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}
         <Route >
@@ -54,6 +67,34 @@ const RouterProvider: React.FC = () => {
 
             <Route path="profile" element={<ProfilePage />} />
             <Route path="my-service" element={<UnderConstruction name='string' />} />
+=======
+          {/* ADMIN ROLE ROUTES */}
+          {/* element={<PrivateRoute allowedRoles={["ADMIN"]} />} */}
+          <Route >
+            <Route path="/admin" element={<DashboardLayout navLink={AdminNavLink} />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="individual" element={<IndividualPl />} />
+
+              <Route path="individual/:id" element={<UnderConstruction name="this" />} />
+              <Route path="agent" element={<AgentListPage />} />
+              {/* <Route path="agent/:id" element={<UnderConstruction name='this' />} /> */}
+
+              <Route path="add-deal" element={<AddDealPage />} />
+              <Route path="deal-list" element={<DealListPage />} />
+              <Route path="product-list/:id" element={<UnderConstruction name="this" />} />
+              <Route path="deal-request" element={<DealRequestPage />} />
+              <Route path="report" element={<ReportAdmin />} />
+              <Route path="level" element={<LevelPage />} />
+              <Route path="closers" element={<ClosersPage />} />
+              <Route path="add-blog" element={<UnderConstruction name='this' />} />
+              <Route path="all-blog" element={<UnderConstruction name='this' />} />
+              <Route path="blog-details" element={<UnderConstruction name='this' />} />
+              <Route path="reviews" element={<UnderConstruction name='this' />} />
+              <Route path="admin-profile" element={<AdminProfile />} />
+              <Route path="password" element={<AdminPasswordChange />} />
+              
+            </Route>
+>>>>>>> cd5fa2fe8ee26add31c2e285a4035677fc5ba284
           </Route>
         </Route>
 
