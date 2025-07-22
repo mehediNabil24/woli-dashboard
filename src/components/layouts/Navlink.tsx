@@ -124,8 +124,8 @@ export const AdminNavLink = [
   //   ],
   // },
   {
-    name: "Customer List",
-    href: "/admin/customer-list",
+    name: "Sales",
+    href: "/admin/sales",
     icon: FaUsers,
    
   },

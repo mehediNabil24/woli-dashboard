@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import DashboardLayout from "../components/layouts/Dashboard";
-import SignInPage from "../components/pages/signIn/SignIn";
+
 import AdminDashboard from "../components/pages/adminDashboard/AdminDashBoard";
 import { AdminNavLink, navLink } from "../components/layouts/Navlink";
 
@@ -14,7 +14,7 @@ import AdminPasswordChange from "../components/password/adminPassword";
 
 import UnderConstruction from "../components/others/underConstructions";
 
-import AgentRankingList from "../components/agentDashboard/scoreBoard/Scorebaord";
+
 
 import AddDeal from "../components/agentDashboard/addDeal/AddDeal";
 import PendingDeal from "../components/agentDashboard/pendingDeal/PendaingDeal";
@@ -28,7 +28,10 @@ import ReportAdmin from "../components/report/ReportAdmin";
 import LevelPage from "../components/level/Level";
 import ClosersPage from "../components/closers/Closers";
 import AgentListPage from "../components/agent/Agent";
-// import AgentDetailsPage from "../components/agent/AgentDeatils";
+import SignInPage from "../components/pages/auth/SignIn";
+import ScoreBoard from "../components/agentDashboard/scoreBoard/Scorebaord";
+import SalesPage from "../components/sales/Sales";
+
 
 
 // ⬇️ Import TokenHandler
@@ -49,7 +52,7 @@ const RouterProvider: React.FC = () => {
              <Route index element={<ReportPage />} />
               
               
-              <Route path="scoreboard" element={<AgentRankingList />} />
+              <Route path="scoreboard" element={<ScoreBoard />} />
               <Route path="addDeal" element={<AddDeal />} />
               <Route path="pendingDeal" element={<PendingDeal />} />
               
@@ -65,18 +68,18 @@ const RouterProvider: React.FC = () => {
               <Route index element={<AdminDashboard />} />
               <Route path="individual" element={<IndividualPl />} />
 
-              <Route path="individual/:id" element={<UnderConstruction name="this" />} />
+              {/* <Route path="individual/:id" element={<UnderConstruction name="this" />} /> */}
               <Route path="agent" element={<AgentListPage />} />
               {/* <Route path="agent/:id" element={<UnderConstruction name='this' />} /> */}
 
               <Route path="add-deal" element={<AddDealPage />} />
               <Route path="deal-list" element={<DealListPage />} />
-              <Route path="product-list/:id" element={<UnderConstruction name="this" />} />
+              {/* <Route path="product-list/:id" element={<UnderConstruction name="this" />} /> */}
               <Route path="deal-request" element={<DealRequestPage />} />
               <Route path="report" element={<ReportAdmin />} />
               <Route path="level" element={<LevelPage />} />
               <Route path="closers" element={<ClosersPage />} />
-              <Route path="add-blog" element={<UnderConstruction name='this' />} />
+              <Route path="sales" element={<SalesPage />} />
               <Route path="all-blog" element={<UnderConstruction name='this' />} />
               <Route path="blog-details" element={<UnderConstruction name='this' />} />
               <Route path="reviews" element={<UnderConstruction name='this' />} />

@@ -2,13 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { useSignInMutation } from "../../../redux/api/auth/authApi";
 import { setUser } from "../../../redux/features/user/userSlice";
+
 
 // Define Zod schema for validation
 const formSchema = z.object({
@@ -48,7 +49,7 @@ export default function SignInPage() {
     try {
       const response = await signIn({ email: data.email, password: data.password }).unwrap();
       console.log('response', response);
-      
+
       if (response) {
         // Save user data and token in Redux
         dispatch(setUser({ user: response.data.user, token: response.data.accessToken }));
@@ -58,14 +59,14 @@ export default function SignInPage() {
 
         // Show success toast
         toast.success("Login successful, redirecting...");
-        
+
         // Redirect based on user role
         const userRole = response.data.user.role;
         if (userRole === "ADMIN") {
           navigate("/admin");
         } else if (userRole === "USER") {
           navigate("/dashboard");
-        } 
+        }
       }
     } catch (err) {
       toast.error("Login failed, please try again.");
@@ -78,17 +79,17 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
+    <div className="w-full min-h-screen flex items-center justify-center bg-black">
       <div className="lg:min-w-[500px] h-full mx-auto">
         <div className="flex flex-col items-center mb-8">
-          <h1 className="text-2xl font-bold mb-2">Hi, Welcome Back! 👋</h1>
-          <p className="text-gray-500 text-sm">Please Enter Your Email And Password Below!</p>
+          <h1 className="text-4xl font-bold mb-2 text-white uppercase">Welcome Back!</h1>
+          <p className="text-3xl font-bold text-[#FECD1C] uppercase">Sign in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
           {/* Email Input */}
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium block">
+            <label htmlFor="email" className="text-sm font-medium block text-white">
               Email address
             </label>
             <input
@@ -96,7 +97,7 @@ export default function SignInPage() {
               type="email"
               placeholder="georgiayoung@example.com"
               {...register("email")}
-              className={`w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-200"
+              className={`w-full text-white px-3 py-2 border border-white ${errors.email ? "border-red-500" : "border-gray-200"
                 } rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500`}
             />
             {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
@@ -104,7 +105,7 @@ export default function SignInPage() {
 
           {/* Password Input */}
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium block">
+            <label htmlFor="password" className="text-sm font-medium block text-white">
               Password
             </label>
             <div className="relative">
@@ -113,7 +114,7 @@ export default function SignInPage() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••••"
                 {...register("password")}
-                className={`w-full px-3 py-2 border ${errors.password ? "border-red-500" : "border-gray-200"
+                className={`w-full px-3 py-2 text-white border border-white ${errors.password ? "border-red-500" : "border-gray-200"
                   } rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500`}
               />
               <button
@@ -137,16 +138,31 @@ export default function SignInPage() {
             />
             <label htmlFor="rememberMe" className="text-sm text-gray-500">Remember Me</label>
           </div> */}
+          <div>
+            <Link to="/forget-password">
+              <h2 className="mb-6 text-end text-[13px] font-medium text-white cursor-pointer">
+                Forgot Password?
+              </h2>
+            </Link>
 
+          </div>
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full cursor-pointer bg-[#FB923C] text-white py-2 px-4 rounded-md hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="w-full cursor-pointer bg-[#FECD1C] text-black font-semibold py-2 px-4 rounded-md hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             disabled={isLoading}
           >
-            {isLoading ? "Logging in..." : "Log in"}
+            {isLoading ? "Logging in..." : "Login Now"}
           </button>
         </form>
+        {/* Register */}
+        <div className="flex flex-col items-center text-center mt-8 text-sm text-white space-y-2">
+          <h1>Didn’t have any account?</h1>
+          <a href="/agent-request" className="text-yellow-400 hover:underline">
+            Register Now
+          </a>
+        </div>
+
       </div>
     </div>
   );
