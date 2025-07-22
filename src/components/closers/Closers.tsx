@@ -3,6 +3,7 @@
 import { Table, Input, Pagination } from "antd"
 import { SearchOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
+import MetricCard from "../MetricCard/MetricCard"
 
 interface CloserRecord {
   key: string
@@ -25,6 +26,29 @@ const data: CloserRecord[] = Array.from({ length: 10 }, (_, index) => ({
   closer: index % 2 === 0 ? "Terry George" : "Tiana Rosser",
   transferAgent: index % 2 === 0 ? "Terry Schleifer" : "Emerson Siphron",
 }))
+
+    const metrics = [
+        {
+            label: 'Total Expenses',
+            value:"$2126", // Static value from the image
+            circleColor: '#FF8C38', // Orange color from the image
+        },
+        {
+            label: 'Total Chargebacks',
+            value: '$5426', // Static value from the image
+            circleColor: '#FFD700', // Yellow color from the image
+        },
+        {
+            label: 'Total Sales',
+            value: '$13426', // Static value from the image
+            circleColor: '#000000', // Black color from the image
+        },
+        {
+            label: 'NET Total',
+            value: "$1634545", // Static value from the image
+            circleColor: '#00C4B4', // Teal color from the image
+        },
+    ] ;
 
 export default function ClosersPage() {
   const columns: ColumnsType<CloserRecord> = [
@@ -74,6 +98,13 @@ export default function ClosersPage() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
+       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
+                    {/* {isLoading && <p>Loading metrics...</p>} */}
+                    {/* {error && <p>Failed to load statistics.</p>} */}
+                    { metrics.map((metric, index) => (
+                        <MetricCard key={index} {...metric} />
+                    ))}
+                </div>
       <div className="bg-white rounded-lg shadow-sm">
         {/* Header Section */}
         <div className="flex items-center justify-end p-4">

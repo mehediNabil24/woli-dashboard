@@ -1,69 +1,54 @@
-import React from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import type React from "react"
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Area } from "recharts"
 
 type ChartPoint = {
-  day: string;
-  sales: number;
-  orders: number;
-};
+  day: string
+  mailers: number
+  dialers: number
+  miscExpenses: number
+}
 
 interface RevenueChartProps {
-  title?: string;
-  weeklyData: ChartPoint[];
+  weeklyData: ChartPoint[]
 }
 
 const formatCurrency = (value: number) => {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(0)}K`;
+  if (value >= 1000 && value < 30000) {
+    return `${(value / 1000).toFixed(0)}K`
   }
-  return `${value}`;
-};
+  if (value >= 30000) {
+    return `30K+`
+  }
+  return `${value}`
+}
 
-const AdminRevenueChart: React.FC<RevenueChartProps> = ({
-  title = "Weekly Sales",
-  weeklyData,
-}) => {
-  const data = weeklyData?.length > 0 ? weeklyData : [];
-  console.log('weekly test data :', data);
+const AdminRevenueChart: React.FC<RevenueChartProps> = ({ weeklyData }) => {
+  const data = weeklyData?.length > 0 ? weeklyData : []
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-        <div className="flex space-x-2">
-          <span className="text-sm font-medium text-gray-700">
-            <span className="inline-block w-4 h-4 bg-orange-400 rounded-full mr-1"></span>
-            Sales
-          </span>
-          <span className="text-sm font-medium text-gray-700">
-            <span className="inline-block w-4 h-4 border-2 bg-black border-dashed border-black rounded-full mr-1"></span>
-            Orders
-          </span>
-        </div>
+      <div className="flex justify-start items-center mb-4 space-x-4">
+        <span className="text-sm font-medium text-gray-700">
+          <span className="inline-block w-4 h-4 bg-orange-500 rounded-full mr-1"></span>
+          Mailers
+        </span>
+        <span className="text-sm font-medium text-gray-700">
+          <span className="inline-block w-4 h-4 bg-yellow-400 rounded-full mr-1"></span>
+          Dialers
+        </span>
+        <span className="text-sm font-medium text-gray-700">
+          <span className="inline-block w-4 h-4 bg-green-500 rounded-full mr-1"></span>
+          MISC Expenses
+        </span>
       </div>
-
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart
-          data={data}
-          margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
-        >
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis 
-            dataKey="day" 
+          <XAxis dataKey="day" tick={{ fontSize: 12 }} />
+          <YAxis
+            tickFormatter={formatCurrency}
             tick={{ fontSize: 12 }}
-          />
-          <YAxis 
-            tickFormatter={formatCurrency} 
-            tick={{ fontSize: 12 }}
-            domain={[0, 'dataMax + 500']} // Ensures lines are visible even if flat
+            domain={[0, 35000]} // Set a fixed domain to match the image scale
           />
           <Tooltip
             contentStyle={{
@@ -77,52 +62,85 @@ const AdminRevenueChart: React.FC<RevenueChartProps> = ({
               color: "#000",
             }}
             formatter={(value: number, name: string) => {
+              let label = ""
+              if (name === "mailers") label = "Mailers"
+              else if (name === "dialers") label = "Dialers"
+              else if (name === "miscExpenses") label = "MISC Expenses"
               return [
                 <span key="value" className="font-bold">
-                  {name === "sales" ? `$${value}` : value}
+                  ${value}
                 </span>,
-                <span key="label">
-                  {name === "sales" ? "Sales" : "Orders"}
-                </span>,
-              ];
+                <span key="label">{label}</span>,
+              ]
             }}
             labelFormatter={(label) => `Day: ${label}`}
           />
-          {/* Sales Line - Solid Orange */}
-          <Line
+          {/* Mailers Line - Solid Orange with Area */}
+          <Area
             type="monotone"
-            dataKey="sales"
-            name="sales"
-            stroke="#FFA500"
+            dataKey="mailers"
+            stroke="#f97316" // Orange-500
+            fillOpacity={0.3}
+            fill="url(#colorMailers)"
             strokeWidth={2}
-            dot={{ r: 4 }}
-            activeDot={{ 
+            dot={{ r: 0 }}
+            activeDot={{
               r: 6,
-              stroke: '#fff',
+              stroke: "#fff",
               strokeWidth: 2,
-              fill: '#FFA500'
+              fill: "#f97316",
             }}
           />
-          {/* Orders Line - Dashed Black */}
           <Line
             type="monotone"
-            dataKey="orders"
-            name="orders"
-            stroke="#000000"
+            dataKey="mailers"
+            name="mailers"
+            stroke="#f97316" // Orange-500
+            strokeWidth={2}
+            dot={{ r: 0 }}
+            activeDot={{
+              r: 6,
+              stroke: "#fff",
+              strokeWidth: 2,
+              fill: "#f97316",
+            }}
+          />
+          {/* Dialers Line - Dotted Yellow */}
+          <Line
+            type="monotone"
+            dataKey="dialers"
+            name="dialers"
+            stroke="#facc15" // Yellow-400
+            strokeWidth={2}
+            strokeDasharray="3 3"
+            dot={{ r: 0 }}
+            activeDot={{
+              r: 6,
+              stroke: "#fff",
+              strokeWidth: 2,
+              fill: "#facc15",
+            }}
+          />
+          {/* MISC Expenses Line - Dashed Green */}
+          <Line
+            type="monotone"
+            dataKey="miscExpenses"
+            name="miscExpenses"
+            stroke="#22c55e" // Green-500
             strokeWidth={2}
             strokeDasharray="5 5"
-            dot={{ r: 4 }}
-            activeDot={{ 
+            dot={{ r: 0 }}
+            activeDot={{
               r: 6,
-              stroke: '#fff',
+              stroke: "#fff",
               strokeWidth: 2,
-              fill: '#000000'
+              fill: "#22c55e",
             }}
           />
         </LineChart>
       </ResponsiveContainer>
     </div>
-  );
-};
+  )
+}
 
-export default AdminRevenueChart;
+export default AdminRevenueChart

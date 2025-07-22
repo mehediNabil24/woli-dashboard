@@ -3,8 +3,9 @@
 
 
 import BestSelling from "../../bestSelling/BestSelling";
+import IndividualPL from "../../individualPL/IndividualPl";
 import MetricCard from "../../MetricCard/MetricCard";
-import RecentOrderList from "../../recentOrderList/RecentOrderList";
+
 import AdminChartData from "../../revenueChartData/AdminChartData";
 const AdminDashboard = () => {
     // const { data, isLoading, error } = useGetMetricStatsQuery({});
@@ -60,7 +61,7 @@ const AdminDashboard = () => {
             {/* Bookings Table */}
             <div className="grid grid-cols-6 gap-4 mt-4">
                 <div className="col-span-6 shadow-md rounded-xl">
-                    <RecentOrderList />
+                    <IndividualPL />
                 </div>
             </div>
         </div>

@@ -31,6 +31,7 @@ import AgentListPage from "../components/agent/Agent";
 import SignInPage from "../components/pages/auth/SignIn";
 import ScoreBoard from "../components/agentDashboard/scoreBoard/Scorebaord";
 import SalesPage from "../components/sales/Sales";
+import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
 
 
 
@@ -79,6 +80,7 @@ const RouterProvider: React.FC = () => {
               <Route path="report" element={<ReportAdmin />} />
               <Route path="level" element={<LevelPage />} />
               <Route path="closers" element={<ClosersPage />} />
+              <Route path="scoreboard" element={<AdminScoreBoard />} />
               <Route path="sales" element={<SalesPage />} />
               <Route path="all-blog" element={<UnderConstruction name='this' />} />
               <Route path="blog-details" element={<UnderConstruction name='this' />} />

@@ -1,11 +1,12 @@
 "use client"
 
-import type React from "react"
+import React, { useState } from "react"
+import { Input, Button, message, Modal, Upload } from "antd"
+import { EditOutlined, UploadOutlined } from "@ant-design/icons"
+import type { UploadFile } from "antd/es/upload/interface"
+import img1 from "../../assets/Rectangle 41.png"
 
-import { useState } from "react"
-import { Avatar, Input, Button, message } from "antd"
-
-export default function AdminProfile() {
+export default function AdminProfilePage() {
   const [adminInfo, setAdminInfo] = useState({
     name: "Henry Jr.",
     email: "zain.aminoff@email.com",
@@ -19,6 +20,9 @@ export default function AdminProfile() {
     confirmNewPassword: "",
   })
 
+  const [isAvatarModalVisible, setIsAvatarModalVisible] = useState(false)
+  const [avatarFileList, setAvatarFileList] = useState<UploadFile[]>([])
+
   const handleAdminInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setAdminInfo((prev) => ({ ...prev, [name]: value }))
@@ -30,13 +34,11 @@ export default function AdminProfile() {
   }
 
   const handleSaveAdminChanges = () => {
-    // Implement save logic here
     message.success("Admin information saved!")
     console.log("Admin Info Saved:", adminInfo)
   }
 
   const handleUpdatePassword = () => {
-    // Implement password update logic here
     if (passwordInfo.newPassword !== passwordInfo.confirmNewPassword) {
       message.error("New password and confirm password do not match.")
       return
@@ -50,15 +52,54 @@ export default function AdminProfile() {
     })
   }
 
+  const handleAvatarEdit = () => {
+    setIsAvatarModalVisible(true)
+  }
+
+  const handleAvatarUploadChange = ({ fileList }: { fileList: UploadFile[] }) => {
+    setAvatarFileList(fileList.slice(-1)) // Only keep the latest uploaded file
+  }
+
+  const getAvatarUrl = () => {
+    const file = avatarFileList[0]
+    return file?.thumbUrl || file?.url || img1
+  }
+
   return (
-    <div className="p-8 bg-gray-50 min-h-screen flex justify-center items-start">
-      <div className="bg-white rounded-lg shadow-sm p-8 w-full max-w-3xl">
+    <div className="p-4  min-h-screen flex justify-center items-start">
+      <div className="bg-white rounded-lg p-8 w-full max-w-8xl">
         {/* Header Section */}
-        <div className="flex items-center space-x-6 mb-8">
-          <Avatar size={80} src="/placeholder.svg?height=80&width=80" />
+        <div style={{ display: "flex", alignItems: "center", gap: "24px", marginBottom: "32px" }}>
+          <div style={{ position: "relative" }}>
+            <img
+              src={getAvatarUrl()}
+              alt="Admin Avatar"
+              style={{
+          width: "80px",
+          height: "80px",
+          borderRadius: "50%",
+          objectFit: "cover",
+              }}
+            />
+            <div
+              style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          background: "#fff",
+          borderRadius: "50%",
+          padding: "4px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+          cursor: "pointer",
+              }}
+              onClick={handleAvatarEdit}
+            >
+              <EditOutlined style={{ color: "#4B5563", fontSize: "14px" }} />
+            </div>
+          </div>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-800">Henry Jr.</h1>
-            <p className="text-gray-600">zain.aminoff@email.com</p>
+            <h1 style={{ fontSize: "2rem", fontWeight: 600, color: "#1F2937", margin: 0 }}>{adminInfo.name}</h1>
+            <p style={{ color: "#4B5563", margin: 0 }}>{adminInfo.email}</p>
           </div>
         </div>
 
@@ -90,7 +131,7 @@ export default function AdminProfile() {
               <Input
                 id="email"
                 name="email"
-                placeholder="Enter your name"
+                placeholder="Enter your email"
                 size="large"
                 className="custom-input-border"
                 value={adminInfo.email}
@@ -130,7 +171,23 @@ export default function AdminProfile() {
             <Button
               type="primary"
               onClick={handleSaveAdminChanges}
-              className="bg-yellow-400 text-black hover:bg-yellow-500 border-none rounded-md px-8 py-2 h-auto text-lg font-semibold"
+              style={{
+              backgroundColor: "#FACC15", // yellow-400
+              color: "#000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "12px 32px",
+              height: "auto",
+              fontSize: "1.125rem",
+              fontWeight: 600,
+              transition: "background 0.2s",
+              }}
+              onMouseOver={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FDE047" // yellow-500
+              }}
+              onMouseOut={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FACC15"
+              }}
             >
               Save changes
             </Button>
@@ -185,7 +242,23 @@ export default function AdminProfile() {
             <Button
               type="primary"
               onClick={handleUpdatePassword}
-              className="bg-yellow-400 text-black hover:bg-yellow-500 border-none rounded-md px-8 py-2 h-auto text-lg font-semibold"
+              style={{
+              backgroundColor: "#FACC15", // yellow-400
+              color: "#000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "12px 32px",
+              height: "auto",
+              fontSize: "1.125rem",
+              fontWeight: 600,
+              transition: "background 0.2s",
+              }}
+              onMouseOver={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FDE047" // yellow-500
+              }}
+              onMouseOut={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FACC15"
+              }}
             >
               Update password
             </Button>
@@ -193,23 +266,50 @@ export default function AdminProfile() {
         </div>
       </div>
 
+      {/* Avatar Edit Modal */}
+      <Modal
+        title="Edit Avatar"
+        open={isAvatarModalVisible}
+        onCancel={() => setIsAvatarModalVisible(false)}
+        onOk={() => {
+          message.success("Avatar updated successfully!")
+          setIsAvatarModalVisible(false)
+        }}
+        okText="Save"
+      >
+        <Upload
+          listType="picture-card"
+          maxCount={1}
+          fileList={avatarFileList}
+          onChange={handleAvatarUploadChange}
+          beforeUpload={() => false} // Prevent auto upload
+        >
+          {avatarFileList.length >= 1 ? null : (
+            <div>
+              <UploadOutlined />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </div>
+          )}
+        </Upload>
+      </Modal>
+
       <style>{`
         .custom-input-border .ant-input,
         .custom-input-border .ant-input-affix-wrapper,
         .custom-input-border .ant-input-password {
-          border-color: #d9d9d9 !important; /* Light gray border */
+          border-color: #d9d9d9 !important;
           border-radius: 4px;
           padding: 10px 12px;
         }
         .custom-input-border .ant-input:hover,
         .custom-input-border .ant-input-affix-wrapper:hover,
         .custom-input-border .ant-input-password:hover {
-          border-color: #a0a0a0 !important; /* Darker gray on hover */
+          border-color: #a0a0a0 !important;
         }
         .custom-input-border .ant-input:focus,
         .custom-input-border .ant-input-affix-wrapper-focused,
         .custom-input-border .ant-input-password:focus {
-          border-color: #40a9ff !important; /* Ant Design default blue on focus */
+          border-color: #40a9ff !important;
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
         }
       `}</style>
