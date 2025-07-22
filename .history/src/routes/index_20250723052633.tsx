@@ -28,15 +28,20 @@ import ReportAdmin from "../components/report/ReportAdmin";
 import LevelPage from "../components/level/Level";
 import ClosersPage from "../components/closers/Closers";
 import AgentListPage from "../components/agent/Agent";
-import SignInPage from "../components/pages/auth/SignIn";
-import ScoreBoard from "../components/agentDashboard/scoreBoard/Scorebaord";
-import SalesPage from "../components/sales/Sales";
-import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
+<<<<<<< HEAD
 import AgentRequest from "../components/pages/auth/AgentRequest";
 import ForgetPassword from "../components/pages/auth/ForgetPassword";
 import VerificationCode from "../components/pages/auth/VerificationCode";
 import SetNewPassword from "../components/pages/auth/SetNewPassword";
+import SignInPage from "../components/pages/auth/SignIn";
+// import AgentDetailsPage from "../components/agent/AgentDeatils";
+=======
+import SignInPage from "../components/pages/auth/SignIn";
+import ScoreBoard from "../components/agentDashboard/scoreBoard/Scorebaord";
+import SalesPage from "../components/sales/Sales";
+import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
 
+>>>>>>> 03d840e4889ffdebe493785f92c88633cff3d492
 
 
 // ⬇️ Import TokenHandler
@@ -48,8 +53,8 @@ const RouterProvider: React.FC = () => {
       {/* ⬇️ Wrap all Routes inside TokenHandler */}
  
         <Routes>
-          <Route path="/" element={<SignInPage />} />
-          <Route path="/agent-request" element={<AgentRequest />} />
+           <Route path="/" element={<SignInPage />} />
+        <Route path="/agent-request" element={<AgentRequest />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/verification-code" element={<VerificationCode />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
@@ -61,7 +66,7 @@ const RouterProvider: React.FC = () => {
              <Route index element={<ReportPage />} />
               
               
-              <Route path="scoreboard" element={<ScoreBoard />} />
+              <Route path="scoreboard" element={<AgentRankingList />} />
               <Route path="addDeal" element={<AddDeal />} />
               <Route path="pendingDeal" element={<PendingDeal />} />
               

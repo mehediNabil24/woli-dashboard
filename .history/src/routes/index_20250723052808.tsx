@@ -32,10 +32,6 @@ import SignInPage from "../components/pages/auth/SignIn";
 import ScoreBoard from "../components/agentDashboard/scoreBoard/Scorebaord";
 import SalesPage from "../components/sales/Sales";
 import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
-import AgentRequest from "../components/pages/auth/AgentRequest";
-import ForgetPassword from "../components/pages/auth/ForgetPassword";
-import VerificationCode from "../components/pages/auth/VerificationCode";
-import SetNewPassword from "../components/pages/auth/SetNewPassword";
 
 
 
@@ -49,10 +45,6 @@ const RouterProvider: React.FC = () => {
  
         <Routes>
           <Route path="/" element={<SignInPage />} />
-          <Route path="/agent-request" element={<AgentRequest />} />
-        <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/verification-code" element={<VerificationCode />} />
-        <Route path="/set-new-password" element={<SetNewPassword />} />
 
           {/* USER ROLE ROUTES */}
           {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}

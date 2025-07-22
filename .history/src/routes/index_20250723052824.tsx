@@ -34,8 +34,6 @@ import SalesPage from "../components/sales/Sales";
 import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
 import AgentRequest from "../components/pages/auth/AgentRequest";
 import ForgetPassword from "../components/pages/auth/ForgetPassword";
-import VerificationCode from "../components/pages/auth/VerificationCode";
-import SetNewPassword from "../components/pages/auth/SetNewPassword";
 
 
 

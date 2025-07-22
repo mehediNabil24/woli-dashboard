@@ -1,408 +1,318 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
-import { Row, Col, Input, Button, Avatar, Typography, Card, Form, Modal, Upload, message } from "antd"
-import {  UploadOutlined, CloseOutlined } from "@ant-design/icons"
-import { useGetProfileQuery, useUpdateProfileMutation,  } from "../../redux/api/profile/profileApi"
+import React, { useState } from "react"
+import { Input, Button, message, Modal, Upload } from "antd"
+import { EditOutlined, UploadOutlined } from "@ant-design/icons"
 import type { UploadFile } from "antd/es/upload/interface"
-import { toast } from "sonner"
+import img1 from "../../assets/Rectangle 41.png"
 
-const { Text } = Typography
-
-interface ProfileData {
-  name: string
-  email: string
-  contact: string
-  imageUrl: string
-  address: string
-}
-
-const AdminProfile: React.FC = () => {
-
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [form] = Form.useForm()
-  const [fileList, setFileList] = useState<UploadFile[]>([])
-
-  // Using the provided query hook to fetch profile data
-  const { data } = useGetProfileQuery({})
-  const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation()
-
-  console.log('data', updateProfile)
-
-  const profileData: ProfileData = data?.Data || {
-    name: "",
-    email: "",
-    contact: "",
-    imageUrl: "",
+export default function AdminProfilePage() {
+  const [adminInfo, setAdminInfo] = useState({
+    name: "Henry Jr.",
+    email: "zain.aminoff@email.com",
+    phoneNumber: "",
     address: "",
+  })
+
+  const [passwordInfo, setPasswordInfo] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  })
+
+  const [isAvatarModalVisible, setIsAvatarModalVisible] = useState(false)
+  const [avatarFileList, setAvatarFileList] = useState<UploadFile[]>([])
+
+  const handleAdminInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setAdminInfo((prev) => ({ ...prev, [name]: value }))
   }
 
-  const showModal = () => {
-    setIsModalVisible(true)
-    form.setFieldsValue({
-      name: profileData.name,
-      email: profileData.email,
-      contact: profileData.contact,
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setPasswordInfo((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSaveAdminChanges = () => {
+    message.success("Admin information saved!")
+    console.log("Admin Info Saved:", adminInfo)
+  }
+
+  const handleUpdatePassword = () => {
+    if (passwordInfo.newPassword !== passwordInfo.confirmNewPassword) {
+      message.error("New password and confirm password do not match.")
+      return
+    }
+    message.success("Password updated successfully!")
+    console.log("Password Updated:", passwordInfo)
+    setPasswordInfo({
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
     })
   }
 
-  const handleCancel = () => {
-    setIsModalVisible(false)
-    form.resetFields()
-    setFileList([])
+  const handleAvatarEdit = () => {
+    setIsAvatarModalVisible(true)
   }
 
-  const handleUpdate = async () => {
-    try {
-      const values = await form.validateFields();
-  
-      const formData = new FormData();
-  
-      // Append text fields
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("contact", values.contact);
-      formData.append("address", profileData.address);
-  
-      if (fileList.length > 0 && fileList[0].originFileObj) {
-        // Append new image file
-        formData.append("image", fileList[0].originFileObj);
-      } else {
-        // No new image, include existing image URL or some identifier
-        formData.append("imageUrl", profileData.imageUrl); // Use the correct key expected by backend
-      }
-  
-      await updateProfile(formData).unwrap();
-  
-      toast.success("Profile updated successfully!");
-      setIsModalVisible(false);
-      form.resetFields();
-      setFileList([]);
-    } catch (error) {
-      toast.error("Failed to update profile");
-      console.error("Update error:", error);
-    }
-  };
-  
-  
+  const handleAvatarUploadChange = ({ fileList }: { fileList: UploadFile[] }) => {
+    setAvatarFileList(fileList.slice(-1)) // Only keep the latest uploaded file
+  }
 
-  const uploadProps = {
-    beforeUpload: (file: File) => {
-      const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png"
-      if (!isJpgOrPng) {
-        message.error("You can only upload JPG/PNG file!")
-        return false
-      }
-      const isLt25M = file.size / 1024 / 1024 < 25
-      if (!isLt25M) {
-        message.error("Image must smaller than 25MB!")
-        return false
-      }
-      return false // Prevent auto upload
-    },
-    fileList,
-    onChange: ({ fileList: newFileList }: { fileList: UploadFile[] }) => setFileList(newFileList),
-    onRemove: () => setFileList([]),
+  const getAvatarUrl = () => {
+    const file = avatarFileList[0]
+    return file?.thumbUrl || file?.url || img1
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "full", margin: "0 auto" }}>
-      <Card bordered={false} style={{ marginBottom: "30px", boxShadow: "none" }}>
-        <Row align="middle" gutter={16}>
-          <Col>
-            <Avatar src={profileData.imageUrl} size={76} style={{ border: "1px solid #f0f0f0" }} />
-          </Col>
-          <Col>
-            <Text strong style={{ fontSize: "20px", display: "block" }}>
-              {profileData.name}
-            </Text>
-            <Text type="secondary" style={{ fontSize: "16px" }}>
-              {profileData.email}
-            </Text>
-          </Col>
-          <Col flex="auto" style={{ textAlign: "right" }}>
+    <div className="p-4  min-h-screen flex justify-center items-start">
+      <div className="bg-white rounded-lg p-8 w-full max-w-8xl">
+        {/* Header Section */}
+        <div style={{ display: "flex", alignItems: "center", gap: "24px", marginBottom: "32px" }}>
+          <div style={{ position: "relative" }}>
+            <img
+              src={getAvatarUrl()}
+              alt="Admin Avatar"
+              style={{
+          width: "80px",
+          height: "80px",
+          borderRadius: "50%",
+          objectFit: "cover",
+              }}
+            />
+            <div
+              style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          background: "#fff",
+          borderRadius: "50%",
+          padding: "4px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+          cursor: "pointer",
+              }}
+              onClick={handleAvatarEdit}
+            >
+              <EditOutlined style={{ color: "#4B5563", fontSize: "14px" }} />
+            </div>
+          </div>
+          <div>
+            <h1 style={{ fontSize: "2rem", fontWeight: 600, color: "#1F2937", margin: 0 }}>{adminInfo.name}</h1>
+            <p style={{ color: "#4B5563", margin: 0 }}>{adminInfo.email}</p>
+          </div>
+        </div>
+
+        {/* Dotted Line Separator */}
+        <div className="w-full border-t-2 border-dashed border-blue-300 mb-8" />
+
+        {/* Admin Information Section */}
+        <div className="mb-10">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">Admin Information</h2>
+          <div className="grid grid-cols-1 gap-y-6">
+            <div>
+              <label htmlFor="name" className="block text-sm font-bold text-gray-800 mb-1">
+                Name*
+              </label>
+              <Input
+                id="name"
+                name="name"
+                placeholder="Enter your first name"
+                size="large"
+                className="custom-input-border"
+                value={adminInfo.name}
+                onChange={handleAdminInfoChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-bold text-gray-800 mb-1">
+                Email*
+              </label>
+              <Input
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                size="large"
+                className="custom-input-border"
+                value={adminInfo.email}
+                onChange={handleAdminInfoChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-bold text-gray-800 mb-1">
+                Phone number
+              </label>
+              <Input
+                id="phoneNumber"
+                name="phoneNumber"
+                placeholder="+0"
+                size="large"
+                className="custom-input-border"
+                value={adminInfo.phoneNumber}
+                onChange={handleAdminInfoChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="address" className="block text-sm font-bold text-gray-800 mb-1">
+                Address*
+              </label>
+              <Input
+                id="address"
+                name="address"
+                placeholder="Enter your address"
+                size="large"
+                className="custom-input-border"
+                value={adminInfo.address}
+                onChange={handleAdminInfoChange}
+              />
+            </div>
+          </div>
+          <div className="mt-8">
             <Button
               type="primary"
-              onClick={showModal}
+              onClick={handleSaveAdminChanges}
               style={{
-                backgroundColor: "#FB923C",
-                borderColor: "#ff9248",
-                height: "40px",
-                width: "120px",
-                fontSize: "14px",
+              backgroundColor: "#FACC15", // yellow-400
+              color: "#000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "12px 32px",
+              height: "auto",
+              fontSize: "1.125rem",
+              fontWeight: 600,
+              transition: "background 0.2s",
+              }}
+              onMouseOver={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FDE047" // yellow-500
+              }}
+              onMouseOut={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FACC15"
               }}
             >
-              Edit Profile
+              Save changes
             </Button>
-          </Col>
-        </Row>
-      </Card>
+          </div>
+        </div>
 
-      <div style={{ borderTop: "2px solid #f0f0f0", paddingTop: "30px" }}>
-        <Form layout="vertical">
-          <Form.Item label={<span style={{ fontWeight: "normal", fontSize: "20px" }}>Admin Name</span>}>
-            <Input
-              value={profileData.name}
+        {/* Change Password Section */}
+        <div>
+          <h2 className="text-xl font-bold text-gray-800 mb-6">Change Password</h2>
+          <div className="grid grid-cols-1 gap-y-6">
+            <div>
+              <label htmlFor="currentPassword" className="block text-sm font-bold text-gray-800 mb-1">
+                Current Password
+              </label>
+              <Input.Password
+                id="currentPassword"
+                name="currentPassword"
+                size="large"
+                className="custom-input-border"
+                value={passwordInfo.currentPassword}
+                onChange={handlePasswordChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="newPassword" className="block text-sm font-bold text-gray-800 mb-1">
+                New Password
+              </label>
+              <Input.Password
+                id="newPassword"
+                name="newPassword"
+                size="large"
+                className="custom-input-border"
+                value={passwordInfo.newPassword}
+                onChange={handlePasswordChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="confirmNewPassword" className="block text-sm font-bold text-gray-800 mb-1">
+                Confirm new Password
+              </label>
+              <Input.Password
+                id="confirmNewPassword"
+                name="confirmNewPassword"
+                size="large"
+                className="custom-input-border"
+                value={passwordInfo.confirmNewPassword}
+                onChange={handlePasswordChange}
+              />
+            </div>
+          </div>
+          <div className="mt-8">
+            <Button
+              type="primary"
+              onClick={handleUpdatePassword}
               style={{
-                height: "40px",
-                borderRadius: "4px",
-                borderColor: "#FB923C",
+              backgroundColor: "#FACC15", // yellow-400
+              color: "#000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "12px 32px",
+              height: "auto",
+              fontSize: "1.125rem",
+              fontWeight: 600,
+              transition: "background 0.2s",
               }}
-              readOnly
-            />
-          </Form.Item>
-
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item label={<span style={{ fontWeight: "normal", fontSize: "20px" }}>Email</span>}>
-                <Input
-                  value={profileData.email}
-                  style={{
-                    height: "40px",
-                    borderRadius: "4px",
-                    borderColor: "#FB923C",
-                  }}
-                  readOnly
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label={<span style={{ fontWeight: "normal", fontSize: "20px" }}>Contact Number</span>}>
-                <Input
-                  value={profileData.contact}
-                  style={{
-                    height: "40px",
-                    borderRadius: "4px",
-                    borderColor: "#FB923C",
-                  }}
-                  readOnly
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          {/* <div style={{ borderTop: "2px solid #f0f0f0", paddingTop: "20px", paddingBottom: "80px" }}>
-            <Form.Item label={<span style={{ fontWeight: "normal", fontSize: "20px " }}>Password</span>}>
-              <Row gutter={16}>
-                <Col flex="auto">
-                  <Input.Password
-                    placeholder="••••••"
-                    visibilityToggle={{
-                      visible: passwordVisible,
-                      onVisibleChange: setPasswordVisible,
-                    }}
-                    iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                    style={{
-                      height: "40px",
-                      borderRadius: "4px",
-                      borderColor: "#ff9248",
-                    }}
-                    readOnly
-                  />
-                </Col>
-                <Col>
-                  <Button
-                    type="primary"
-                    style={{
-                      backgroundColor: "#ff9248",
-                      borderColor: "#ff9248",
-                      height: "40px",
-                      width: "120px",
-                      fontSize: "14px",
-                    }}
-                  >
-                    Change
-                  </Button>
-                </Col>
-              </Row>
-            </Form.Item>
-          </div> */}
-        </Form>
+              onMouseOver={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FDE047" // yellow-500
+              }}
+              onMouseOut={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FACC15"
+              }}
+            >
+              Update password
+            </Button>
+          </div>
+        </div>
       </div>
 
-      {/* Edit Profile Modal */}
+      {/* Avatar Edit Modal */}
       <Modal
-        title={
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingRight: "24px",
-            }}
-          >
-            <span style={{ color: "#FB923C", fontSize: "18px", fontWeight: "normal" }}>Edit Profile</span>
-            <CloseOutlined onClick={handleCancel} style={{ color: "#ff9248", fontSize: "16px", cursor: "pointer" }} />
-          </div>
-        }
-        open={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-        closable={false}
-        width={600}
-        styles={{
-          header: {
-            borderBottom: "none",
-            paddingBottom: "16px",
-          },
+        title="Edit Avatar"
+        open={isAvatarModalVisible}
+        onCancel={() => setIsAvatarModalVisible(false)}
+        onOk={() => {
+          message.success("Avatar updated successfully!")
+          setIsAvatarModalVisible(false)
         }}
+        okText="Save"
       >
-        <Form form={form} layout="vertical" style={{ marginTop: "20px" }}>
-          <Form.Item
-            label={<span style={{ fontSize: "16px", fontWeight: "normal", color: "#000" }}>Name</span>}
-            name="name"
-            rules={[{ required: true, message: "Please input your name!" }]}
-          >
-            <Input
-              placeholder="Name"
-              style={{
-                height: "45px",
-                borderRadius: "4px",
-                borderColor: "#FB923C",
-                fontSize: "14px",
-              }}
-            />
-          </Form.Item>
-
-          <Form.Item label={<span style={{ fontSize: "16px", fontWeight: "normal", color: "#000" }}>Image</span>}>
-            <Upload.Dragger
-              {...uploadProps}
-              style={{
-                borderColor: "#FB923C",
-                borderRadius: "4px",
-                backgroundColor: "#fafafa",
-                padding: "40px 20px",
-              }}
-            >
-              <div style={{ textAlign: "center" }}>
-                <UploadOutlined style={{ fontSize: "24px", color: "#666", marginBottom: "8px" }} />
-                <div style={{ fontSize: "16px", color: "#000", marginBottom: "4px" }}>Drop file or browse</div>
-                <div style={{ fontSize: "12px", color: "#999", marginBottom: "16px" }}>
-                  Format: .jpeg, .png & Max file size: 25 MB
-                </div>
-                <Button
-                  style={{
-                    backgroundColor: "#FB923C",
-                    borderColor: "#ff9248",
-                    color: "white",
-                    fontSize: "12px",
-                    height: "32px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                  }}
-                >
-                  Browse Files
-                </Button>
-              </div>
-            </Upload.Dragger>
-
-            {fileList.length > 0 && (
-              <div style={{ marginTop: "16px" }}>
-                <div
-                  style={{
-                    position: "relative",
-                    display: "inline-block",
-                    width: "120px",
-                    height: "80px",
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    src={URL.createObjectURL(fileList[0].originFileObj as File) || "/placeholder.svg"}
-                    alt="preview"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                  <CloseOutlined
-                    onClick={() => setFileList([])}
-                    style={{
-                      position: "absolute",
-                      top: "4px",
-                      right: "4px",
-                      color: "#ff9248",
-                      backgroundColor: "white",
-                      borderRadius: "50%",
-                      padding: "2px",
-                      fontSize: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-          </Form.Item>
-
-          <Form.Item
-            label={<span style={{ fontSize: "16px", fontWeight: "normal", color: "#000" }}>Email</span>}
-            name="email"
-            rules={[
-              { required: true, message: "Please input your email!" },
-              { type: "email", message: "Please enter a valid email!" },
-            ]}
-          >
-            <Input
-              placeholder="admin@email.com"
-              style={{
-                height: "45px",
-                borderRadius: "4px",
-                borderColor: "#FB923C",
-                fontSize: "14px",
-              }}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label={<span style={{ fontSize: "16px", fontWeight: "normal", color: "#000" }}>Contact Number</span>}
-            name="contact"
-            rules={[{ required: true, message: "Please input your contact number!" }]}
-          >
-            <Input
-              placeholder="0123456789"
-              style={{
-                height: "45px",
-                borderRadius: "4px",
-                borderColor: "#FB923C",
-                fontSize: "14px",
-                marginBottom: "40px",
-              }}
-            />
-          </Form.Item>
-
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "40px" }}>
-            <Button
-              onClick={handleCancel}
-              style={{
-                height: "45px",
-                width: "120px",
-                borderColor: "#ff9248",
-                color: "#ff9248",
-                fontSize: "14px",
-                fontWeight: "normal",
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="primary"
-              onClick={handleUpdate}
-              loading={isUpdating}
-              style={{
-                backgroundColor: "#FB923C",
-                borderColor: "#ff9248",
-                height: "45px",
-                width: "140px",
-                fontSize: "14px",
-                fontWeight: "normal",
-              }}
-            >
-              Update Profile
-            </Button>
-          </div>
-        </Form>
+        <Upload
+          listType="picture-card"
+          maxCount={1}
+          fileList={avatarFileList}
+          onChange={handleAvatarUploadChange}
+          beforeUpload={() => false} // Prevent auto upload
+        >
+          {avatarFileList.length >= 1 ? null : (
+            <div>
+              <UploadOutlined />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </div>
+          )}
+        </Upload>
       </Modal>
+
+      <style>{`
+        .custom-input-border .ant-input,
+        .custom-input-border .ant-input-affix-wrapper,
+        .custom-input-border .ant-input-password {
+          border-color: #d9d9d9 !important;
+          border-radius: 4px;
+          padding: 10px 12px;
+        }
+        .custom-input-border .ant-input:hover,
+        .custom-input-border .ant-input-affix-wrapper:hover,
+        .custom-input-border .ant-input-password:hover {
+          border-color: #a0a0a0 !important;
+        }
+        .custom-input-border .ant-input:focus,
+        .custom-input-border .ant-input-affix-wrapper-focused,
+        .custom-input-border .ant-input-password:focus {
+          border-color: #40a9ff !important;
+          box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+        }
+      `}</style>
     </div>
   )
 }
-
-export default AdminProfile

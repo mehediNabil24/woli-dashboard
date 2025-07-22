@@ -1,14 +1,13 @@
 import {   CiSettings} from 'react-icons/ci';
-import {  FaUsers } from 'react-icons/fa';
+
 import { FaShop,} from 'react-icons/fa6';
 
-import { GiNewspaper } from 'react-icons/gi';
+
 import { GoPlus} from 'react-icons/go';
 
 
 import { LuCalendarDays } from 'react-icons/lu';
-import {   MdOutlinePayments } from 'react-icons/md';
-import { PiNewspaperThin } from 'react-icons/pi';
+
 import { RiDashboardFill } from 'react-icons/ri';
 
 
@@ -97,6 +96,11 @@ export const AdminNavLink = [
     icon: LuCalendarDays,
   },
     {
+    name: "Scoreboard",
+    href: "/admin/scoreboard",
+    icon: LuCalendarDays,
+  },
+    {
     name: "Level",
     href: "/admin/level",
     icon: LuCalendarDays,
@@ -123,31 +127,7 @@ export const AdminNavLink = [
   //     },
   //   ],
   // },
-  {
-    name: "Customer List",
-    href: "/admin/customer-list",
-    icon: FaUsers,
-   
-  },
-  {
-    name:"Orders",
-    href: "/admin/order-list",
-    icon: MdOutlinePayments
-  },
-  {
-    name: "Blog",
-    href: "#",
-    icon: PiNewspaperThin,
-    subItems: [
-      { name: "Add Blogs", href: "/admin/add-blog", icon: GoPlus },
-      { name: "All Blogs", href: "/admin/all-blog", icon: GiNewspaper },
-    ],
-  },
-  {
-    name: "Review",
-    href: "/admin/reviews",
-    icon: FaUsers,
-  },
+ 
   // {
   //   name:"Shop Payment",
   //   href: "/admin/shop-payment",
@@ -158,11 +138,7 @@ export const AdminNavLink = [
     href: "/admin/admin-profile",
     icon: CiSettings
   },
-  {
-    name: "Password Change",
-    href: "/admin/password",
-    icon: CiSettings,
-  },
+
 
   
 ];
