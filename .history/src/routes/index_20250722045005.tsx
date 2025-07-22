@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import DashboardLayout from "../components/layouts/Dashboard";
-
+import SignInPage from "../components/pages/signIn/SignIn";
 import AdminDashboard from "../components/pages/adminDashboard/AdminDashBoard";
 import { AdminNavLink, navLink } from "../components/layouts/Navlink";
 
@@ -28,11 +28,6 @@ import ReportAdmin from "../components/report/ReportAdmin";
 import LevelPage from "../components/level/Level";
 import ClosersPage from "../components/closers/Closers";
 import AgentListPage from "../components/agent/Agent";
-import AgentRequest from "../components/pages/auth/AgentRequest";
-import ForgetPassword from "../components/pages/auth/ForgetPassword";
-import VerificationCode from "../components/pages/auth/VerificationCode";
-import SetNewPassword from "../components/pages/auth/SetNewPassword";
-import SignInPage from "../components/pages/auth/SignIn";
 // import AgentDetailsPage from "../components/agent/AgentDeatils";
 
 
@@ -45,11 +40,7 @@ const RouterProvider: React.FC = () => {
       {/* ⬇️ Wrap all Routes inside TokenHandler */}
  
         <Routes>
-           <Route path="/" element={<SignInPage />} />
-        <Route path="/agent-request" element={<AgentRequest />} />
-        <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/verification-code" element={<VerificationCode />} />
-        <Route path="/set-new-password" element={<SetNewPassword />} />
+          <Route path="/" element={<SignInPage />} />
 
           {/* USER ROLE ROUTES */}
           {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}

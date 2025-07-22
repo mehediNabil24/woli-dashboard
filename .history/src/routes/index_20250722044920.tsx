@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import DashboardLayout from "../components/layouts/Dashboard";
-
+import SignInPage from "../components/pages/auth/SignIn";
 import AdminDashboard from "../components/pages/adminDashboard/AdminDashBoard";
 import { AdminNavLink, navLink } from "../components/layouts/Navlink";
 
@@ -28,11 +28,6 @@ import ReportAdmin from "../components/report/ReportAdmin";
 import LevelPage from "../components/level/Level";
 import ClosersPage from "../components/closers/Closers";
 import AgentListPage from "../components/agent/Agent";
-import AgentRequest from "../components/pages/auth/AgentRequest";
-import ForgetPassword from "../components/pages/auth/ForgetPassword";
-import VerificationCode from "../components/pages/auth/VerificationCode";
-import SetNewPassword from "../components/pages/auth/SetNewPassword";
-import SignInPage from "../components/pages/auth/SignIn";
 // import AgentDetailsPage from "../components/agent/AgentDeatils";
 
 
@@ -43,29 +38,13 @@ const RouterProvider: React.FC = () => {
   return (
     <Router>
       {/* ⬇️ Wrap all Routes inside TokenHandler */}
- 
-        <Routes>
-           <Route path="/" element={<SignInPage />} />
+
+      <Routes>
+        <Route path="/" element={<SignInPage />} />
         <Route path="/agent-request" element={<AgentRequest />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/verification-code" element={<VerificationCode />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
-
-          {/* USER ROLE ROUTES */}
-          {/* element={<PrivateRoute allowedRoles={["USER"]} />} */}
-          <Route >
-            <Route path="/dashboard" element={<DashboardLayout navLink={navLink} />}>
-             <Route index element={<ReportPage />} />
-              
-              
-              <Route path="scoreboard" element={<AgentRankingList />} />
-              <Route path="addDeal" element={<AddDeal />} />
-              <Route path="pendingDeal" element={<PendingDeal />} />
-              
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="my-service" element={<UnderConstruction name='string' />} />
-            </Route>
-          </Route>
 
           {/* ADMIN ROLE ROUTES */}
           {/* element={<PrivateRoute allowedRoles={["ADMIN"]} />} */}
@@ -94,8 +73,33 @@ const RouterProvider: React.FC = () => {
               
             </Route>
           </Route>
-        </Routes>
-     
+        </Route>
+
+        {/* ADMIN ROLE ROUTES */}
+        {/* element={<PrivateRoute allowedRoles={["ADMIN"]} />} */}
+        <Route >
+          <Route path="/admin" element={<DashboardLayout navLink={AdminNavLink} />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="individual" element={<IndividualPl />} />
+            <Route path="individual/:id" element={<UnderConstruction name="this" />} />
+            <Route path="add-product" element={<UnderConstruction name="this" />} />
+            <Route path="product-list" element={<UnderConstruction name="this" />} />
+            <Route path="product-list/:id" element={<UnderConstruction name="this" />} />
+            <Route path="add-material" element={<UnderConstruction name='this' />} />
+            <Route path="material-list" element={<UnderConstruction name='this' />} />
+            <Route path="customer-list" element={<UnderConstruction name='this' />} />
+            <Route path="order-list" element={<UnderConstruction name='this' />} />
+            <Route path="add-blog" element={<UnderConstruction name='this' />} />
+            <Route path="all-blog" element={<UnderConstruction name='this' />} />
+            <Route path="blog-details" element={<UnderConstruction name='this' />} />
+            <Route path="reviews" element={<UnderConstruction name='this' />} />
+            <Route path="admin-profile" element={<AdminProfile />} />
+            <Route path="password" element={<AdminPasswordChange />} />
+
+          </Route>
+        </Route>
+      </Routes>
+
     </Router>
   );
 };
