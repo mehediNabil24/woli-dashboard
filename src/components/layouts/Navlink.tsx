@@ -1,12 +1,16 @@
+
+import { DollarCircleFilled } from '@ant-design/icons';
+import { File } from 'lucide-react';
 import {   CiSettings} from 'react-icons/ci';
 
-import { FaShop,} from 'react-icons/fa6';
+import {  FaHandHolding, FaHandshake,  FaRankingStar,  FaUser, FaUsers, FaUsersLine,} from 'react-icons/fa6';
 
 
 import { GoPlus} from 'react-icons/go';
 
 
-import { LuCalendarDays } from 'react-icons/lu';
+
+import { MdLeaderboard, MdPending, MdReport } from 'react-icons/md';
 
 import { RiDashboardFill } from 'react-icons/ri';
 
@@ -18,22 +22,22 @@ export const navLink = [
   {
     name: "Report",
     href: "/dashboard",
-    icon: LuCalendarDays,
+    icon: MdReport,
   },
   {
     name: "Scoreboard",
     href: "/dashboard/scoreboard",
-    icon: LuCalendarDays,
+    icon: MdLeaderboard,
   },
   {
     name: "Add Deal",
     href: "/dashboard/addDeal",
-    icon: LuCalendarDays,
+    icon: GoPlus,
   },
   {
     name: "Pending Deal",
     href: "/dashboard/pendingDeal",
-    icon: LuCalendarDays,
+    icon: MdPending,
   },
 
   {
@@ -54,18 +58,18 @@ export const AdminNavLink = [
     {
     name: "Individual P&L",
     href: "/admin/individual",
-    icon: LuCalendarDays,
+    icon: FaHandHolding,
   },
     {
     name: "Agent List",
     href: "/admin/agent",
-    icon: LuCalendarDays,
+    icon: FaUser,
   },
   
   {
     name: "Deals",
     href: "#",
-    icon: FaShop,
+    icon: FaHandshake,
     subItems: [
 
       {
@@ -78,12 +82,12 @@ export const AdminNavLink = [
         
           name: "Deal List",
           href: "/admin/deal-list",
-          icon: FaShop,
+          icon: FaUsers,
       },
       {
         name: "Deal Request",
         href: "/admin/deal-request",
-        icon: FaShop,
+        icon: FaUsersLine,
       },
       
    
@@ -93,22 +97,22 @@ export const AdminNavLink = [
     {
     name: "Report",
     href: "/admin/report",
-    icon: LuCalendarDays,
+    icon: File,
   },
     {
     name: "Scoreboard",
     href: "/admin/scoreboard",
-    icon: LuCalendarDays,
+    icon: MdLeaderboard,
   },
     {
     name: "Level",
     href: "/admin/level",
-    icon: LuCalendarDays,
+    icon: FaRankingStar,
   },
     {
     name: "Closers P&L",
     href: "/admin/closers",
-    icon: LuCalendarDays,
+    icon: DollarCircleFilled,
   },
   // {
   //   name: "Locations",
