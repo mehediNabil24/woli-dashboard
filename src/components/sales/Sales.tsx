@@ -8,6 +8,8 @@ import type { ColumnsType } from "antd/es/table"
 import { Select } from "antd" // Import Select
 import SalesDetailsPage from "./SalesDetails"
 const { Option } = Select // Destructure Option
+import img1 from '../../assets/Rectangle 55.png';
+import img2 from '../../assets/fi_555526.png';
 
 interface SalesRecord {
   key: string
@@ -49,8 +51,8 @@ const initialData: SalesRecord[] = [
     key: "1",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -95,8 +97,8 @@ const initialData: SalesRecord[] = [
     key: "2",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -128,8 +130,8 @@ const initialData: SalesRecord[] = [
     key: "3",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -161,8 +163,8 @@ const initialData: SalesRecord[] = [
     key: "4",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -194,8 +196,8 @@ const initialData: SalesRecord[] = [
     key: "5",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -227,8 +229,8 @@ const initialData: SalesRecord[] = [
     key: "6",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+      avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -260,8 +262,8 @@ const initialData: SalesRecord[] = [
     key: "7",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -293,8 +295,8 @@ const initialData: SalesRecord[] = [
     key: "8",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -326,8 +328,8 @@ const initialData: SalesRecord[] = [
     key: "9",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",
@@ -359,8 +361,8 @@ const initialData: SalesRecord[] = [
     key: "10",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     commissionPaidToAgent: "$1234",
     annualPremiumTotal: "$1234",

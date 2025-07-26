@@ -29,25 +29,21 @@ const data: CloserRecord[] = Array.from({ length: 10 }, (_, index) => ({
 
     const metrics = [
         {
-            label: 'Total Expenses',
+            label: 'Total Cleint',
             value:"$2126", // Static value from the image
             circleColor: '#FF8C38', // Orange color from the image
         },
         {
-            label: 'Total Chargebacks',
+            label: 'Total Annual Premium',
             value: '$5426', // Static value from the image
             circleColor: '#FFD700', // Yellow color from the image
         },
         {
-            label: 'Total Sales',
+            label: 'Total Chargebacks',
             value: '$13426', // Static value from the image
             circleColor: '#000000', // Black color from the image
         },
-        {
-            label: 'NET Total',
-            value: "$1634545", // Static value from the image
-            circleColor: '#00C4B4', // Teal color from the image
-        },
+      
     ] ;
 
 export default function ClosersPage() {
