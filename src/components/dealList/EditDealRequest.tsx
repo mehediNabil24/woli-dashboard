@@ -160,7 +160,18 @@ export default function EditDealRequestModal({
             <Button
               type="primary"
               onClick={handleSubmit}
-              className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-10 py-2 h-auto text-lg font-semibold w-full"
+              style={{
+              backgroundColor: "#000",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "4px 10px",
+              height: "auto",
+              fontSize: "18px",
+              fontWeight: 600,
+              width: "100%",
+              }}
+              className="custom-save-btn"
             >
               Save
             </Button>

@@ -147,10 +147,26 @@ export default function EditDealModal({ visible, onCancel, initialData }: EditDe
             <Button
               type="primary"
               htmlType="submit"
-              className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-10 py-2 h-auto text-lg font-semibold"
+              style={{
+              backgroundColor: "#000",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "12px 40px",
+              fontSize: "18px",
+              fontWeight: 600,
+              height: "auto",
+              transition: "background 0.2s",
+              }}
+              className="update-now-btn"
             >
               Update Now
             </Button>
+            <style>{`
+              .update-now-btn:hover {
+              background-color: #333 !important;
+              }
+            `}</style>
           </div>
         </form>
       </div>

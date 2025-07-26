@@ -117,13 +117,22 @@ export default function DealListPage() {
       <div className="bg-white rounded-lg shadow-sm">
         {/* Header Section */}
         <div className="flex items-center justify-end p-4">
-          <Button
+            <Button
             type="primary"
             icon={<PlusOutlined />}
-            className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-6 py-2 h-auto font-semibold"
-          >
+            style={{
+              backgroundColor: "#000",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "8px 24px",
+              height: "auto",
+              fontWeight: 600,
+            }}
+            className="add-deals-btn"
+            >
             Add Deals
-          </Button>
+            </Button>
         </div>
 
         {/* Table Section */}

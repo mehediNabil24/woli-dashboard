@@ -19,6 +19,10 @@ export default function AddDeal() {
   const [annualPremiumInput, setAnnualPremiumInput] = useState("")
   const [note, setNote] = useState("")
 
+  // NEW STATES
+  const [splitWithAgents, setSplitWithAgents] = useState<string[]>([])
+  const [showSplitAgents, setShowSplitAgents] = useState(false)
+
   // Placeholder data for dropdowns
   const agentNames = ["Emily Carter", "John Doe", "Jane Smith"]
   const states = ["California", "New York", "Texas", "Florida"]
@@ -31,7 +35,6 @@ export default function AddDeal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission logic here
     console.log({
       agentName,
       state,
@@ -42,20 +45,18 @@ export default function AddDeal() {
       applicationNumber,
       annualPremiumInput,
       note,
+      splitWithAgents
     })
     alert("New Deal Created (Check console for data)")
   }
 
   return (
-    <div className=" min-h-screen flex justify-center items-start">
+    <div className="min-h-screen flex justify-center items-start">
       <div className="bg-white rounded-lg shadow-sm p-8 w-full max-w-8xl grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Section: Form Fields */}
+        {/* Left Section */}
         <form onSubmit={handleSubmit} className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-          {/* Agent Name */}
           <div>
-            <label htmlFor="agentName" className="block text-sm font-bold text-gray-800 mb-1">
-              Agent Name*
-            </label>
+            <label htmlFor="agentName" className="block text-sm font-bold text-gray-800 mb-1">Agent Name*</label>
             <Select
               id="agentName"
               placeholder="e.g emily carter"
@@ -65,18 +66,13 @@ export default function AddDeal() {
               value={agentName}
             >
               {agentNames.map((name) => (
-                <Option key={name} value={name}>
-                  {name}
-                </Option>
+                <Option key={name} value={name}>{name}</Option>
               ))}
             </Select>
           </div>
 
-          {/* State */}
           <div>
-            <label htmlFor="state" className="block text-sm font-bold text-gray-800 mb-1">
-              State*
-            </label>
+            <label htmlFor="state" className="block text-sm font-bold text-gray-800 mb-1">State*</label>
             <Select
               id="state"
               placeholder="e.g california"
@@ -86,18 +82,13 @@ export default function AddDeal() {
               value={state}
             >
               {states.map((s) => (
-                <Option key={s} value={s}>
-                  {s}
-                </Option>
+                <Option key={s} value={s}>{s}</Option>
               ))}
             </Select>
           </div>
 
-          {/* Select Company */}
           <div>
-            <label htmlFor="company" className="block text-sm font-bold text-gray-800 mb-1">
-              Select Company*
-            </label>
+            <label htmlFor="company" className="block text-sm font-bold text-gray-800 mb-1">Select Company*</label>
             <Select
               id="company"
               placeholder="Select Company"
@@ -107,18 +98,13 @@ export default function AddDeal() {
               value={company}
             >
               {companies.map((c) => (
-                <Option key={c} value={c}>
-                  {c}
-                </Option>
+                <Option key={c} value={c}>{c}</Option>
               ))}
             </Select>
           </div>
 
-          {/* Product */}
           <div>
-            <label htmlFor="product" className="block text-sm font-bold text-gray-800 mb-1">
-              Product*
-            </label>
+            <label htmlFor="product" className="block text-sm font-bold text-gray-800 mb-1">Product*</label>
             <Select
               id="product"
               placeholder="Select Product"
@@ -128,18 +114,13 @@ export default function AddDeal() {
               value={product}
             >
               {products.map((p) => (
-                <Option key={p} value={p}>
-                  {p}
-                </Option>
+                <Option key={p} value={p}>{p}</Option>
               ))}
             </Select>
           </div>
 
-          {/* Client Name */}
           <div className="col-span-full">
-            <label htmlFor="clientFirstName" className="block text-sm font-bold text-gray-800 mb-1">
-              Client Name*
-            </label>
+            <label htmlFor="clientFirstName" className="block text-sm font-bold text-gray-800 mb-1">Client Name*</label>
             <div className="grid grid-cols-2 gap-4">
               <Input
                 id="clientFirstName"
@@ -160,11 +141,8 @@ export default function AddDeal() {
             </div>
           </div>
 
-          {/* Application Number */}
           <div className="col-span-full">
-            <label htmlFor="applicationNumber" className="block text-sm font-bold text-gray-800 mb-1">
-              Application Number*
-            </label>
+            <label htmlFor="applicationNumber" className="block text-sm font-bold text-gray-800 mb-1">Application Number*</label>
             <Input
               id="applicationNumber"
               placeholder="#Fafl545411"
@@ -175,11 +153,8 @@ export default function AddDeal() {
             />
           </div>
 
-          {/* Annual Premium */}
           <div className="col-span-full">
-            <label htmlFor="annualPremium" className="block text-sm font-bold text-gray-800 mb-1">
-              Annual Premium*
-            </label>
+            <label htmlFor="annualPremium" className="block text-sm font-bold text-gray-800 mb-1">Annual Premium*</label>
             <Input
               id="annualPremium"
               placeholder="e.g $12,548"
@@ -190,11 +165,8 @@ export default function AddDeal() {
             />
           </div>
 
-          {/* Note */}
           <div className="col-span-full">
-            <label htmlFor="note" className="block text-sm font-bold text-gray-800 mb-1">
-              Note*
-            </label>
+            <label htmlFor="note" className="block text-sm font-bold text-gray-800 mb-1">Note*</label>
             <TextArea
               id="note"
               placeholder="Say something here"
@@ -206,12 +178,23 @@ export default function AddDeal() {
             />
           </div>
 
-          {/* Create New Deal Button */}
           <div className="col-span-full flex justify-start mt-6">
             <Button
               type="primary"
               htmlType="submit"
-              className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-10 py-2 h-auto text-lg font-semibold"
+              style={{
+                backgroundColor: "#000",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 40px",
+                fontSize: "1.125rem",
+                fontWeight: 600,
+                height: "auto",
+                transition: "background 0.2s",
+              }}
+              onMouseOver={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#222"}
+              onMouseOut={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000"}
             >
               Create New Deal
             </Button>
@@ -231,9 +214,43 @@ export default function AddDeal() {
             <span className="text-gray-700">Annual Premium</span>
             <span className="font-semibold text-gray-800">{annualPremiumCalculated}</span>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-4">
             <span className="text-gray-700">Monthly Premium</span>
             <span className="font-semibold text-gray-800">{monthlyPremiumCalculated}</span>
+          </div>
+
+          {/* Split With Section */}
+          <div className="mb-4">
+            <label className="text-sm font-bold text-gray-800 block mb-1">Split With</label>
+            <div className="flex items-start gap-2">
+              <Button
+                type="default"
+                style={{
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  borderRadius: "6px",
+                  padding: "0 12px",
+                  fontWeight: "bold",
+                }}
+                onClick={() => setShowSplitAgents(true)}
+              >
+                +
+              </Button>
+              {showSplitAgents && (
+                <Select
+                  mode="multiple"
+                  placeholder="Select agents"
+                  className="w-full custom-select"
+                  size="large"
+                  onChange={(value) => setSplitWithAgents(value)}
+                  value={splitWithAgents}
+                >
+                  {agentNames.map((name) => (
+                    <Option key={name} value={name}>{name}</Option>
+                  ))}
+                </Select>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -242,42 +259,42 @@ export default function AddDeal() {
         .custom-input .ant-input,
         .custom-input .ant-input-affix-wrapper,
         .custom-input .ant-input-textarea {
-          background-color: #f0f0f0 !important; /* Light gray background */
-          border-color: #f0f0f0 !important; /* Match border to background */
+          background-color: #f0f0f0 !important;
+          border-color: #f0f0f0 !important;
           border-radius: 4px;
           padding: 10px 12px;
         }
         .custom-input .ant-input:hover,
         .custom-input .ant-input-affix-wrapper:hover,
         .custom-input .ant-input-textarea:hover {
-          border-color: #d9d9d9 !important; /* Slightly darker gray on hover */
+          border-color: #d9d9d9 !important;
         }
         .custom-input .ant-input:focus,
         .custom-input .ant-input-affix-wrapper-focused,
         .custom-input .ant-input-textarea:focus {
-          border-color: #d9d9d9 !important; /* Keep border consistent on focus */
-          box-shadow: none !important; /* Remove default Ant Design blue shadow */
+          border-color: #d9d9d9 !important;
+          box-shadow: none !important;
         }
 
         .custom-select .ant-select-selector {
-          background-color: #f0f0f0 !important; /* Light gray background */
-          border-color: #f0f0f0 !important; /* Match border to background */
+          background-color: #f0f0f0 !important;
+          border-color: #f0f0f0 !important;
           border-radius: 4px;
-          padding: 6px 12px; /* Adjust padding for select */
-          height: auto !important; /* Allow height to adjust based on content */
+          padding: 6px 12px;
+          height: auto !important;
         }
         .custom-select .ant-select-arrow {
-          color: #6b7280; /* Darker arrow color */
+          color: #6b7280;
         }
         .custom-select .ant-select-selector:hover {
-          border-color: #d9d9d9 !important; /* Slightly darker gray on hover */
+          border-color: #d9d9d9 !important;
         }
         .custom-select.ant-select-focused .ant-select-selector {
-          border-color: #d9d9d9 !important; /* Keep border consistent on focus */
-          box-shadow: none !important; /* Remove default Ant Design blue shadow */
+          border-color: #d9d9d9 !important;
+          box-shadow: none !important;
         }
         .custom-select .ant-select-selection-placeholder {
-          color: #9ca3af; /* Placeholder text color */
+          color: #9ca3af;
         }
       `}</style>
     </div>

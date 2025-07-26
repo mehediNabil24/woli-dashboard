@@ -46,7 +46,7 @@ export default function ScoreBoard() {
       key: "rank",
       className: "text-gray-700 font-medium",
       render: (text: string) => (
-        <div className="inline-flex items-center justify-center w-10 h-7 bg-yellow-400 rounded-md text-black font-semibold text-sm">
+        <div className="inline-flex items-center justify-center w-10 h-7 bg-[#FFFAE8] rounded-md text-black font-semibold text-sm">
           {text}
         </div>
       ),

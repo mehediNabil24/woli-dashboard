@@ -5,6 +5,8 @@ import { Table, Input, Pagination, Dropdown, Menu, Avatar, Select } from "antd"
 import { SearchOutlined, MoreOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
 import AgentDetailsPage from "./AgentDeatils"
+import img1 from '../../assets/Rectangle 55.png';
+import img2 from '../../assets/fi_555526.png';
 
 const { Option } = Select
 
@@ -30,8 +32,8 @@ const initialData: AgentRecord[] = [
     key: "1",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+      avatar: img1,
+      flag: img2,
     },
     email: "wilson.levin@example.com",
     contract: "+0123456789",
@@ -48,8 +50,8 @@ const initialData: AgentRecord[] = [
     key: "2",
     agentProfile: {
       name: "Nolan Botosh",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "nolanbotosh@email.com",
     contract: "+0123456789",
@@ -63,8 +65,8 @@ const initialData: AgentRecord[] = [
     key: "3",
     agentProfile: {
       name: "Zain Baptista",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "zainbaptista@email.com",
     contract: "+0123456789",
@@ -78,8 +80,8 @@ const initialData: AgentRecord[] = [
     key: "4",
     agentProfile: {
       name: "Kaylynn Lipshutz",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "kaylynnlipshutz@email.com",
     contract: "+0123456789",
@@ -93,8 +95,8 @@ const initialData: AgentRecord[] = [
     key: "5",
     agentProfile: {
       name: "Roger Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "rogerlevin@email.com",
     contract: "+0123456789",
@@ -108,8 +110,8 @@ const initialData: AgentRecord[] = [
     key: "6",
     agentProfile: {
       name: "Emerson Culhane",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "emersonculhane@email.com",
     contract: "+0123456789",
@@ -123,8 +125,8 @@ const initialData: AgentRecord[] = [
     key: "7",
     agentProfile: {
       name: "Justin Aminoff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "justinaminoff@email.com",
     contract: "+0123456789",
@@ -138,8 +140,8 @@ const initialData: AgentRecord[] = [
     key: "8",
     agentProfile: {
       name: "Tiana Torff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "tianatorff@email.com",
     contract: "+0123456789",
@@ -153,8 +155,8 @@ const initialData: AgentRecord[] = [
     key: "9",
     agentProfile: {
       name: "Marilyn Workman",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "marilynworkman@email.com",
     contract: "+0123456789",
@@ -168,8 +170,8 @@ const initialData: AgentRecord[] = [
     key: "10",
     agentProfile: {
       name: "Kaylynn Lubin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     email: "kaylynnlubin@email.com",
     contract: "+0123456789",

@@ -4,7 +4,7 @@ import { useState } from "react"
 import {  Input, Button, Upload, message } from "antd"
 import { EditOutlined, StarFilled, DeleteOutlined, PaperClipOutlined, SendOutlined } from "@ant-design/icons"
 
-import image1 from "../../../assets/Rectangle 41.png"
+import image1 from "../../../assets/Rectangle 55.png"
 
 
 
@@ -75,10 +75,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="p-4 flex justify-center items-start">
-      <div className="bg-white rounded-lg  p-8 w-full max-w-8xl">
+    <div className=" flex justify-center items-start">
+      <div className="bg-white rounded-lg  p-4 w-full max-w-8xl">
         {/* Top Section: Profile Summary and Account Info (in one row, two columns) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
           {/* Left Column: Profile Summary */}
           <div className="lg:col-span-1 flex flex-col items-center text-center">
             <div className="relative mb-4">
@@ -99,7 +99,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Right Column: Account Info */}
-          <div className="lg:col-span-2 pl-8 border-l border-gray-200">
+          <div className="lg:col-span-3 pl-8 border-l border-gray-200">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-gray-800">Account Info</h2>
               <Button type="link" onClick={handleEditClick} className="p-0 h-auto">
@@ -141,7 +141,16 @@ export default function ProfilePage() {
           <div className="flex space-x-4 mt-6">
             <Button
               type="primary"
-              className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-6 py-2 h-auto font-semibold"
+              style={{
+              backgroundColor: "#000",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "6px 20px",
+              height: "auto",
+              fontWeight: 600,
+              }}
+              className="save-now-btn"
             >
               Save Now
             </Button>

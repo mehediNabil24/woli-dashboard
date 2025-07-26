@@ -5,6 +5,8 @@ import { Table, Input, Select, Pagination, Avatar, Dropdown, Menu } from "antd"
 import { SearchOutlined, MoreOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
 import AgentDetailsPage from "../agent/AgentDeatils"
+import img1 from '../../assets/Rectangle 55.png';
+import img2 from '../../assets/fi_555526.png';
 
 
 const { Option } = Select
@@ -33,8 +35,8 @@ const data: AgentRecord[] = [
     rank: "1",
     agentProfile: {
       name: "Wilson Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+        avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -49,8 +51,8 @@ const data: AgentRecord[] = [
     rank: "2",
     agentProfile: {
       name: "Nolan Botosh",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -65,8 +67,8 @@ const data: AgentRecord[] = [
     rank: "3",
     agentProfile: {
       name: "Zain Baptista",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -81,8 +83,8 @@ const data: AgentRecord[] = [
     rank: "4",
     agentProfile: {
       name: "Kaylynn Lipshutz",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -97,8 +99,8 @@ const data: AgentRecord[] = [
     rank: "5",
     agentProfile: {
       name: "Roger Levin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -113,8 +115,8 @@ const data: AgentRecord[] = [
     rank: "6",
     agentProfile: {
       name: "Emerson Culhane",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -129,8 +131,8 @@ const data: AgentRecord[] = [
     rank: "7",
     agentProfile: {
       name: "Justin Aminoff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -145,8 +147,8 @@ const data: AgentRecord[] = [
     rank: "8",
     agentProfile: {
       name: "Tiana Torff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -161,8 +163,8 @@ const data: AgentRecord[] = [
     rank: "9",
     agentProfile: {
       name: "Marilyn Workman",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -177,8 +179,8 @@ const data: AgentRecord[] = [
     rank: "10",
     agentProfile: {
       name: "Kaylynn Lubin",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
     },
     totalNetPerformer: "$1234",
     totalSales: "$1234",
@@ -208,7 +210,7 @@ export default function ScoreBoard() {
       key: "rank",
       className: "text-gray-700 font-medium",
       render: (text: string) => (
-        <div className="inline-flex items-center justify-center w-10 h-7 bg-yellow-400 rounded-md text-black font-semibold text-sm">
+        <div className="inline-flex items-center justify-center w-10 h-7 bg-[#FFFAE8] rounded-md text-black font-semibold text-sm">
           {text}
         </div>
       ),

@@ -16,6 +16,7 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 
 
+
 export const navLink = [
  
 
@@ -112,6 +113,11 @@ export const AdminNavLink = [
     {
     name: "Closers P&L",
     href: "/admin/closers",
+    icon: DollarCircleFilled,
+  },
+    {
+    name: "Sales",
+    href: "/admin/sales",
     icon: DollarCircleFilled,
   },
   // {

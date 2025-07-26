@@ -114,7 +114,7 @@ export default function PendingDeal() {
   ]
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="">
       <div className="bg-white rounded-lg shadow-sm">
         {/* Header Section */}
         <div className="flex items-center justify-start p-4">

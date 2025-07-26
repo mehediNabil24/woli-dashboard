@@ -232,7 +232,23 @@ export default function UpdateProfileModal({ visible, onCancel, initialData, onU
             <Button
               type="primary"
               onClick={handleSubmit}
-              className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-10 py-2 h-auto text-lg font-semibold"
+              style={{
+              backgroundColor: "black",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "8px 30px",
+              fontSize: "18px",
+              fontWeight: 600,
+              height: "auto",
+              transition: "background 0.2s",
+              }}
+              onMouseOver={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#333";
+              }}
+              onMouseOut={e => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = "black";
+              }}
             >
               Update Now
             </Button>

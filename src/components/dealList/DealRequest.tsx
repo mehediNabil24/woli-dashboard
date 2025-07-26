@@ -5,6 +5,8 @@ import { Table, Input, Pagination, Dropdown, Menu, Avatar, Select } from "antd"
 import { SearchOutlined, MoreOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
 import EditDealRequestModal from "./EditDealRequest"
+import img1 from '../../assets/Rectangle 55.png';
+import img2 from '../../assets/fi_555526.png';
 
 
 const { Option } = Select
@@ -31,8 +33,9 @@ const initialData: DealRequestRecord[] = [
     key: "1",
     agentProfile: {
       name: "Tiana Torff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+      avatar: img1,
+      flag: img2,
+  
       rank: "Rank Level 1",
       rating: 5,
     },
@@ -47,8 +50,8 @@ const initialData: DealRequestRecord[] = [
     key: "2",
     agentProfile: {
       name: "Tiana Torff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+        avatar: img1,
+      flag: img2,
       rank: "Rank Level 1",
       rating: 4,
     },
@@ -63,8 +66,8 @@ const initialData: DealRequestRecord[] = [
     key: "3",
     agentProfile: {
       name: "Tiana Torff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+       avatar: img1,
+      flag: img2,
       rank: "Rank Level 1",
       rating: 3,
     },
@@ -79,8 +82,8 @@ const initialData: DealRequestRecord[] = [
     key: "4",
     agentProfile: {
       name: "Tiana Torff",
-      avatar: "/placeholder.svg?height=32&width=32",
-      flag: "/placeholder.svg?height=16&width=16",
+        avatar: img1,
+      flag: img2,
       rank: "Rank Level 1",
       rating: 2,
     },
