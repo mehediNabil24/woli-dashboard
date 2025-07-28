@@ -38,7 +38,7 @@ export default function MainNavLink({
 
     // Exact match for dashboard routes
     if (cleanHref === "/dashboard/agent") {
-      return cleanPathname === "/dashboard/agent";
+      return cleanPathname === "/dashboard";
     }
     if (cleanHref === "/admin") {
       return cleanPathname === "/admin";

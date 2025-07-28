@@ -97,27 +97,27 @@ export const AdminNavLink = [
   },
     {
     name: "Report",
-    href: "/dashboard/admin/report",
+    href: "/admin/report",
     icon: File,
   },
     {
     name: "Scoreboard",
-    href: "/dashboard/admin/scoreboard",
+    href: "/admin/scoreboard",
     icon: MdLeaderboard,
   },
     {
     name: "Level",
-    href: "/dashboard/admin/level",
+    href: "/admin/level",
     icon: FaRankingStar,
   },
     {
     name: "Closers P&L",
-    href: "/dashboard/admin/closers",
+    href: "/admin/closers",
     icon: DollarCircleFilled,
   },
     {
     name: "Sales",
-    href: "/dashboard/admin/sales",
+    href: "/admin/sales",
     icon: DollarCircleFilled,
   },
   // {
@@ -145,7 +145,7 @@ export const AdminNavLink = [
   // },
   {
     name:"Profile",
-    href: "/dashboard/admin/admin-profile",
+    href: "/admin/admin-profile",
     icon: CiSettings
   },
 

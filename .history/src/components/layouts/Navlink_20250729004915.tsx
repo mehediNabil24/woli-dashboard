@@ -107,17 +107,17 @@ export const AdminNavLink = [
   },
     {
     name: "Level",
-    href: "/dashboard/admin/level",
+    href: "/admin/level",
     icon: FaRankingStar,
   },
     {
     name: "Closers P&L",
-    href: "/dashboard/admin/closers",
+    href: "/admin/closers",
     icon: DollarCircleFilled,
   },
     {
     name: "Sales",
-    href: "/dashboard/admin/sales",
+    href: "/admin/sales",
     icon: DollarCircleFilled,
   },
   // {
@@ -145,7 +145,7 @@ export const AdminNavLink = [
   // },
   {
     name:"Profile",
-    href: "/dashboard/admin/admin-profile",
+    href: "/admin/admin-profile",
     icon: CiSettings
   },
 

@@ -37,8 +37,8 @@ export default function MainNavLink({
     const cleanPathname = location.pathname.split("?")[0];
 
     // Exact match for dashboard routes
-    if (cleanHref === "/dashboard/agent") {
-      return cleanPathname === "/dashboard/agent";
+    if (cleanHref === "/dashboard/age") {
+      return cleanPathname === "/dashboard";
     }
     if (cleanHref === "/admin") {
       return cleanPathname === "/admin";

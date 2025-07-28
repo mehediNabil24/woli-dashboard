@@ -145,7 +145,7 @@ export const AdminNavLink = [
   // },
   {
     name:"Profile",
-    href: "/dashboard/admin/admin-profile",
+    href: "/admin/admin-profile",
     icon: CiSettings
   },
 
