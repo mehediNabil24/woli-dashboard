@@ -105,11 +105,28 @@ export const AdminNavLink = [
     href: "/dashboard/admin/scoreboard",
     icon: MdLeaderboard,
   },
-    {
+  {
+     name: "Level",
+    href: "#",
+    icon: FaRankingStar,
+    subItems: [
+
+      {
+        name: "Add Level",
+        href: "/dashboard/admin/add-level",
+        icon: GoPlus,
+
+      },
+      {
     name: "Level",
     href: "/dashboard/admin/level",
     icon: FaRankingStar,
   },
+]
+},
+
+  
+    
     {
     name: "Closers P&L",
     href: "/dashboard/admin/closers",

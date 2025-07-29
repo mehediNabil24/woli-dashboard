@@ -10,7 +10,7 @@ import { logout, setAccessToken } from "../features/user/userSlice";
 
 const baseQuery = fetchBaseQuery({
 
-  baseUrl: "http://10.0.20.87:5001/api/v1",
+  baseUrl: "http://10.0.20.121:5001/api/v1",
 
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth?.accessToken;
@@ -59,7 +59,7 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ["Profile", "Admin",],
+  tagTypes: ["Profile", "Admin","Product","Level"],
 
 });
 

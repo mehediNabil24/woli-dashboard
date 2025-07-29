@@ -1,13 +1,15 @@
 "use client"
 
-import type React from "react"
 import { useState, useEffect } from "react"
-import { Modal, Input, Button } from "antd"
+import { Modal, Input, Button, message } from "antd"
+import { useUpdateProductMutation } from "../../redux/features/product/productApi"
+import { toast } from "sonner"
 
 interface EditDealListModalProps {
   visible: boolean
   onCancel: () => void
   initialData?: {
+    key: string // product ID
     company: string
     product: string
     commissions: string
@@ -17,133 +19,129 @@ interface EditDealListModalProps {
   onSave: (data: any) => void
 }
 
-export default function EditDealListModal({ visible, onCancel, initialData, onSave }: EditDealListModalProps) {
-  const [formData, setFormData] = useState<NonNullable<EditDealListModalProps['initialData']>>({
-  company: "",
-  product: "",
-  commissions: "",
-  chargeback: "",
-  applicationNumber: "",
-})
+export default function EditDealListModal({
+  visible,
+  onCancel,
+  initialData,
+  onSave,
+}: EditDealListModalProps) {
+  const [formData, setFormData] = useState<NonNullable<EditDealListModalProps["initialData"]>>({
+    key: "",
+    company: "",
+    product: "",
+    commissions: "",
+    chargeback: "",
+    applicationNumber: "",
+  })
 
+  const [updateProduct, { isLoading }] = useUpdateProductMutation()
 
- useEffect(() => {
-  if (initialData) {
-    setFormData(initialData)
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData)
+    }
+  }, [initialData])
+
+  const handleProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, product: e.target.value }))
   }
-}, [initialData])
 
+  const handleSubmit = async () => {
+    if (!formData.key) {
+      message.error("Invalid product ID.")
+      return
+    }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    try {
+      const res = await updateProduct({
+        id: formData.key,
+        body: { productName: formData.product.trim() }, // ✅ Send body correctly
+      }).unwrap()
 
-  const handleSubmit = () => {
-    onSave(formData)
-    onCancel()
+      if (res?.success) {
+        toast.success("Product name updated successfully!")
+        onSave(formData)
+        onCancel()
+      } else {
+        message.error(res?.message || "Failed to update product name.")
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Update failed.")
+    }
   }
 
   return (
     <Modal
-      title={null} // No title as per image
+      title={null}
       open={visible}
       onCancel={onCancel}
-      footer={null} // Hide default footer buttons
-      width={450} // Adjust width as needed
+      footer={null}
+      width={450}
       centered
-      destroyOnClose // Destroy modal content on close to reset form
+      destroyOnClose
       className="edit-deal-list-modal"
+      confirmLoading={isLoading}
     >
       <div className="p-6">
-        <form className="grid grid-cols-1 gap-y-6">
-          {/* Company */}
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-600 mb-1">
-              Company
-            </label>
-            <Input
-              id="company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              className="custom-input-underline"
-              bordered={false} // Remove default border
-            />
-          </div>
-
-          {/* Product */}
+        <form
+          className="grid grid-cols-1 gap-y-6"
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit()
+          }}
+        >
+          {/* Editable Product Name */}
           <div>
             <label htmlFor="product" className="block text-sm font-medium text-gray-600 mb-1">
-              Product
+              Product Name
             </label>
             <Input
               id="product"
               name="product"
               value={formData.product}
-              onChange={handleChange}
+              onChange={handleProductChange}
               className="custom-input-underline"
               bordered={false}
+              autoFocus
             />
           </div>
 
-          {/* Commissions % and Chargeback */}
+          {/* Non-editable fields */}
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Company</label>
+            <Input value={formData.company} bordered={false} disabled />
+          </div>
+
           <div className="grid grid-cols-2 gap-x-8">
             <div>
-              <label htmlFor="commissions" className="block text-sm font-medium text-green-600 mb-1">
-                Commissions %
-              </label>
-              <Input
-                id="commissions"
-                name="commissions"
-                value={formData.commissions}
-                onChange={handleChange}
-                className="custom-input-underline text-green-600"
-                bordered={false}
-              />
+              <label className="block text-sm font-medium text-green-600 mb-1">Commissions %</label>
+              <Input value={formData.commissions} bordered={false} disabled />
             </div>
             <div>
-              <label htmlFor="chargeback" className="block text-sm font-medium text-red-600 mb-1">
-                Chargeback
-              </label>
-              <Input
-                id="chargeback"
-                name="chargeback"
-                value={formData.chargeback}
-                onChange={handleChange}
-                className="custom-input-underline text-red-600"
-                bordered={false}
-              />
+              <label className="block text-sm font-medium text-red-600 mb-1">Chargeback</label>
+              <Input value={formData.chargeback} bordered={false} disabled />
             </div>
           </div>
 
-          {/* Application Number */}
           <div>
-            <label htmlFor="applicationNumber" className="block text-sm font-medium text-gray-600 mb-1">
-              Application Number
-            </label>
-            <Input
-              id="applicationNumber"
-              name="applicationNumber"
-              value={formData.applicationNumber}
-              onChange={handleChange}
-              className="custom-input-underline"
-              bordered={false}
-            />
+            <label className="block text-sm font-medium text-gray-600 mb-1">Application Number</label>
+            <Input value={formData.applicationNumber} bordered={false} disabled />
           </div>
 
           {/* Save Button */}
           <div className="flex justify-center mt-6">
             <Button
               type="primary"
-              onClick={handleSubmit}
+              htmlType="submit"
               className="bg-black text-white hover:bg-gray-800 border-none rounded-md px-10 py-2 h-auto text-lg font-semibold w-full"
+              loading={isLoading}
             >
               Save
             </Button>
           </div>
         </form>
       </div>
+
       <style>{`
         .edit-deal-list-modal .ant-modal-content {
           padding: 0;
@@ -155,22 +153,16 @@ export default function EditDealListModal({ visible, onCancel, initialData, onSa
           right: 16px;
         }
         .edit-deal-list-modal .custom-input-underline.ant-input-borderless {
-          border-bottom: 1px solid #d9d9d9; /* Light gray underline */
+          border-bottom: 1px solid #d9d9d9;
           padding-left: 0;
           padding-right: 0;
           box-shadow: none !important;
         }
         .edit-deal-list-modal .custom-input-underline.ant-input-borderless:hover {
-          border-bottom-color: #a0a0a0; /* Darker gray on hover */
+          border-bottom-color: #a0a0a0;
         }
         .edit-deal-list-modal .custom-input-underline.ant-input-borderless:focus {
-          border-bottom-color: #000; /* Black on focus */
-        }
-        .edit-deal-list-modal .custom-input-underline.ant-input-borderless.text-green-600 {
-          color: #22c55e !important;
-        }
-        .edit-deal-list-modal .custom-input-underline.ant-input-borderless.text-red-600 {
-          color: #ef4444 !important;
+          border-bottom-color: #000;
         }
       `}</style>
     </Modal>

@@ -36,6 +36,7 @@ import AgentRequest from "../components/pages/auth/AgentRequest";
 import ForgetPassword from "../components/pages/auth/ForgetPassword";
 import VerificationCode from "../components/pages/auth/VerificationCode";
 import SetNewPassword from "../components/pages/auth/SetNewPassword";
+import AddLevelForm from "../components/level/addLevel";
 
 
 
@@ -86,6 +87,7 @@ const RouterProvider: React.FC = () => {
               {/* <Route path="product-list/:id" element={<UnderConstruction name="this" />} /> */}
               <Route path="deal-request" element={<DealRequestPage />} />
               <Route path="report" element={<ReportAdmin />} />
+              <Route path="add-level" element={<AddLevelForm />} />
               <Route path="level" element={<LevelPage />} />
               <Route path="closers" element={<ClosersPage />} />
               <Route path="scoreboard" element={<AdminScoreBoard />} />
