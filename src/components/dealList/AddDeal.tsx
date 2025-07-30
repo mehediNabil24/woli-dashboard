@@ -2,60 +2,88 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Input, Select, Button, message } from "antd"
+import { Input, Select, Button, message, Spin } from "antd"
+import { useAddCompanyMutation, useAddProductMutation, useGetCompanyQuery } from "../../redux/features/product/productApi"
+import { toast } from "sonner"
 
 const { Option } = Select
 
 export default function AddDealPage() {
   const [newCompanyName, setNewCompanyName] = useState("")
-  const [companies, setCompanies] = useState<string[]>(["Company A", "Company B", "Company C"]) // Initial dummy companies
-
   const [selectedCompany, setSelectedCompany] = useState<string | undefined>(undefined)
   const [productName, setProductName] = useState("")
-  const [commissions, setCommissions] = useState("")
   const [applicationNumber, setApplicationNumber] = useState("")
 
-  const handleAddCompany = () => {
-    if (newCompanyName.trim() && !companies.includes(newCompanyName.trim())) {
-      setCompanies((prev) => [...prev, newCompanyName.trim()])
-      setNewCompanyName("")
-      message.success(`Company "${newCompanyName.trim()}" added successfully!`)
-    } else if (companies.includes(newCompanyName.trim())) {
-      message.warning(`Company "${newCompanyName.trim()}" already exists.`)
-    } else {
+  // API hooks
+  const { data, isLoading: loadingCompanies, refetch } = useGetCompanyQuery({})
+  const companiesData = data?.data || []
+  const [addCompany] = useAddCompanyMutation()
+  const [addProduct] = useAddProductMutation()
+
+  const handleAddCompany = async () => {
+    if (!newCompanyName.trim()) {
       message.error("Company name cannot be empty.")
+      return
+    }
+
+    try {
+      const res = await addCompany({ companyName: newCompanyName }).unwrap()
+      if (res?.success) {
+        toast.success(res?.message || `Company "${newCompanyName}" added successfully!`)
+        setNewCompanyName("")
+        await refetch() // Refresh company list
+
+        // ✅ Auto-select the newly added company
+        if (res?.data?.id) {
+          setSelectedCompany(res.data.id) // Keep as string
+        }
+      } else {
+        message.error(res?.message || "Failed to add company.")
+      }
+    } catch (error: any) {
+      const backendMsg = error?.data?.message
+      toast.error(backendMsg || "Failed to add company.")
     }
   }
 
-  const handleSubmitProduct = (e: React.FormEvent) => {
+  const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedCompany || !productName.trim() || !commissions.trim()) {
-      message.error("Please fill in all required fields for Add Products.")
+
+    if (!selectedCompany || !productName.trim()) {
+      message.error("Please fill in required fields.")
       return
     }
-    console.log({
-      company: selectedCompany,
-      product: productName,
-      commissions: commissions,
-      applicationNumber: applicationNumber,
-    })
-    message.success("Product details submitted successfully!")
-    // Reset product form fields
-    setSelectedCompany(undefined)
-    setProductName("")
-    setCommissions("")
-    setApplicationNumber("")
+
+    try {
+      const res = await addProduct({
+        companyId: selectedCompany, // ✅ Keep as string
+        productName,
+        applicationNumber,
+      }).unwrap()
+
+      if (res?.success) {
+        toast.success(res?.message || "Product details submitted successfully!")
+        setSelectedCompany(undefined)
+        setProductName("")
+        setApplicationNumber("")
+      } else {
+        toast.error(res?.message || "Failed to add product.")
+      }
+    } catch (error: any) {
+      const backendMsg = error?.data?.message
+      message.error(backendMsg || "Failed to add product.")
+    }
   }
 
   return (
-    <div className="p-4  min-h-screen flex justify-center items-start">
+    <div className="p-4 min-h-screen flex justify-center items-start">
       <div className="bg-white rounded-lg p-8 w-full max-w-8xl">
         {/* Add Company Section */}
         <div className="mb-8 pb-8 border-b border-gray-200">
           <h2 className="text-lg font-bold text-gray-800 mb-4">Company*</h2>
           <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
             <Input
-              placeholder="e.g. Emily Carter"
+              placeholder="e.g. Apple Inc."
               size="large"
               className="custom-input"
               style={{ flex: 1 }}
@@ -74,8 +102,8 @@ export default function AddDealPage() {
                 fontWeight: 600,
                 height: "auto",
               }}
-              onMouseOver={e => (e.currentTarget.style.backgroundColor = "#1f2937")}
-              onMouseOut={e => (e.currentTarget.style.backgroundColor = "#000")}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#1f2937")}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#000")}
             >
               Add Company
             </Button>
@@ -88,33 +116,31 @@ export default function AddDealPage() {
           <form onSubmit={handleSubmitProduct} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             {/* Company Dropdown */}
             <div>
-              <label htmlFor="productCompany" className="block text-sm font-bold text-gray-800 mb-1">
-                Company*
-              </label>
-              <Select
-                id="productCompany"
-                placeholder="e.g. Emily Carter"
-                className="w-full custom-select"
-                size="large"
-                onChange={(value) => setSelectedCompany(value)}
-                value={selectedCompany}
-              >
-                {companies.map((company) => (
-                  <Option key={company} value={company}>
-                    {company}
-                  </Option>
-                ))}
-              </Select>
+              <label className="block text-sm font-bold text-gray-800 mb-1">Company*</label>
+              {loadingCompanies ? (
+                <Spin />
+              ) : (
+                <Select
+                  placeholder="Select Company"
+                  className="w-full custom-select"
+                  size="large"
+                  onChange={(value) => setSelectedCompany(value)}
+                  value={selectedCompany}
+                >
+                  {companiesData?.map((company: any) => (
+                    <Option key={company.id} value={company.id}>
+                      {company.companyName}
+                    </Option>
+                  ))}
+                </Select>
+              )}
             </div>
 
             {/* Product */}
             <div>
-              <label htmlFor="productName" className="block text-sm font-bold text-gray-800 mb-1">
-                Product*
-              </label>
+              <label className="block text-sm font-bold text-gray-800 mb-1">Product*</label>
               <Input
-                id="productName"
-                placeholder="e.g. Omahan"
+                placeholder="e.g. Apple Watch Series 10"
                 size="large"
                 className="custom-input"
                 value={productName}
@@ -122,29 +148,11 @@ export default function AddDealPage() {
               />
             </div>
 
-            {/* Commissions % */}
-            <div>
-              <label htmlFor="commissions" className="block text-sm font-bold text-gray-800 mb-1">
-                Commissions %*
-              </label>
-              <Input
-                id="commissions"
-                placeholder="e.g. 20%"
-                size="large"
-                className="custom-input"
-                value={commissions}
-                onChange={(e) => setCommissions(e.target.value)}
-              />
-            </div>
-
             {/* Application Number */}
             <div>
-              <label htmlFor="applicationNumber" className="block text-sm font-bold text-gray-800 mb-1">
-                Application Number
-              </label>
+              <label className="block text-sm font-bold text-gray-800 mb-1">Application Number</label>
               <Input
-                id="applicationNumber"
-                placeholder="#Fda121511"
+                placeholder="#AP-AW10-003"
                 size="large"
                 className="custom-input"
                 value={applicationNumber}
@@ -167,8 +175,8 @@ export default function AddDealPage() {
                   fontSize: "18px",
                   height: "auto",
                 }}
-                onMouseOver={e => (e.currentTarget.style.backgroundColor = "#1f2937")}
-                onMouseOut={e => (e.currentTarget.style.backgroundColor = "#000")}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#1f2937")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#000")}
               >
                 Submit
               </Button>
@@ -176,46 +184,6 @@ export default function AddDealPage() {
           </form>
         </div>
       </div>
-
-      <style>{`
-      .custom-input .ant-input,
-      .custom-input .ant-input-affix-wrapper {
-        background-color: #f0f0f0 !important; /* Light gray background */
-        border-color: #f0f0f0 !important; /* Match border to background */
-        border-radius: 4px;
-        padding: 10px 12px;
-      }
-      .custom-input .ant-input:hover,
-      .custom-input .ant-input-affix-wrapper:hover {
-        border-color: #d9d9d9 !important; /* Slightly darker gray on hover */
-      }
-      .custom-input .ant-input:focus,
-      .custom-input .ant-input-affix-wrapper-focused {
-        border-color: #d9d9d9 !important; /* Keep border consistent on focus */
-        box-shadow: none !important; /* Remove default Ant Design blue shadow */
-      }
-
-      .custom-select .ant-select-selector {
-        background-color: #f0f0f0 !important; /* Light gray background */
-        border-color: #f0f0f0 !important; /* Match border to background */
-        border-radius: 4px;
-        padding: 6px 12px; /* Adjust padding for select */
-        height: auto !important; /* Allow height to adjust based on content */
-      }
-      .custom-select .ant-select-arrow {
-        color: #6b7280; /* Darker arrow color */
-      }
-      .custom-select .ant-select-selector:hover {
-        border-color: #d9d9d9 !important; /* Slightly darker gray on hover */
-      }
-      .custom-select.ant-select-focused .ant-select-selector {
-        border-color: #d9d9d9 !important; /* Keep border consistent on focus */
-        box-shadow: none !important; /* Remove default Ant Design blue shadow */
-      }
-      .custom-select .ant-select-selection-placeholder {
-        color: #9ca3af; /* Placeholder text color */
-      }
-    `}</style>
     </div>
   )
 }

@@ -36,6 +36,8 @@ import AgentRequest from "../components/pages/auth/AgentRequest";
 import ForgetPassword from "../components/pages/auth/ForgetPassword";
 import VerificationCode from "../components/pages/auth/VerificationCode";
 import SetNewPassword from "../components/pages/auth/SetNewPassword";
+import AddLevelForm from "../components/level/addLevel";
+import CompanyListPage from "../components/dealList/CompanyList";
 
 
 
@@ -82,10 +84,12 @@ const RouterProvider: React.FC = () => {
               {/* <Route path="agent/:id" element={<UnderConstruction name='this' />} /> */}
 
               <Route path="add-deal" element={<AddDealPage />} />
+              <Route path="company-list" element={<CompanyListPage />} />
               <Route path="deal-list" element={<DealListPage />} />
               {/* <Route path="product-list/:id" element={<UnderConstruction name="this" />} /> */}
               <Route path="deal-request" element={<DealRequestPage />} />
               <Route path="report" element={<ReportAdmin />} />
+              <Route path="add-level" element={<AddLevelForm />} />
               <Route path="level" element={<LevelPage />} />
               <Route path="closers" element={<ClosersPage />} />
               <Route path="scoreboard" element={<AdminScoreBoard />} />

@@ -2,11 +2,16 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { Modal, Input } from "antd"
+import { Modal, Input, message } from "antd"
+import { useUpdateLevelMutation } from "../../redux/features/level/levelApi"
+import { toast } from "sonner"
+
 
 interface RankFormData {
-  rank: string
-  percentage: string
+  key?: string
+  levelName: string
+  levelOrder: number
+  percentage: number
 }
 
 interface EditRankModalProps {
@@ -23,13 +28,21 @@ export default function EditRankModal({
   onSave,
 }: EditRankModalProps) {
   const [formData, setFormData] = useState<RankFormData>({
-    rank: "",
-    percentage: "",
+    levelName: "",
+    levelOrder: 0,
+    percentage: 0,
   })
+
+  const [updateLevel, { isLoading }] = useUpdateLevelMutation()
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData)
+      setFormData({
+        key: initialData.key,
+        levelName: initialData.levelName || "",
+        levelOrder: initialData.levelOrder || 0,
+        percentage: initialData.percentage || 0,
+      })
     }
   }, [initialData])
 
@@ -38,10 +51,37 @@ export default function EditRankModal({
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = () => {
-    onSave(formData)
-    onCancel()
+  const handleSubmit = async () => {
+    if (!formData.levelName || !formData.levelOrder || !formData.percentage) {
+      message.warning("Please fill all fields")
+      return
+    }
+
+    try {
+      const res = await updateLevel({
+        id: formData.key,
+        body: {
+          levelName: formData.levelName,
+          levelOrder: Number(formData.levelOrder),
+          percentage: Number(formData.percentage),
+        },
+      }).unwrap()
+
+      // Show backend success message if available
+      if (res?.message) {
+        toast.success(res.message)
+      } else {
+        message.success("Level updated successfully")
+      }
+      onSave(formData)
+      onCancel()
+    } catch (error: any) {
+      // Show backend error message if available
+      const errMsg = error?.data?.message || "Failed to update level"
+      toast.error(errMsg)
+    }
   }
+
 
   return (
     <Modal
@@ -49,7 +89,7 @@ export default function EditRankModal({
       open={visible}
       onCancel={onCancel}
       footer={null}
-      width={450}
+      width={500}
       centered
       destroyOnClose
       className="edit-rank-modal"
@@ -63,8 +103,23 @@ export default function EditRankModal({
             </label>
             <Input
               id="levelName"
-              name="rank"
-              value={formData.rank}
+              name="levelName"
+              value={formData.levelName}
+              onChange={handleChange}
+              className="custom-input-underline"
+              bordered={false}
+            />
+          </div>
+
+          {/* Level Order */}
+          <div>
+            <label htmlFor="levelOrder" className="block text-sm font-medium text-gray-600 mb-1">
+              Level Order
+            </label>
+            <Input
+              id="levelOrder"
+              name="levelOrder"
+              value={formData.levelOrder}
               onChange={handleChange}
               className="custom-input-underline"
               bordered={false}
@@ -106,11 +161,12 @@ export default function EditRankModal({
                 }
             `}</style>
             <button
-                type="button"
-                onClick={handleSubmit}
-                className="custom-save-btn"
+              type="button"
+              onClick={handleSubmit}
+              className="custom-save-btn"
+              disabled={isLoading}
             >
-                Save
+              {isLoading ? "Saving..." : "Save"}
             </button>
           </div>
         </form>
