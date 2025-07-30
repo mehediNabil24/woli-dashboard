@@ -23,22 +23,6 @@ const dealsApi = baseApi.injectEndpoints({
             }),
             providesTags: ['Deals'],
         }),
-      getMyDeals: builder.query({
-  query: ({ status, page, limit, searchTerm }) => ({
-    url: `/deals/get-my-deals`,
-    method: "GET",
-    params: { 
-      dealStatus: status, 
-      page, 
-      limit, 
-      searchTerm 
-    }
-  }),
-  providesTags: ['Deals'],
-}),
-
-
-
 
 
     }),
@@ -48,8 +32,7 @@ const dealsApi = baseApi.injectEndpoints({
 
 export const {
     useAddDealsMutation,
-    useGetProductQueryQuery,
-    useGetMyDealsQuery
+    useGetProductQueryQuery
 } = dealsApi;
 
 export default dealsApi;

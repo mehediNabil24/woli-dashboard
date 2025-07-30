@@ -194,45 +194,6 @@ export default function PendingDeal() {
             : undefined
         }
       />
-      <style>{`
-        .application-table .ant-table-thead > tr > th {
-          background-color: #f9fafb;
-          border-bottom: 1px solid #e5e7eb;
-          font-weight: 600;
-          color: #374151;
-          padding: 12px 16px;
-        }
-        .application-table .ant-table-tbody > tr > td {
-          border-bottom: 1px solid #e5e7eb;
-          padding: 12px 16px;
-          color: #374151;
-        }
-        .application-table .ant-table-tbody > tr:hover > td {
-          background-color: #f9fafb;
-        }
-        .application-pagination .ant-pagination-item-active {
-          background-color: #fbbf24 !important;
-          border-color: #fbbf24 !important;
-        }
-        .application-pagination .ant-pagination-item-active a {
-          color: #000 !important;
-        }
-        .application-pagination .ant-pagination-prev button,
-        .application-pagination .ant-pagination-next button {
-          border: 1px solid #d1d5db;
-          border-radius: 4px;
-          background-color: white;
-          color: #4b5563;
-        }
-        .application-pagination .ant-pagination-prev button:hover,
-        .application-pagination .ant-pagination-next button:hover {
-          border-color: #9ca3af;
-        }
-        .ant-input-affix-wrapper-focused {
-          border-color: #fbbf24 !important;
-          box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.2) !important;
-        }
-      `}</style>
     </div>
   )
 }

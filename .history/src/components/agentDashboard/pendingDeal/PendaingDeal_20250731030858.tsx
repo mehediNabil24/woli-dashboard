@@ -27,15 +27,11 @@ export default function PendingDeal() {
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
-  // Search state
-  const [searchTerm, setSearchTerm] = useState("")
-
-  // API Call with pagination + search
+  // API Call with pagination
   const { data: dealData, isFetching } = useGetMyDealsQuery({
     status: "PENDING",
     page: currentPage,
-    limit: pageSize,
-    searchTerm: searchTerm || undefined, // যদি খালি থাকে তাহলে পাঠাবে না
+    limit: pageSize
   })
 
   const tableData: ApplicationRecord[] =
@@ -64,11 +60,6 @@ export default function PendingDeal() {
   const handleModalCancel = () => {
     setIsModalVisible(false)
     setEditingRecord(null)
-  }
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value)
-    setCurrentPage(1) // নতুন সার্চে প্রথম পেজে ফিরে যাবে
   }
 
   const columns: ColumnsType<ApplicationRecord> = [
@@ -120,8 +111,6 @@ export default function PendingDeal() {
             <Input
               placeholder="Search by name"
               prefix={<SearchOutlined className="text-gray-400" />}
-              value={searchTerm}
-              onChange={handleSearch}
               className="rounded-full border-gray-300 focus:border-yellow-400 focus:ring-yellow-400"
               size="middle"
             />
@@ -194,6 +183,7 @@ export default function PendingDeal() {
             : undefined
         }
       />
+
       <style>{`
         .application-table .ant-table-thead > tr > th {
           background-color: #f9fafb;

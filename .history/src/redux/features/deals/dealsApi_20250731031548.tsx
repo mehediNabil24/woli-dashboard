@@ -31,7 +31,7 @@ const dealsApi = baseApi.injectEndpoints({
       dealStatus: status, 
       page, 
       limit, 
-      searchTerm 
+      searchTerm // backend এ handle করতে হবে
     }
   }),
   providesTags: ['Deals'],

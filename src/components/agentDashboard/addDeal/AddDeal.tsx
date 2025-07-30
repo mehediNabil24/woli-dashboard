@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -6,10 +7,13 @@ import { Input, Select, Button } from "antd"
 
 const { Option } = Select
 const { TextArea } = Input
-
+import './addDeal.css'
+import { useGetCompanyQuery, } from "../../../redux/features/product/productApi"
+import { useAddDealsMutation, useGetProductQueryQuery } from "../../../redux/features/deals/dealsApi"
+import { toast } from "sonner"
 export default function AddDeal() {
   // State for form fields
-  const [agentName, setAgentName] = useState("")
+
   const [state, setState] = useState("")
   const [company, setCompany] = useState("")
   const [product, setProduct] = useState("")
@@ -18,44 +22,87 @@ export default function AddDeal() {
   const [applicationNumber, setApplicationNumber] = useState("")
   const [annualPremiumInput, setAnnualPremiumInput] = useState("")
   const [note, setNote] = useState("")
-
-  // NEW STATES
-  const [splitWithAgents, setSplitWithAgents] = useState<string[]>([])
-  const [showSplitAgents, setShowSplitAgents] = useState(false)
-
-  // Placeholder data for dropdowns
-  const agentNames = ["Emily Carter", "John Doe", "Jane Smith"]
-  const states = ["California", "New York", "Texas", "Florida"]
-  const companies = ["Xyz", "Abc Corp", "Global Insurers"]
-  const products = ["Omaha", "Product A", "Product B"]
+  // api 
+  const { data } = useGetCompanyQuery({ page: 1, limit: 10 })
+  const companies = data?.data || [];
+  const [addDeals, { isLoading }] = useAddDealsMutation()
+  const { data: productsData } = useGetProductQueryQuery(company)
 
   // Dummy calculation values
-  const annualPremiumCalculated = "$1,25,580.00"
-  const monthlyPremiumCalculated = "$5,80.00"
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log({
-      agentName,
-      state,
-      company,
-      product,
-      clientFirstName,
-      clientLastName,
-      applicationNumber,
-      annualPremiumInput,
-      note,
-      splitWithAgents
-    })
-    alert("New Deal Created (Check console for data)")
-  }
+  const annualPremiumNumber = Number(annualPremiumInput.replace(/[^0-9]/g, ""));
+  const monthlyPremiumCalculated = annualPremiumNumber / 12;
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !product ||
+      !company ||
+      !state ||
+      !clientFirstName ||
+      !clientLastName ||
+      !applicationNumber ||
+      !annualPremiumNumber
+    ) {
+      let missingField = "";
+
+      if (!product) missingField = "product";
+      else if (!company) missingField = "company";
+      else if (!state) missingField = "state";
+      else if (!clientFirstName) missingField = "client first name";
+      else if (!clientLastName) missingField = "client last name";
+      else if (!applicationNumber) missingField = "application number";
+      else if (!annualPremiumNumber) missingField = "annual premium";
+
+      toast.error(`Please provide ${missingField} and fill in all required fields.`);
+      return;
+    }
+
+    try {
+      const dealsData = {
+        state,
+        companyId: company,
+        productId: product,
+        clientFirstName,
+        clientLastName,
+        applicationNumber,
+        annualPremium: parseFloat(annualPremiumNumber.toString()),
+        dealDate: new Date().toISOString(),
+        note
+      };
+
+      const res = await addDeals(dealsData).unwrap();
+      if (res.success) {
+        toast.success(res.message)
+        setState("");
+        setCompany("");
+        setProduct("");
+        setClientFirstName("");
+        setClientLastName("");
+        setApplicationNumber("");
+        setAnnualPremiumInput("");
+        setNote("");
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.data?.message);
+    }
+  };
+
+
+
+
 
   return (
     <div className="min-h-screen flex justify-center items-start">
       <div className="bg-white rounded-lg shadow-sm p-8 w-full max-w-8xl grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Section */}
         <form onSubmit={handleSubmit} className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-          <div>
+          {/* <div>
             <label htmlFor="agentName" className="block text-sm font-bold text-gray-800 mb-1">Agent Name*</label>
             <Select
               id="agentName"
@@ -69,57 +116,62 @@ export default function AddDeal() {
                 <Option key={name} value={name}>{name}</Option>
               ))}
             </Select>
-          </div>
+          </div> */}
 
           <div>
             <label htmlFor="state" className="block text-sm font-bold text-gray-800 mb-1">State*</label>
-            <Select
+            <Input
               id="state"
-              placeholder="e.g california"
-              className="w-full custom-select"
+              placeholder="State"
               size="large"
-              onChange={(value) => setState(value)}
+              className="custom-input"
               value={state}
-            >
-              {states.map((s) => (
-                <Option key={s} value={s}>{s}</Option>
-              ))}
-            </Select>
+              onChange={(e) => setState(e.target.value)}
+            />
           </div>
 
           <div>
-            <label htmlFor="company" className="block text-sm font-bold text-gray-800 mb-1">Select Company*</label>
+            <label htmlFor="company" className="block text-sm font-bold text-black mb-1">Select Company*</label>
             <Select
               id="company"
               placeholder="Select Company"
               className="w-full custom-select"
               size="large"
-              onChange={(value) => setCompany(value)}
-              value={company}
+              onChange={(id) => setCompany(id)}
+              value={company ?? undefined}
             >
-              {companies.map((c) => (
-                <Option key={c} value={c}>{c}</Option>
+              {companies.map((c: any) => (
+                <Option key={c.id} value={c.id}>
+                  {c.companyName}
+                </Option>
               ))}
             </Select>
           </div>
-
           <div>
-            <label htmlFor="product" className="block text-sm font-bold text-gray-800 mb-1">Product*</label>
+            <label htmlFor="product" className="block text-sm font-bold text-black mb-1">
+              Product*
+            </label>
             <Select
               id="product"
               placeholder="Select Product"
-              className="w-full custom-select"
               size="large"
-              onChange={(value) => setProduct(value)}
-              value={product}
+              className="custom-select w-full" // Full width
+              onChange={(id) => setProduct(id)}
+              value={product || undefined}
+              style={{ width: "100%" }} // Backup full width style
+
             >
-              {products.map((p) => (
-                <Option key={p} value={p}>{p}</Option>
+              {productsData?.data?.map((p: any) => (
+                <Option key={p.id} value={p.id}>
+                  {p.productName}
+                </Option>
               ))}
             </Select>
           </div>
 
+
           <div className="col-span-full">
+
             <label htmlFor="clientFirstName" className="block text-sm font-bold text-gray-800 mb-1">Client Name*</label>
             <div className="grid grid-cols-2 gap-4">
               <Input
@@ -196,7 +248,10 @@ export default function AddDeal() {
               onMouseOver={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#222"}
               onMouseOut={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000"}
             >
-              Create New Deal
+
+              {
+                isLoading ? "Creating..." : "Create New Deal"
+              }
             </Button>
           </div>
         </form>
@@ -212,15 +267,15 @@ export default function AddDeal() {
           <h3 className="text-lg font-bold text-gray-800 mb-4">Calculation</h3>
           <div className="flex justify-between items-center mb-2">
             <span className="text-gray-700">Annual Premium</span>
-            <span className="font-semibold text-gray-800">{annualPremiumCalculated}</span>
+            <span className="font-semibold text-gray-800">${annualPremiumInput}</span>
           </div>
           <div className="flex justify-between items-center mb-4">
             <span className="text-gray-700">Monthly Premium</span>
-            <span className="font-semibold text-gray-800">{monthlyPremiumCalculated}</span>
+            <span className="font-semibold text-gray-800">${monthlyPremiumCalculated}</span>
           </div>
 
           {/* Split With Section */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="text-sm font-bold text-gray-800 block mb-1">Split With</label>
             <div className="flex items-start gap-2">
               <Button
@@ -251,52 +306,12 @@ export default function AddDeal() {
                 </Select>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <style>{`
-        .custom-input .ant-input,
-        .custom-input .ant-input-affix-wrapper,
-        .custom-input .ant-input-textarea {
-          background-color: #f0f0f0 !important;
-          border-color: #f0f0f0 !important;
-          border-radius: 4px;
-          padding: 10px 12px;
-        }
-        .custom-input .ant-input:hover,
-        .custom-input .ant-input-affix-wrapper:hover,
-        .custom-input .ant-input-textarea:hover {
-          border-color: #d9d9d9 !important;
-        }
-        .custom-input .ant-input:focus,
-        .custom-input .ant-input-affix-wrapper-focused,
-        .custom-input .ant-input-textarea:focus {
-          border-color: #d9d9d9 !important;
-          box-shadow: none !important;
-        }
-
-        .custom-select .ant-select-selector {
-          background-color: #f0f0f0 !important;
-          border-color: #f0f0f0 !important;
-          border-radius: 4px;
-          padding: 6px 12px;
-          height: auto !important;
-        }
-        .custom-select .ant-select-arrow {
-          color: #6b7280;
-        }
-        .custom-select .ant-select-selector:hover {
-          border-color: #d9d9d9 !important;
-        }
-        .custom-select.ant-select-focused .ant-select-selector {
-          border-color: #d9d9d9 !important;
-          box-shadow: none !important;
-        }
-        .custom-select .ant-select-selection-placeholder {
-          color: #9ca3af;
-        }
-      `}</style>
     </div>
   )
 }
+
+

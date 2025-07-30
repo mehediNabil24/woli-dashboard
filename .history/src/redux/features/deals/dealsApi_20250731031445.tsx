@@ -23,21 +23,16 @@ const dealsApi = baseApi.injectEndpoints({
             }),
             providesTags: ['Deals'],
         }),
-      getMyDeals: builder.query({
-  query: ({ status, page, limit, searchTerm }) => ({
+       getMyDeals: builder.query({
+  query: ({ status, page, limit }) => ({
     url: `/deals/get-my-deals`,
     method: "GET",
-    params: { 
-      dealStatus: status, 
-      page, 
-      limit, 
-      searchTerm 
-    }
+    params: { dealStatus: status, page, limit }
   }),
   providesTags: ['Deals'],
 }),
 
-
+}),
 
 
 
