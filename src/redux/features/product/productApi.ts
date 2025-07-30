@@ -14,7 +14,7 @@ const productApi = baseApi.injectEndpoints({
       invalidatesTags: ['Product'], // Invalidate the 'Product' tag to refetch data
     }),
 
-    // ad product
+    // add product
     addProduct: builder.mutation({
       query: (body) => ({
         url: `/products/`, // Adjust your actual add endpoint
@@ -25,13 +25,27 @@ const productApi = baseApi.injectEndpoints({
     }),
    
 
-    // Get All
+    // Get All company API
     getCompany: builder.query({
-      query: () => ({
+      query: ({page,limit}) => ({
         url: "/companies",
         method: "GET",
+        params: {
+          page: String(page),   // Ensure it's a string
+          limit: String(limit), // Ensure it's a string
+        },
       }),
       providesTags: ['Product'], 
+    }),
+
+    //update company api
+    updateCompany: builder.mutation({
+      query: ({body,id}) => ({
+        url: `/companies/${id}`, // Adjust your actual update endpoint
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Product'], // Invalidate the 'Product' tag to refetch data
     }),
 
     // get all product 
@@ -79,6 +93,7 @@ export const {
    useGetCompanyQuery,
    useGetProductQuery,
     useUpdateProductMutation, 
+    useUpdateCompanyMutation,
     useDeleteProductMutation// Export the update mutation hook
 
  // Export the update mutation hook

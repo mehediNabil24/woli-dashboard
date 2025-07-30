@@ -80,6 +80,12 @@ export const AdminNavLink = [
 
       },
       {
+        name:" All Company",
+        href: "/dashboard/admin/company-list",
+        icon: FaUsers,
+
+      },
+      {
         
           name: "Deal List",
           href: "/dashboard/admin/deal-list",

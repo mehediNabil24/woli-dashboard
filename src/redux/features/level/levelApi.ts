@@ -15,25 +15,26 @@ const levelApi = baseApi.injectEndpoints({
       invalidatesTags: ['Level'], // Invalidate the 'Level' tag to refetch data
     }),
 
-    // Get All
-    getProfile: builder.query({
-      query: () => ({
-        url: "/user/profile",
+    // Get All level api
+    getLevel: builder.query({
+      query: ({page,limit}) => ({
+        url: "/levels",
         method: "GET",
+        params: { page:String(page), limit:String(limit) }, // Include pagination parameters
       }),
-      providesTags: ['Profile'], 
+      providesTags: ['Level'], 
     }),
 
    
 
     // Update Category API (PATCH)
-    updateProfile: builder.mutation({
-      query: (body) => ({
-        url: `/user/update-profile/`, // Adjust your actual update endpoint
-        method: 'PATCH',
+    updateLevel: builder.mutation({
+      query: ({body,id}) => ({
+        url: `/levels/${id}`, // Adjust your actual update endpoint
+        method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Profile'], // Invalidate the 'Categories' tag to refetch data
+      invalidatesTags: ['Level'], // Invalidate the 'Categories' tag to refetch data
     }),
   }),
   overrideExisting: false,
@@ -41,7 +42,9 @@ const levelApi = baseApi.injectEndpoints({
 });
 
 export const {
-   useAddLevelMutation
+   useAddLevelMutation,
+   useGetLevelQuery,
+    useUpdateLevelMutation,
 
  // Export the update mutation hook
 } = levelApi;
