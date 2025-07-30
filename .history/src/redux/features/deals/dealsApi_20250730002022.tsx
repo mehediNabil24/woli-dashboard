@@ -1,0 +1,31 @@
+import baseApi from "../../api/baseApi";
+
+const dealsApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+  
+   
+
+    // Get All
+    addDeals: builder.mu({
+      query: () => ({
+        url: "/users/me",
+        method: "GET",
+      }),
+      providesTags: ['Profile'], 
+    }),
+    
+   
+   
+  }),
+  overrideExisting: false,
+  
+});
+
+export const {
+   useGetGetProfileQuery,
+ 
+
+ // Export the update mutation hook
+} = dealsApi;
+
+export default dealsApi;
