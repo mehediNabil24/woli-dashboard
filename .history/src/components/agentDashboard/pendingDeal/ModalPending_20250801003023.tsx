@@ -48,13 +48,12 @@ export default function EditDealModal({
     }
   }, [initialData]);
 
-  const handleChange = (field: string, value: any) => {
-  setFormData((prev) => ({
-    ...prev,
-    [field]: field === "annualPremium" ? Number(value) : value,
-  }));
-};
-
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (e?: any) => {
     if (e) e.preventDefault();
@@ -194,7 +193,7 @@ export default function EditDealModal({
         <Input
   value={formData.annualPremium}
   onChange={(e) =>
-    handleChange("annualPremium", Number(e.target.value)) 
+    handleChange("annualPremium", Number(e.target.value)) // ✅ store as number
   }
   size="large"
 />

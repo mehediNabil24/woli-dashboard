@@ -119,7 +119,7 @@ export default function EditDealModal({
             Select Company*
           </label>
           <Select
-            placeholder="Select Company"
+            placeholder={}
             className="w-full custom-select"
             size="large"
             onChange={(id) => handleChange("companyId", id)}

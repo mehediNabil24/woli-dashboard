@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { useGetCompanyQuery } from "../../../redux/features/product/productApi";
 
 const { TextArea } = Input;
-const { Option } = Select;
 
 export default function EditDealModal({
   visible,
@@ -24,37 +23,35 @@ export default function EditDealModal({
     annualPremium: "",
     note: "",
   });
+  const [company, setCompany] = useState("")
+  const [product, setProduct] = useState("")
 
   const [updateDeal, { isLoading }] = useUpdateDealsMutation();
-  const { data } = useGetCompanyQuery({ page: 1, limit: 10 });
+  const { data } = useGetCompanyQuery({ page: 1, limit: 10 })
   const companies = data?.data || [];
+  const { data: productsData } = useGetProductQueryQuery(company)
 
-  const { data: productsData } = useGetProductQueryQuery(formData.companyId);
-  const products = productsData?.data || [];
-
-  // Pre-fill form when modal opens
   useEffect(() => {
     if (initialData) {
       setFormData({
         state: initialData.state || "",
-        companyId: initialData.company?.id || "", // store ID
-        productId: initialData.product?.id || "",
+        company: initialData.company || "",
+        product: initialData.product || "",
         clientFirstName: initialData.clientFirstName || "",
         clientLastName: initialData.clientLastName || "",
-        applicationNumber: initialData.applicationNumber || "",
-        annualPremium: initialData.annualPremium || "",
+        applicationNumber: initialData.applicationNo || "",
+        annualPremium: initialData.annualPremi || "",
         note: initialData.note || "",
       });
     }
   }, [initialData]);
 
-  const handleChange = (field: string, value: any) => {
-  setFormData((prev) => ({
-    ...prev,
-    [field]: field === "annualPremium" ? Number(value) : value,
-  }));
-};
-
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (e?: any) => {
     if (e) e.preventDefault();
@@ -69,10 +66,10 @@ export default function EditDealModal({
         id: initialData.key,
         data: formData,
       }).unwrap();
-
+      console.log(res, "res");
       if (res?.success) {
         toast.success(res?.message || "Deal updated successfully");
-        onCancel();
+        onCancel(); // modal close
       } else {
         toast.error(res?.message || "Update failed");
       }
@@ -107,7 +104,9 @@ export default function EditDealModal({
           </label>
           <Input
             value={formData.state}
-            onChange={(e) => handleChange("state", e.target.value)}
+            onChange={(e) =>
+              handleChange("state", e.target.value)
+            }
             placeholder="State"
             size="large"
           />
@@ -118,19 +117,22 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             Select Company*
           </label>
+
           <Select
-            placeholder="Select Company"
-            className="w-full custom-select"
-            size="large"
-            onChange={(id) => handleChange("companyId", id)}
-            value={formData.companyId || undefined}
-          >
-            {companies.map((c: any) => (
-              <Option key={c.id} value={c.id}>
-                {c.companyName}
-              </Option>
-            ))}
-          </Select>
+  id="company"
+  placeholder="Select Company"
+  className="w-full custom-select"
+  size="large"
+  onChange={(id) => setCompany(id)} // ✅ fix here
+  value={company ?? undefined}
+>
+  {companies.map((c: any) => (
+    <Option key={c.id} value={c.id}>
+      {c.companyName}
+    </Option>
+  ))}
+</Select>
+
         </div>
 
         {/* Product */}
@@ -139,14 +141,15 @@ export default function EditDealModal({
             Product*
           </label>
           <Select
+            id="product"
             placeholder="Select Product"
             size="large"
-            className="custom-select w-full"
-            onChange={(id) => handleChange("productId", id)}
-            value={formData.productId || undefined}
-          >
-            {products.map((p: any) => (
-              <Option key={p.id} value={p.id}>
+            className="custom-select w-full" 
+            onChange={(id) => setProduct(id)}
+            value={product}
+            style={{ width: "100%" }} >
+            {productsData?.data?.map((p: any) => (
+              <Option key={p.id} value={p.key}>
                 {p.productName}
               </Option>
             ))}
@@ -161,13 +164,17 @@ export default function EditDealModal({
           <div className="grid grid-cols-2 gap-4">
             <Input
               value={formData.clientFirstName}
-              onChange={(e) => handleChange("clientFirstName", e.target.value)}
+              onChange={(e) =>
+                handleChange("clientFirstName", e.target.value)
+              }
               placeholder="First Name"
               size="large"
             />
             <Input
               value={formData.clientLastName}
-              onChange={(e) => handleChange("clientLastName", e.target.value)}
+              onChange={(e) =>
+                handleChange("clientLastName", e.target.value)
+              }
               placeholder="Last Name"
               size="large"
             />
@@ -181,7 +188,9 @@ export default function EditDealModal({
           </label>
           <Input
             value={formData.applicationNumber}
-            onChange={(e) => handleChange("applicationNumber", e.target.value)}
+            onChange={(e) =>
+              handleChange("applicationNumber", e.target.value)
+            }
             size="large"
           />
         </div>
@@ -191,14 +200,13 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             Annual Premium*
           </label>
-        <Input
-  value={formData.annualPremium}
-  onChange={(e) =>
-    handleChange("annualPremium", Number(e.target.value)) 
-  }
-  size="large"
-/>
-
+          <Input
+            value={formData.annualPremium}
+            onChange={(e) =>
+              handleChange("annualPremium", e.target.value)
+            }
+            size="large"
+          />
         </div>
 
         {/* Note */}

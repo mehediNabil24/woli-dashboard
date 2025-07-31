@@ -113,45 +113,52 @@ export default function EditDealModal({
           />
         </div>
 
-        {/* Company */}
-        <div>
-          <label className="block text-sm font-bold text-gray-800 mb-1">
-            Select Company*
-          </label>
-          <Select
-            placeholder="Select Company"
-            className="w-full custom-select"
-            size="large"
-            onChange={(id) => handleChange("companyId", id)}
-            value={formData.companyId || undefined}
-          >
-            {companies.map((c: any) => (
-              <Option key={c.id} value={c.id}>
-                {c.companyName}
-              </Option>
-            ))}
-          </Select>
-        </div>
+       {/* Company */}
+<div>
+  <label className="block text-sm font-bold text-gray-800 mb-1">
+    Select Company*
+  </label>
+  <Select
+    placeholder="Select Company"
+    className="w-full custom-select"
+    size="large"
+    onChange={(id) => handleChange("companyId", id)}
+    value={formData.companyId || undefined}
+  >
+    {/* Ensure initial company is in the list */}
+    {[...(formData.companyId && !companies.some((c) => c.id === formData.companyId)
+      ? [{ id: formData.companyId, companyName: initialData?.company?.companyName }]
+      : []), ...companies].map((c: any) => (
+        <Option key={c.id} value={c.id}>
+          {c.companyName}
+        </Option>
+      ))}
+  </Select>
+</div>
 
-        {/* Product */}
-        <div>
-          <label className="block text-sm font-bold text-gray-800 mb-1">
-            Product*
-          </label>
-          <Select
-            placeholder="Select Product"
-            size="large"
-            className="custom-select w-full"
-            onChange={(id) => handleChange("productId", id)}
-            value={formData.productId || undefined}
-          >
-            {products.map((p: any) => (
-              <Option key={p.id} value={p.id}>
-                {p.productName}
-              </Option>
-            ))}
-          </Select>
-        </div>
+{/* Product */}
+<div>
+  <label className="block text-sm font-bold text-gray-800 mb-1">
+    Product*
+  </label>
+  <Select
+    placeholder="Select Product"
+    size="large"
+    className="custom-select w-full"
+    onChange={(id) => handleChange("productId", id)}
+    value={formData.productId || undefined}
+  >
+    {/* Ensure initial product is in the list */}
+    {[...(formData.productId && !products.some((p) => p.id === formData.productId)
+      ? [{ id: formData.productId, productName: initialData?.product?.productName }]
+      : []), ...products].map((p: any) => (
+        <Option key={p.id} value={p.id}>
+          {p.productName}
+        </Option>
+      ))}
+  </Select>
+</div>
+
 
         {/* Client Name */}
         <div className="col-span-full">
