@@ -51,7 +51,7 @@ export default function DealRequestPage() {
     },
     product: deal.product?.productName || "N/A",
     company: deal.company?.companyName || "N/A",
-    annualPremium: `$${deal.annualPremium}`,
+    annualPremium: deal.annualPremium, // ✅ keep number
     applicationNo: deal.applicationNumber,
     chargeback: deal.chargebackAmount ? `$${deal.chargebackAmount}` : "$0",
     status: deal.dealStatus as "APPROVED" | "REJECTED" | "PENDING",
@@ -95,7 +95,12 @@ export default function DealRequestPage() {
     },
     { title: "Product", dataIndex: "product", key: "product" },
     { title: "Company", dataIndex: "company", key: "company" },
-    { title: "Annual Premium", dataIndex: "annualPremium", key: "annualPremium" },
+    {
+      title: "Annual Premium",
+      dataIndex: "annualPremium",
+      key: "annualPremium",
+      render: (value) => `$${value}`, // ✅ Only format for display
+    },
     { title: "Application No", dataIndex: "applicationNo", key: "applicationNo" },
     { title: "Chargeback", dataIndex: "chargeback", key: "chargeback" },
     {
@@ -137,8 +142,8 @@ export default function DealRequestPage() {
   ];
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-sm">
+    <div className=" min-h-screen">
+      <div className="bg-white rounded-lg ">
         <div className="flex items-center justify-end p-4">
           <Input
             placeholder="Search..."
@@ -180,7 +185,7 @@ export default function DealRequestPage() {
           }}
           initialData={{
             id: editingRecord.id,
-            annualPremium: editingRecord.annualPremium,
+            annualPremium: editingRecord.annualPremium, // ✅ number passed
             agentProfile: editingRecord.agentProfile,
           }}
         />

@@ -107,8 +107,8 @@ export default function AgentListPage() {
   ];
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-sm">
+    <div className=" min-h-screen">
+      <div className="bg-white rounded-lg">
         <div className="flex items-center justify-end p-4 space-x-4">
           <Input
             placeholder="Search..."

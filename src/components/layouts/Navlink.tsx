@@ -53,7 +53,7 @@ export const navLink = [
 export const AdminNavLink = [
   {
     name: "Dashboard",
-    href: "/admin",
+    href: "/dashboard/admin",
     icon: RiDashboardFill,
   },
     {
@@ -68,13 +68,13 @@ export const AdminNavLink = [
   },
   
   {
-    name: "Deals",
+    name: "Products",
     href: "#",
     icon: FaHandshake,
     subItems: [
 
       {
-        name: "Add Deal",
+        name: "Add Products",
         href: "/dashboard/admin/add-deal",
         icon: GoPlus,
 
@@ -87,7 +87,7 @@ export const AdminNavLink = [
       },
       {
         
-          name: "Deal List",
+          name: "Product List",
           href: "/dashboard/admin/deal-list",
           icon: FaUsers,
       },

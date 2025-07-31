@@ -86,18 +86,25 @@ const agentApi = baseApi.injectEndpoints({
     }),
 
 
+    // get all chargeback 
+    getChargeback: builder.query({
+      query: ({searchTerm, page,limit}) => ({
+        url: "/deals?ChargebackStatus=PENDING",
+        method: "GET",
+        params:{
+            searchTerm,
+            page: String(page),   // Ensure it's a string
+            limit: String(limit), // Ensure it's a string
+        }
+      }),
+      providesTags: ['Agent'], 
+    }),
+
+
 
    
 
-    // Update Category API (PATCH)
-    updateProfile: builder.mutation({
-      query: (body) => ({
-        url: `/user/update-profile/`, // Adjust your actual update endpoint
-        method: 'PATCH',
-        body,
-      }),
-      invalidatesTags: ['Profile'], // Invalidate the 'Categories' tag to refetch data
-    }),
+   
   }),
   overrideExisting: false,
   
@@ -110,7 +117,8 @@ export const {
    useAddAgentLevelMutation,
    useGetAgentDealRequestQuery,
    useUpdateDealStatusMutation,
-   useUpdateDealMutation
+   useUpdateDealMutation,
+   useGetChargebackQuery
 
    
 

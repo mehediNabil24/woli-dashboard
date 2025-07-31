@@ -86,8 +86,8 @@ export default function LevelPage() {
   ]
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-sm">
+    <div className=" min-h-screen">
+      <div className="bg-white rounded-lg ">
         {/* Loader */}
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
