@@ -165,7 +165,7 @@ console.log(initialData?.company, "initialData");
             value={formData.productId || undefined}
           >
             {[...(formData.productId && !products.some((p:any) => p.id === formData.productId)
-              ? [{ id: formData.productId, productName: initialData?.product?.productName }]
+              ? [{ id: formData.productId, productName: initialData?.productName }]
               : []), ...products].map((p: any) => (
               <Option key={p.id} value={p.id}>
                 {p.productName}

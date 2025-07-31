@@ -4,7 +4,6 @@ import { File } from 'lucide-react';
 import {   CiSettings} from 'react-icons/ci';
 
 import {  FaHandHolding, FaHandshake,  FaRankingStar,  FaUser, FaUsers, FaUsersLine,} from 'react-icons/fa6';
-import { FiUserPlus } from "react-icons/fi";
 
 
 import { GoPlus} from 'react-icons/go';
@@ -30,11 +29,6 @@ export const navLink = [
     name: "Scoreboard",
     href: "/dashboard/agent/scoreboard",
     icon: MdLeaderboard,
-  },
-  {
-    name: "My Teams",
-    href: "/dashboard/agent/myTeams",
-    icon: FiUserPlus,
   },
   {
     name: "Add Deal",

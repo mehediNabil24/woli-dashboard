@@ -3,8 +3,7 @@ import { DollarCircleFilled } from '@ant-design/icons';
 import { File } from 'lucide-react';
 import {   CiSettings} from 'react-icons/ci';
 
-import {  FaHandHolding, FaHandshake,  FaRankingStar,  FaUser, FaUsers, FaUsersLine,} from 'react-icons/fa6';
-import { FiUserPlus } from "react-icons/fi";
+import {  FaHandHolding, FaHandshake,  FaRankingStar,  FaUser, FiUserPlus, FaUsers, FaUsersLine,} from 'react-icons/fa6';
 
 
 import { GoPlus} from 'react-icons/go';

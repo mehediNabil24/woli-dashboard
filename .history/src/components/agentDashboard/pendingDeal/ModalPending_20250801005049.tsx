@@ -137,12 +137,12 @@ console.log(initialData?.company, "initialData");
             className="w-full custom-select"
             size="large"
             onChange={(id) => handleChange("companyId", id)}
-            defaultValue={initialData?.company}
+            de
             value={formData.companyId || undefined}
           >
             {/* Ensure current company is in list */}
-            {[...(formData.companyId && !companies.some((c:any) => c.id === formData.companyId)
-              ? [{ id: formData.companyId, companyName: initialData?.companyName }]
+            {[...(formData.companyId && !companies.some((c) => c.id === formData.companyId)
+              ? [{ id: formData.companyId, companyName: initialData?.company?.companyName }]
               : []), ...companies].map((c: any) => (
               <Option key={c.id} value={c.id}>
                 {c.companyName}
@@ -161,10 +161,9 @@ console.log(initialData?.company, "initialData");
             size="large"
             className="custom-select w-full"
             onChange={(id) => handleChange("productId", id)}
-            defaultValue={initialData?.product}
             value={formData.productId || undefined}
           >
-            {[...(formData.productId && !products.some((p:any) => p.id === formData.productId)
+            {[...(formData.productId && !products.some((p) => p.id === formData.productId)
               ? [{ id: formData.productId, productName: initialData?.product?.productName }]
               : []), ...products].map((p: any) => (
               <Option key={p.id} value={p.id}>

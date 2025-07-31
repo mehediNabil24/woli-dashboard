@@ -141,8 +141,8 @@ console.log(initialData?.company, "initialData");
             value={formData.companyId || undefined}
           >
             {/* Ensure current company is in list */}
-            {[...(formData.companyId && !companies.some((c:any) => c.id === formData.companyId)
-              ? [{ id: formData.companyId, companyName: initialData?.companyName }]
+            {[...(formData.companyId && !companies.some((c) => c.id === formData.companyId)
+              ? [{ id: formData.companyId, companyName: initialData?.company?.companyName }]
               : []), ...companies].map((c: any) => (
               <Option key={c.id} value={c.id}>
                 {c.companyName}

@@ -65,7 +65,7 @@ const RouterProvider: React.FC = () => {
               
               
               <Route path="scoreboard" element={<ScoreBoard />} />
-              <Route path="myTeams" element={<MyTeams />} />
+              <Route path="scoreboard" element={<MyTeams />} />
               <Route path="addDeal" element={<AddDeal />} />
               <Route path="pendingDeal" element={<PendingDeal />} />
               

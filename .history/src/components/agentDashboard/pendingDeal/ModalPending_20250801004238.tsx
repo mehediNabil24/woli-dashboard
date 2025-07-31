@@ -24,7 +24,7 @@ export default function EditDealModal({
     annualPremium: "",
     note: "",
   });
-console.log(initialData?.company, "initialData");
+
   const [updateDeal, { isLoading }] = useUpdateDealsMutation();
   const { data } = useGetCompanyQuery({ page: 1, limit: 10 });
   const companies = data?.data || [];
@@ -33,21 +33,20 @@ console.log(initialData?.company, "initialData");
   const products = productsData?.data || [];
 
   // Pre-fill form when modal opens
- useEffect(() => {
-  if (initialData) {
-    setFormData({
-      state: initialData.state || "",
-      companyId: initialData.company?.id || "", // must be valid ObjectID
-      productId: initialData.product?.id || "",
-      clientFirstName: initialData.clientFirstName || "",
-      clientLastName: initialData.clientLastName || "",
-      applicationNumber: initialData.applicationNumber || "",
-      annualPremium: initialData.annualPremium || "",
-      note: initialData.note || "",
-    });
-  }
-}, [initialData]);
-
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        state: initialData.state || "",
+        companyId: initialData.company?.id || "",
+        productId: initialData.product?.id || "",
+        clientFirstName: initialData.clientFirstName || "",
+        clientLastName: initialData.clientLastName || "",
+        applicationNumber: initialData.applicationNumber || "",
+        annualPremium: initialData.annualPremium || "",
+        note: initialData.note || "",
+      });
+    }
+  }, [initialData]);
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({
@@ -56,44 +55,30 @@ console.log(initialData?.company, "initialData");
     }));
   };
 
- const handleSubmit = async (e?: any) => {
-  if (e) e.preventDefault();
+  const handleSubmit = async (e?: any) => {
+    if (e) e.preventDefault();
 
-  if (!initialData?.key) {
-    toast.error("No deal selected for update");
-    return;
-  }
-
-  if (!formData.companyId) {
-    toast.error("Please select a company");
-    return;
-  }
-
-  if (!formData.productId) {
-    toast.error("Please select a product");
-    return;
-  }
-
-  try {
-    const res = await updateDeal({
-      id: initialData.key,
-      data: {
-        ...formData,
-        annualPremium: Number(formData.annualPremium) || 0, // ensure number
-      },
-    }).unwrap();
-
-    if (res?.success) {
-      toast.success(res?.message || "Deal updated successfully");
-      onCancel();
-    } else {
-      toast.error(res?.message || "Update failed");
+    if (!initialData?.key) {
+      toast.error("No deal selected for update");
+      return;
     }
-  } catch (error: any) {
-    toast.error(error?.data?.message || "Something went wrong");
-  }
-};
 
+    try {
+      const res = await updateDeal({
+        id: initialData.key,
+        data: formData,
+      }).unwrap();
+
+      if (res?.success) {
+        toast.success(res?.message || "Deal updated successfully");
+        onCancel();
+      } else {
+        toast.error(res?.message || "Update failed");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Something went wrong");
+    }
+  };
 
   return (
     <Modal
@@ -137,12 +122,11 @@ console.log(initialData?.company, "initialData");
             className="w-full custom-select"
             size="large"
             onChange={(id) => handleChange("companyId", id)}
-            defaultValue={initialData?.company}
             value={formData.companyId || undefined}
           >
             {/* Ensure current company is in list */}
-            {[...(formData.companyId && !companies.some((c:any) => c.id === formData.companyId)
-              ? [{ id: formData.companyId, companyName: initialData?.companyName }]
+            {[...(formData.companyId && !companies.some((c) => c.id === formData.companyId)
+              ? [{ id: formData.companyId, companyName: initialData?.company?.companyName }]
               : []), ...companies].map((c: any) => (
               <Option key={c.id} value={c.id}>
                 {c.companyName}
@@ -161,10 +145,9 @@ console.log(initialData?.company, "initialData");
             size="large"
             className="custom-select w-full"
             onChange={(id) => handleChange("productId", id)}
-            defaultValue={initialData?.product}
             value={formData.productId || undefined}
           >
-            {[...(formData.productId && !products.some((p:any) => p.id === formData.productId)
+            {[...(formData.productId && !products.some((p) => p.id === formData.productId)
               ? [{ id: formData.productId, productName: initialData?.product?.productName }]
               : []), ...products].map((p: any) => (
               <Option key={p.id} value={p.id}>

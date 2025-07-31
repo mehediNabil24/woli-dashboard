@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { RootState } from "@reduxjs/toolkit/query";
 import type { Dispatch, SetStateAction } from "react";
 import { LuMenu, LuX } from "react-icons/lu";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 
 
 
@@ -19,10 +18,7 @@ export default function TopBar({
     dark?: boolean;
 }) {
     // ⬅️ Get user from Redux store
-    const user:any = useSelector((state: RootState) => state?.auth?.user) as { name?: string; role?: string } | null;
-    
- console.log(user, "user");
-
+    const user = useSelector((state: RootState) => state.user.user) as { name?: string; role?: string } | null;
 
     return (
         <header className={`shadow-md ${dark ? "bg-white" : "bg-white"}`}>
@@ -43,7 +39,7 @@ export default function TopBar({
                 {/* Welcome Message */}
                 <div className="items-center gap-2">
                     <span className={`text-sm font-medium ${dark ? "text-black" : "text-gray-700"}`}>
-                        Welcome Back, {user?.firstName || "John Doe"}!
+                        Welcome Back, {user?.name || "John Doe"}!
                     </span>
                     <span className="text-xl">👋</span>
                 </div>
@@ -51,10 +47,10 @@ export default function TopBar({
                 {/* User Info */}
                 <div className="flex items-center gap-3 px-3 py-3">
                     {/* Avatar */}
-                  <img src={user?.imageUrl} alt="Avatar" />
+                  <img src=" " alt="" />
                     <div className="flex-1">
                         <div className={`font-medium ${dark ? "text-black" : "text-gray-500"}`}>
-                            {`${user?.firstName}` ||`${user?.lastName}` || "John Doe"}
+                            {user?.name || "John Doe"}
                         </div>
                         <div className={`text-xs ${dark ? "text-black" : "text-gray-500"}`}>
                              {user?.role || "Super Admin"}

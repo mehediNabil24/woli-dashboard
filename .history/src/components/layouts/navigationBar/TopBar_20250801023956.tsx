@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { Dispatch, SetStateAction } from "react";
 import { LuMenu, LuX } from "react-icons/lu";
@@ -19,7 +18,7 @@ export default function TopBar({
     dark?: boolean;
 }) {
     // ⬅️ Get user from Redux store
-    const user:any = useSelector((state: RootState) => state?.auth?.user) as { name?: string; role?: string } | null;
+    const user = useSelector((state: RootState) => state?.auth?.user) as { name?: string; role?: string } | null;
     
  console.log(user, "user");
 
