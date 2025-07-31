@@ -1,210 +1,56 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Table, Input, Pagination, Dropdown, Menu, Avatar, Select } from "antd"
-import { SearchOutlined, MoreOutlined } from "@ant-design/icons"
-import type { ColumnsType } from "antd/es/table"
-import AgentDetailsPage from "./AgentDeatils"
-import img1 from '../../assets/Rectangle 55.png';
-import img2 from '../../assets/fi_555526.png';
+import { useState } from "react";
+import { Table, Input, Pagination, Dropdown, Menu, Avatar, Select, Spin } from "antd";
+import { SearchOutlined, MoreOutlined } from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
+import { useGetAgentQuery } from "../../redux/features/agent/agentApi";
 
-const { Option } = Select
 
-interface AgentRecord {
-  key: string
-  agentProfile: {
-    name: string
-    avatar: string
-    flag: string
-  }
-  email: string
-  contract: string
-  dateOfBirth: string
-  status: "Approved" | "Pending" | "Rejected"
-  // Additional fields for AgentDetailsPage
-  contactNumber: string
-  level: string
-  uploadedDocuments: { name: string; url: string }[]
+const { Option } = Select;
+
+interface AgentProfile {
+  firstName: string;
+  lastName: string;
+  imageUrl?: string | null;
 }
 
-const initialData: AgentRecord[] = [
-  {
-    key: "1",
-    agentProfile: {
-      name: "Wilson Levin",
-      avatar: img1,
-      flag: img2,
-    },
-    email: "wilson.levin@example.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Approved",
-    contactNumber: "+1 235469787",
-    level: "Level 1 (Trainee)",
-    uploadedDocuments: [
-      { name: "Document 1.pdf", url: "#" },
-      { name: "Contract.docx", url: "#" },
-    ],
-  },
-  {
-    key: "2",
-    agentProfile: {
-      name: "Nolan Botosh",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "nolanbotosh@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Pending",
-    contactNumber: "+1 987654321",
-    level: "Level 2 (Live Transfer Agent)",
-    uploadedDocuments: [{ name: "License.pdf", url: "#" }],
-  },
-  {
-    key: "3",
-    agentProfile: {
-      name: "Zain Baptista",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "zainbaptista@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Rejected",
-    contactNumber: "+1 112233445",
-    level: "Level 3 (Closer Agent)",
-    uploadedDocuments: [],
-  },
-  {
-    key: "4",
-    agentProfile: {
-      name: "Kaylynn Lipshutz",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "kaylynnlipshutz@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Approved",
-    contactNumber: "+1 556677889",
-    level: "Level 4 (Team director)",
-    uploadedDocuments: [{ name: "Certification.pdf", url: "#" }],
-  },
-  {
-    key: "5",
-    agentProfile: {
-      name: "Roger Levin",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "rogerlevin@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Pending",
-    contactNumber: "+1 998877665",
-    level: "Level 5 (Owner)",
-    uploadedDocuments: [{ name: "Agreement.pdf", url: "#" }],
-  },
-  {
-    key: "6",
-    agentProfile: {
-      name: "Emerson Culhane",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "emersonculhane@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Approved",
-    contactNumber: "+1 123123123",
-    level: "Level 1 (Trainee)",
-    uploadedDocuments: [],
-  },
-  {
-    key: "7",
-    agentProfile: {
-      name: "Justin Aminoff",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "justinaminoff@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Pending",
-    contactNumber: "+1 456456456",
-    level: "Level 2 (Live Transfer Agent)",
-    uploadedDocuments: [{ name: "ID.pdf", url: "#" }],
-  },
-  {
-    key: "8",
-    agentProfile: {
-      name: "Tiana Torff",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "tianatorff@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Approved",
-    contactNumber: "+1 789789789",
-    level: "Level 3 (Closer Agent)",
-    uploadedDocuments: [{ name: "Resume.pdf", url: "#" }],
-  },
-  {
-    key: "9",
-    agentProfile: {
-      name: "Marilyn Workman",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "marilynworkman@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Approved",
-    contactNumber: "+1 321321321",
-    level: "Level 4 (Team director)",
-    uploadedDocuments: [],
-  },
-  {
-    key: "10",
-    agentProfile: {
-      name: "Kaylynn Lubin",
-       avatar: img1,
-      flag: img2,
-    },
-    email: "kaylynnlubin@email.com",
-    contract: "+0123456789",
-    dateOfBirth: "06 - 07 - 2025",
-    status: "Rejected",
-    contactNumber: "+1 654654654",
-    level: "Level 5 (Owner)",
-    uploadedDocuments: [{ name: "Portfolio.pdf", url: "#" }],
-  },
-]
+interface AgentRecord {
+  id: string;
+  email: string;
+  approvalStatus: "APPROVED" | "PENDING" | "REJECTED";
+  profile: AgentProfile;
+  level?: string | null;
+  dateOfBirth?: string;
+}
 
 export default function AgentListPage() {
-  const [selectedAgent, setSelectedAgent] = useState<AgentRecord | null>(null)
+  const navigate = useNavigate();
 
-  const handleDetailsClick = (record: AgentRecord) => {
-    setSelectedAgent(record)
-  }
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
 
-  const handleBackToAgentList = () => {
-    setSelectedAgent(null)
-  }
+  const { data, isLoading } = useGetAgentQuery({
+    page,
+    limit: pageSize,
+    searchTerm: searchTerm || undefined,
+    approvalStatus: statusFilter || undefined,
+  });
+
+  const agents: AgentRecord[] = data?.data || [];
+  const total = data?.meta?.total || 0;
 
   const columns: ColumnsType<AgentRecord> = [
     {
       title: "Agent Profile",
-      dataIndex: "agentProfile",
       key: "agentProfile",
-      className: "text-gray-700 font-medium",
-      render: (profile: { name: string; avatar: string; flag: string }) => (
+      render: (_, record) => (
         <div className="flex items-center space-x-2">
-          <Avatar src={profile.avatar} size="large" />
-          <img src={profile.flag || "/placeholder.svg"} alt="Flag" width={16} height={16} />
-          <span>{profile.name}</span>
+          <Avatar src={record.profile?.imageUrl || "/placeholder.svg"} size="large" />
+          <span>{record.profile?.firstName} {record.profile?.lastName}</span>
         </div>
       ),
     },
@@ -212,33 +58,24 @@ export default function AgentListPage() {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      className: "text-gray-700 font-medium",
     },
-    {
-      title: "Contract",
-      dataIndex: "contract",
-      key: "contract",
-      className: "text-gray-700 font-medium",
-    },
-    {
-      title: "Date of Birth",
-      dataIndex: "dateOfBirth",
-      key: "dateOfBirth",
-      className: "text-gray-700 font-medium",
-    },
+    // {
+    //   title: "Date of Birth",
+    //   key: "dateOfBirth",
+    //   render: (_, record) => record.profile?.dateOfBirth || "N/A",
+    // },
     {
       title: "Status",
-      dataIndex: "status",
-      key: "status",
-      className: "text-gray-700 font-medium",
-      render: (status: "Approved" | "Pending" | "Rejected") => (
+      dataIndex: "approvalStatus",
+      key: "approvalStatus",
+      render: (status: AgentRecord["approvalStatus"]) => (
         <div
           className={`inline-flex items-center justify-center px-3 py-1 rounded-md text-sm font-medium ${
-            status === "Approved"
+            status === "APPROVED"
               ? "bg-green-100 text-green-800"
-              : status === "Pending"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-red-100 text-red-800"
+              : status === "PENDING"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
           }`}
         >
           {status}
@@ -248,12 +85,14 @@ export default function AgentListPage() {
     {
       title: "Actions",
       key: "actions",
-      className: "text-gray-700 font-medium",
       render: (_, record) => (
         <Dropdown
           overlay={
             <Menu>
-              <Menu.Item key="details" onClick={() => handleDetailsClick(record)}>
+              <Menu.Item
+                key="details"
+                onClick={() => navigate(`/dashboard/admin/agent/${record.id}`)}
+              >
                 Details
               </Menu.Item>
             </Menu>
@@ -265,130 +104,63 @@ export default function AgentListPage() {
         </Dropdown>
       ),
     },
-  ]
-
-  if (selectedAgent) {
-    return (
-      <AgentDetailsPage
-        agent={{
-          name: selectedAgent.agentProfile.name,
-          avatar: selectedAgent.agentProfile.avatar,
-          email: selectedAgent.email,
-        //   contract: selectedAgent.contract,
-          dateOfBirth: selectedAgent.dateOfBirth,
-          status: selectedAgent.status,
-          contactNumber: selectedAgent.contactNumber,
-          level: selectedAgent.level,
-          uploadedDocuments: selectedAgent.uploadedDocuments,
-        }}
-        onBack={handleBackToAgentList}
-      />
-    )
-  }
+  ];
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white rounded-lg shadow-sm">
-        {/* Header Section */}
         <div className="flex items-center justify-end p-4 space-x-4">
           <Input
             placeholder="Search..."
             prefix={<SearchOutlined className="text-gray-400" />}
             className="rounded-md border-gray-300 w-64 focus:border-yellow-400 focus:ring-yellow-400"
             size="middle"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Select defaultValue="status" style={{ width: 120 }} size="middle">
-            <Option value="status">Status</Option>
-            <Option value="Approved">Approved</Option>
-            <Option value="Pending">Pending</Option>
-            <Option value="Rejected">Rejected</Option>
+          <Select
+            placeholder="Status"
+            style={{ width: 140 }}
+            size="middle"
+            value={statusFilter}
+            onChange={(value) => setStatusFilter(value)}
+            allowClear
+          >
+            <Option value="APPROVED">Approved</Option>
+            <Option value="PENDING">Pending</Option>
+            <Option value="REJECTED">Rejected</Option>
           </Select>
         </div>
 
-        {/* Table Section */}
         <div className="overflow-x-auto">
-          <Table
-            columns={columns}
-            dataSource={initialData} // Using initialData directly for simplicity, can be filtered
-            pagination={false}
-            className="agent-list-table"
-            rowClassName={(_, index) => (index % 2 === 0 ? "bg-white" : "bg-white")}
-          />
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <Spin size="large" />
+            </div>
+          ) : (
+            <Table
+              columns={columns}
+              dataSource={agents.map((agent) => ({ ...agent, key: agent.id }))}
+              pagination={false}
+              rowClassName={(_, index) => (index % 2 === 0 ? "bg-white" : "bg-gray-50")}
+            />
+          )}
         </div>
 
-        {/* Footer Section */}
         <div className="flex items-center justify-between p-4 border-t border-gray-200">
-          <div className="text-sm text-gray-600">Showing 1-10 of 187</div>
-
+          <div className="text-sm text-gray-600">
+            Showing {(page - 1) * pageSize + 1}-
+            {Math.min(page * pageSize, total)} of {total}
+          </div>
           <Pagination
-            current={1}
-            total={187}
-            pageSize={10}
+            current={page}
+            total={total}
+            pageSize={pageSize}
             showSizeChanger={false}
-            className="agent-list-pagination"
-            itemRender={(page, type, originalElement) => {
-              if (type === "page") {
-                return (
-                  <button
-                    className={`w-8 h-8 rounded flex items-center justify-center text-sm font-medium border ${
-                      page === 1
-                        ? "bg-yellow-400 border-yellow-400 text-black"
-                        : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              }
-              return originalElement
-            }}
+            onChange={(p) => setPage(p)}
           />
         </div>
       </div>
-
-      <style>{`
-        .agent-list-table .ant-table-thead > tr > th {
-          background-color: #f9fafb; /* Light gray for header */
-          border-bottom: 1px solid #e5e7eb;
-          font-weight: 600;
-          color: #374151;
-          padding: 12px 16px;
-        }
-        .agent-list-table .ant-table-tbody > tr > td {
-          border-bottom: 1px solid #e5e7eb;
-          padding: 12px 16px;
-          color: #374151;
-        }
-        .agent-list-table .ant-table-tbody > tr:hover > td {
-          background-color: #f9fafb; /* Light gray on hover */
-        }
-        .agent-list-pagination .ant-pagination-item-active {
-          background-color: #fbbf24 !important; /* Yellow for active page */
-          border-color: #fbbf24 !important;
-        }
-        .agent-list-pagination .ant-pagination-item-active a {
-          color: #000 !important;
-        }
-        .agent-list-pagination .ant-pagination-prev button,
-        .agent-list-pagination .ant-pagination-next button {
-          border: 1px solid #d1d5db; /* Gray border for arrows */
-          border-radius: 4px;
-          background-color: white;
-          color: #4b5563;
-        }
-        .agent-list-pagination .ant-pagination-prev button:hover,
-        .agent-list-pagination .ant-pagination-next button:hover {
-          border-color: #9ca3af;
-        }
-        .ant-input-affix-wrapper-focused {
-          border-color: #fbbf24 !important;
-          box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.2) !important;
-        }
-        .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-          border-color: #fbbf24 !important;
-          box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.2) !important;
-        }
-      `}</style>
     </div>
-  )
+  );
 }

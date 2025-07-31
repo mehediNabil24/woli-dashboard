@@ -38,6 +38,7 @@ import VerificationCode from "../components/pages/auth/VerificationCode";
 import SetNewPassword from "../components/pages/auth/SetNewPassword";
 import AddLevelForm from "../components/level/addLevel";
 import CompanyListPage from "../components/dealList/CompanyList";
+import AgentDetailsPage from "../components/agent/AgentDeatils";
 
 
 
@@ -81,7 +82,7 @@ const RouterProvider: React.FC = () => {
 
               {/* <Route path="individual/:id" element={<UnderConstruction name="this" />} /> */}
               <Route path="agent" element={<AgentListPage />} />
-              {/* <Route path="agent/:id" element={<UnderConstruction name='this' />} /> */}
+              <Route path="agent/:id" element={<AgentDetailsPage />} />
 
               <Route path="add-deal" element={<AddDealPage />} />
               <Route path="company-list" element={<CompanyListPage />} />

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Table, Input, Select, Pagination, Avatar, Dropdown, Menu } from "antd"
 import { SearchOutlined, MoreOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
-import AgentDetailsPage from "../agent/AgentDeatils"
+
 import img1 from '../../assets/Rectangle 55.png';
 import img2 from '../../assets/fi_555526.png';
 
@@ -199,9 +199,9 @@ export default function ScoreBoard() {
     setSelectedAgent(record)
   }
 
-  const handleBackToScoreboard = () => {
-    setSelectedAgent(null)
-  }
+  // const handleBackToScoreboard = () => {
+  //   setSelectedAgent(null)
+  // }
 
   const columns: ColumnsType<AgentRecord> = [
     {
@@ -263,22 +263,22 @@ export default function ScoreBoard() {
   ]
 
   if (selectedAgent) {
-    return (
-      <AgentDetailsPage
-        agent={{
-          name: selectedAgent.agentProfile.name,
-          avatar: selectedAgent.agentProfile.avatar,
-          contactNumber: selectedAgent.contactNumber,
-          dateOfBirth: selectedAgent.dateOfBirth,
-          email: selectedAgent.email,
-          level: selectedAgent.rank, // Pass rank to details page
-          uploadedDocuments: selectedAgent.uploadedDocuments,
-          status: selectedAgent.isVerified ? "Verified" : "Unverified",
-        //   isVerified: selectedAgent.isVerified,
-        }}
-        onBack={handleBackToScoreboard}
-      />
-    )
+    // return (
+    //   <AgentDetailsPage
+    //     agent={{
+    //       name: selectedAgent.agentProfile.name,
+    //       avatar: selectedAgent.agentProfile.avatar,
+    //       contactNumber: selectedAgent.contactNumber,
+    //       dateOfBirth: selectedAgent.dateOfBirth,
+    //       email: selectedAgent.email,
+    //       level: selectedAgent.rank, // Pass rank to details page
+    //       uploadedDocuments: selectedAgent.uploadedDocuments,
+    //       status: selectedAgent.isVerified ? "Verified" : "Unverified",
+    //     //   isVerified: selectedAgent.isVerified,
+    //     }}
+    //     onBack={handleBackToScoreboard}
+    //   />
+    // )
   }
 
   return (

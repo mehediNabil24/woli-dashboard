@@ -1,30 +1,35 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { Modal, Input, Button, Avatar } from "antd"
-import { StarFilled } from "@ant-design/icons"
+import type React from "react";
+import { useState, useEffect } from "react";
+import { Modal, Input, Button, Avatar, message } from "antd";
+import { StarFilled } from "@ant-design/icons";
+import { useUpdateDealMutation } from "../../redux/features/agent/agentApi";
 
 interface AgentProfile {
-  name: string
-  avatar: string
-  rank: string
-  rating: number
+  name: string;
+  avatar: string;
+  rank: string;
+  rating: number;
 }
 
 interface FormData {
-  company: string
-  product: string
-  annualPremium: string
-  chargeback: string
-  agentProfile: AgentProfile
+  state: string;
+  companyId: string;
+  productId: string;
+  clientFirstName: string;
+  clientLastName: string;
+  applicationNumber: string;
+  annualPremium: number;
+  note: string;
+  agentProfile: AgentProfile;
 }
 
 interface EditDealRequestModalProps {
-  visible: boolean
-  onCancel: () => void
-  initialData?: FormData
-  onSave: (data: FormData) => void
+  visible: boolean;
+  onCancel: () => void;
+  initialData?: Partial<FormData> & { id?: string };
+  onSave: (updatedData: Partial<FormData>) => void; // ✅ Updated
 }
 
 export default function EditDealRequestModal({
@@ -34,113 +39,87 @@ export default function EditDealRequestModal({
   onSave,
 }: EditDealRequestModalProps) {
   const [formData, setFormData] = useState<FormData>({
-    company: "",
-    product: "",
-    annualPremium: "",
-    chargeback: "",
+    state: "",
+    companyId: "",
+    productId: "",
+    clientFirstName: "",
+    clientLastName: "",
+    applicationNumber: "",
+    annualPremium: 0,
+    note: "",
     agentProfile: {
       name: "",
       avatar: "",
       rank: "",
       rating: 0,
     },
-  })
+  });
+
+  const [updateDeal, { isLoading }] = useUpdateDealMutation();
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData)
+      setFormData((prev) => ({
+        ...prev,
+        ...initialData,
+        agentProfile: initialData.agentProfile || prev.agentProfile,
+      }));
     }
-  }, [initialData])
+  }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = () => {
-    onSave(formData)
-    onCancel()
-  }
+  const handleSubmit = async () => {
+    try {
+      await updateDeal({
+        id: initialData?.id,
+        body: {
+          state: formData.state,
+          companyId: formData.companyId,
+          productId: formData.productId,
+          clientFirstName: formData.clientFirstName,
+          clientLastName: formData.clientLastName,
+          applicationNumber: formData.applicationNumber,
+          annualPremium: formData.annualPremium,
+          note: formData.note,
+        },
+      }).unwrap();
+
+      message.success("Deal updated successfully");
+      onSave(formData); // ✅ Send updated data to parent
+      onCancel();
+    } catch (error: any) {
+      message.error(error?.data?.message || "Failed to update deal");
+    }
+  };
 
   return (
     <Modal
-      title={null}
+      title="Edit Deal"
       open={visible}
       onCancel={onCancel}
       footer={null}
-      width={450}
+      width={500}
       centered
       destroyOnClose
       className="edit-deal-request-modal"
     >
       <div className="p-6">
-        <form className="grid grid-cols-1 gap-y-6">
-          {/* Company */}
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-600 mb-1">
-              Company
-            </label>
-            <Input
-              id="company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              className="custom-input-underline"
-              bordered={false}
-            />
-          </div>
-
-          {/* Product */}
-          <div>
-            <label htmlFor="product" className="block text-sm font-medium text-gray-600 mb-1">
-              Product
-            </label>
-            <Input
-              id="product"
-              name="product"
-              value={formData.product}
-              onChange={handleChange}
-              className="custom-input-underline"
-              bordered={false}
-            />
-          </div>
-
-          {/* Annual Premium and Chargeback */}
-          <div className="grid grid-cols-2 gap-x-8">
-            <div>
-              <label htmlFor="annualPremium" className="block text-sm font-medium text-gray-600 mb-1">
-                Annum Premium
-              </label>
-              <Input
-                id="annualPremium"
-                name="annualPremium"
-                value={formData.annualPremium}
-                onChange={handleChange}
-                className="custom-input-underline"
-                bordered={false}
-              />
-            </div>
-            <div>
-              <label htmlFor="chargeback" className="block text-sm font-medium text-red-600 mb-1">
-                Chargeback
-              </label>
-              <Input
-                id="chargeback"
-                name="chargeback"
-                value={formData.chargeback}
-                onChange={handleChange}
-                className="custom-input-underline text-red-600"
-                bordered={false}
-              />
-            </div>
-          </div>
+        <form className="grid grid-cols-1 gap-y-4">
+          <Input
+            name="annualPremium"
+            placeholder="Annual Premium"
+            value={formData.annualPremium}
+            onChange={handleChange}
+          />
+          <Input name="note" placeholder="Note" value={formData.note} onChange={handleChange} />
 
           {/* Agent Profile */}
           <div className="mt-4 flex items-center space-x-3">
-            <Avatar
-              size={48}
-              src={formData.agentProfile?.avatar || "/placeholder.svg?height=48&width=48"}
-            />
+            <Avatar size={48} src={formData.agentProfile?.avatar || "/placeholder.svg"} />
             <div>
               <div className="font-semibold text-gray-800">{formData.agentProfile?.name}</div>
               <div className="flex items-center text-sm text-gray-600">
@@ -155,55 +134,28 @@ export default function EditDealRequestModal({
             </div>
           </div>
 
-          {/* Save Button */}
           <div className="flex justify-center mt-6">
             <Button
               type="primary"
               onClick={handleSubmit}
+              loading={isLoading}
               style={{
-              backgroundColor: "#000",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              padding: "4px 10px",
-              height: "auto",
-              fontSize: "18px",
-              fontWeight: 600,
-              width: "100%",
+                backgroundColor: "#000",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                padding: "4px 10px",
+                height: "auto",
+                fontSize: "18px",
+                fontWeight: 600,
+                width: "100%",
               }}
-              className="custom-save-btn"
             >
               Save
             </Button>
           </div>
         </form>
       </div>
-      <style>{`
-        .edit-deal-request-modal .ant-modal-content {
-          padding: 0;
-          border-radius: 8px;
-          overflow: hidden;
-        }
-        .edit-deal-request-modal .ant-modal-close {
-          top: 16px;
-          right: 16px;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless {
-          border-bottom: 1px solid #d9d9d9;
-          padding-left: 0;
-          padding-right: 0;
-          box-shadow: none !important;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless:hover {
-          border-bottom-color: #a0a0a0;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless:focus {
-          border-bottom-color: #000;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless.text-red-600 {
-          color: #ef4444 !important;
-        }
-      `}</style>
     </Modal>
-  )
+  );
 }
