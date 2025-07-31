@@ -1,30 +1,29 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { Modal, Input, Button, Avatar } from "antd"
-import { StarFilled } from "@ant-design/icons"
+import { useState, useEffect } from "react";
+import { Modal, Input, Button, Avatar, message, InputNumber } from "antd";
+import { StarFilled } from "@ant-design/icons";
+import { useUpdateDealMutation } from "../../redux/features/agent/agentApi";
+import { toast } from "sonner";
 
 interface AgentProfile {
-  name: string
-  avatar: string
-  rank: string
-  rating: number
+  name: string;
+  avatar: string;
+  rank: string;
+  rating: number;
 }
 
 interface FormData {
-  company: string
-  product: string
-  annualPremium: string
-  chargeback: string
-  agentProfile: AgentProfile
+  annualPremium: number;
+  note: string;
+  agentProfile: AgentProfile;
 }
 
 interface EditDealRequestModalProps {
-  visible: boolean
-  onCancel: () => void
-  initialData?: FormData
-  onSave: (data: FormData) => void
+  visible: boolean;
+  onCancel: () => void;
+  initialData?: Partial<FormData> & { id?: string };
+  onSave: (updatedData: Partial<FormData>) => void;
 }
 
 export default function EditDealRequestModal({
@@ -34,176 +33,172 @@ export default function EditDealRequestModal({
   onSave,
 }: EditDealRequestModalProps) {
   const [formData, setFormData] = useState<FormData>({
-    company: "",
-    product: "",
-    annualPremium: "",
-    chargeback: "",
+    annualPremium: 0,
+    note: "",
     agentProfile: {
       name: "",
       avatar: "",
       rank: "",
       rating: 0,
     },
-  })
+  });
+
+  const [updateDeal, { isLoading }] = useUpdateDealMutation();
 
   useEffect(() => {
+    console.log("🔎 Initial Data:", initialData);
     if (initialData) {
-      setFormData(initialData)
+      setFormData((prev) => ({
+        ...prev,
+        annualPremium:
+          typeof initialData.annualPremium === "number"
+            ? initialData.annualPremium
+            : prev.annualPremium,
+        note: initialData.note ?? prev.note,
+        agentProfile: initialData.agentProfile || prev.agentProfile,
+      }));
     }
-  }, [initialData])
+  }, [initialData]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleSubmit = async () => {
+    try {
+      if (!formData.annualPremium) {
+        message.error("Annual Premium is required");
+        return;
+      }
 
-  const handleSubmit = () => {
-    onSave(formData)
-    onCancel()
-  }
+      await updateDeal({
+        id: initialData?.id,
+        body: {
+          annualPremium: Number(formData.annualPremium),
+          note: formData.note,
+        },
+      }).unwrap();
+
+      toast.success("Deal updated successfully");
+      onSave({
+        annualPremium: Number(formData.annualPremium),
+        note: formData.note,
+      });
+      onCancel();
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update deal");
+    }
+  };
 
   return (
     <Modal
-      title={null}
+      title="Edit Deal"
       open={visible}
       onCancel={onCancel}
       footer={null}
-      width={450}
+      width={500}
       centered
       destroyOnClose
       className="edit-deal-request-modal"
     >
       <div className="p-6">
         <form className="grid grid-cols-1 gap-y-6">
-          {/* Company */}
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-600 mb-1">
-              Company
-            </label>
-            <Input
-              id="company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              className="custom-input-underline"
-              bordered={false}
-            />
-          </div>
+          {/* Annual Premium Label */}
+          <label
+            htmlFor="annualPremium"
+            className="text-gray-700 font-semibold text-base"
+          >
+            Annual Premium
+          </label>
+          {/* Annual Premium Input */}
+         <InputNumber
+  id="annualPremium"
+  name="annualPremium"
+  placeholder="Enter Annual Premium"
+  value={formData.annualPremium}
+  onChange={(value) =>
+    setFormData((prev) => ({
+      ...prev,
+      annualPremium: value || 0,
+    }))
+  }
+  min={0}
+  style={{
+    width: '100%',
+    borderRadius: '6px',
+    border: '1px solid #D1D5DB',
+    padding: '6px 6px',
+    fontSize: '1.25rem',
+    lineHeight: '1.75rem',
+    outline: 'none',
+    boxSizing: 'border-box',
+    transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
+  }}
+  onFocus={(e) => {
+    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.5)';
+    e.currentTarget.style.borderColor = '#3B82F6';
+  }}
+  onBlur={(e) => {
+    e.currentTarget.style.boxShadow = 'none';
+    e.currentTarget.style.borderColor = '#D1D5DB';
+  }}
+/>
 
-          {/* Product */}
-          <div>
-            <label htmlFor="product" className="block text-sm font-medium text-gray-600 mb-1">
-              Product
-            </label>
-            <Input
-              id="product"
-              name="product"
-              value={formData.product}
-              onChange={handleChange}
-              className="custom-input-underline"
-              bordered={false}
-            />
-          </div>
 
-          {/* Annual Premium and Chargeback */}
-          <div className="grid grid-cols-2 gap-x-8">
-            <div>
-              <label htmlFor="annualPremium" className="block text-sm font-medium text-gray-600 mb-1">
-                Annum Premium
-              </label>
-              <Input
-                id="annualPremium"
-                name="annualPremium"
-                value={formData.annualPremium}
-                onChange={handleChange}
-                className="custom-input-underline"
-                bordered={false}
-              />
-            </div>
-            <div>
-              <label htmlFor="chargeback" className="block text-sm font-medium text-red-600 mb-1">
-                Chargeback
-              </label>
-              <Input
-                id="chargeback"
-                name="chargeback"
-                value={formData.chargeback}
-                onChange={handleChange}
-                className="custom-input-underline text-red-600"
-                bordered={false}
-              />
-            </div>
-          </div>
+          {/* Note Label */}
+          <label htmlFor="note" className="text-gray-700 font-semibold text-base">
+            Note
+          </label>
+          {/* Note Input */}
+          <Input
+            id="note"
+            name="note"
+            placeholder="Enter note"
+            value={formData.note}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, note: e.target.value }))
+            }
+            className="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-          {/* Agent Profile */}
-          <div className="mt-4 flex items-center space-x-3">
+          {/* Agent Profile Display */}
+          <div className="mt-6 flex items-center space-x-4 border-t pt-4">
             <Avatar
-              size={48}
-              src={formData.agentProfile?.avatar || "/placeholder.svg?height=48&width=48"}
+              size={56}
+              src={formData.agentProfile?.avatar || "/placeholder.svg"}
+              alt={formData.agentProfile?.name || "Agent Avatar"}
             />
             <div>
-              <div className="font-semibold text-gray-800">{formData.agentProfile?.name}</div>
-              <div className="flex items-center text-sm text-gray-600">
+              <div className="font-semibold text-gray-800 text-lg">
+                {formData.agentProfile?.name}
+              </div>
+              <div className="flex items-center text-sm text-gray-600 mt-1">
                 {[...Array(formData.agentProfile?.rating || 0)].map((_, i) => (
-                  <StarFilled key={i} className="text-yellow-400 text-xs" />
+                  <StarFilled
+                    key={`filled-${i}`}
+                    className="text-yellow-400 text-sm"
+                  />
                 ))}
                 {[...Array(5 - (formData.agentProfile?.rating || 0))].map((_, i) => (
-                  <StarFilled key={i} className="text-gray-300 text-xs" />
+                  <StarFilled
+                    key={`empty-${i}`}
+                    className="text-gray-300 text-sm"
+                  />
                 ))}
-                <span className="ml-1">({formData.agentProfile?.rank})</span>
+                <span className="ml-2 text-gray-500">({formData.agentProfile?.rank})</span>
               </div>
             </div>
           </div>
 
           {/* Save Button */}
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-8">
             <Button
               type="primary"
               onClick={handleSubmit}
-              style={{
-              backgroundColor: "#000",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              padding: "4px 10px",
-              height: "auto",
-              fontSize: "18px",
-              fontWeight: 600,
-              width: "100%",
-              }}
-              className="custom-save-btn"
+              loading={isLoading}
+              className="w-full bg-black text-white text-lg font-semibold rounded-md py-3 hover:bg-gray-900"
             >
               Save
             </Button>
           </div>
         </form>
       </div>
-      <style>{`
-        .edit-deal-request-modal .ant-modal-content {
-          padding: 0;
-          border-radius: 8px;
-          overflow: hidden;
-        }
-        .edit-deal-request-modal .ant-modal-close {
-          top: 16px;
-          right: 16px;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless {
-          border-bottom: 1px solid #d9d9d9;
-          padding-left: 0;
-          padding-right: 0;
-          box-shadow: none !important;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless:hover {
-          border-bottom-color: #a0a0a0;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless:focus {
-          border-bottom-color: #000;
-        }
-        .edit-deal-request-modal .custom-input-underline.ant-input-borderless.text-red-600 {
-          color: #ef4444 !important;
-        }
-      `}</style>
     </Modal>
-  )
+  );
 }

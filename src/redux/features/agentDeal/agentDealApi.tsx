@@ -5,7 +5,7 @@ const agentDealApi = baseApi.injectEndpoints({
   
    
 
-    // Get All
+    // Get all agest's his own deals
     getReport: builder.query({
       query: ({searchTerm, page,limit}) => ({
         url: "/deals/get-my-deals",

@@ -38,8 +38,12 @@ import VerificationCode from "../components/pages/auth/VerificationCode";
 import SetNewPassword from "../components/pages/auth/SetNewPassword";
 import AddLevelForm from "../components/level/addLevel";
 import CompanyListPage from "../components/dealList/CompanyList";
+<<<<<<< HEAD
 import MyTeams from "../components/agentDashboard/myTeams/MyTeams";
 import TeamReport from "../components/agentDashboard/teamReport/TeamReport";
+=======
+import AgentDetailsPage from "../components/agent/AgentDeatils";
+>>>>>>> de56155365ecf32b47cbb50c40c914f28e99bf61
 
 
 
@@ -85,7 +89,7 @@ const RouterProvider: React.FC = () => {
 
               {/* <Route path="individual/:id" element={<UnderConstruction name="this" />} /> */}
               <Route path="agent" element={<AgentListPage />} />
-              {/* <Route path="agent/:id" element={<UnderConstruction name='this' />} /> */}
+              <Route path="agent/:id" element={<AgentDetailsPage />} />
 
               <Route path="add-deal" element={<AddDealPage />} />
               <Route path="company-list" element={<CompanyListPage />} />

@@ -111,7 +111,7 @@ export default function EditDealListModal({
             <label className="block text-sm font-medium text-gray-600 mb-1">Company</label>
             <Input value={formData.company} bordered={false} disabled />
           </div>
-
+{/* 
           <div className="grid grid-cols-2 gap-x-8">
             <div>
               <label className="block text-sm font-medium text-green-600 mb-1">Commissions %</label>
@@ -121,7 +121,7 @@ export default function EditDealListModal({
               <label className="block text-sm font-medium text-red-600 mb-1">Chargeback</label>
               <Input value={formData.chargeback} bordered={false} disabled />
             </div>
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Application Number</label>
