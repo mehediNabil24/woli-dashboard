@@ -23,11 +23,11 @@ export default function EditDealModal({
     annualPremium: "",
     note: "",
   });
-  const [company, setCompany] = useState("")
-  const [product, setProduct] = useState("")
+    const [company, setCompany] = useState("")
+    const [product, setProduct] = useState("")
 
   const [updateDeal, { isLoading }] = useUpdateDealsMutation();
-  const { data } = useGetCompanyQuery({ page: 1, limit: 10 })
+const { data } = useGetCompanyQuery({ page: 1, limit: 10 })
   const companies = data?.data || [];
   const { data: productsData } = useGetProductQueryQuery(company)
 
@@ -54,7 +54,7 @@ export default function EditDealModal({
   };
 
   const handleSubmit = async (e?: any) => {
-    if (e) e.preventDefault();
+    if (e) e.preventDefault(); 
 
     if (!initialData?.key) {
       toast.error("No deal selected for update");
@@ -66,7 +66,7 @@ export default function EditDealModal({
         id: initialData.key,
         data: formData,
       }).unwrap();
-      console.log(res, "res");
+console.log(res, "res");
       if (res?.success) {
         toast.success(res?.message || "Deal updated successfully");
         onCancel(); // modal close
@@ -102,14 +102,15 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
-          <Input
+          <Select
             value={formData.state}
-            onChange={(e) =>
-              handleChange("state", e.target.value)
-            }
-            placeholder="State"
+            onChange={(val) => handleChange("state", val)}
+            className="w-full"
             size="large"
-          />
+          >
+            <Select.Option value="California">California</Select.Option>
+            <Select.Option value="New York">New York</Select.Option>
+          </Select>
         </div>
 
         {/* Company */}
@@ -117,21 +118,21 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             Select Company*
           </label>
-
-          <Select
-            id="company"
-            placeholder="Select Company"
-            className="w-full custom-select"
-            size="large"
-            onChange={(id) => setCompany(value.id)}
-            value={company ?? undefined}
-          >
-            {companies.map((c: any) => (
-              <Option key={c.id} value={c.id}>
-                {c.companyName}
-              </Option>
-            ))}
-          </Select>
+          
+              <Select
+                        id="company"
+                        placeholder="Select Company"
+                        className="w-full custom-select"
+                        size="large"
+                        onChange={(id) => setCompany(id)}
+                        value={formData.company ?? undefined}
+                      >
+                        {companies.map((c: any) => (
+                          <Option key={c.id} value={c.id}>
+                            {c.companyName}
+                          </Option>
+                        ))}
+                      </Select>
         </div>
 
         {/* Product */}
@@ -140,20 +141,13 @@ export default function EditDealModal({
             Product*
           </label>
           <Select
-            id="product"
-            placeholder="Select Product"
+            value={formData.product}
+            onChange={(val) => handleChange("product", val)}
+            className="w-full"
             size="large"
-            className="custom-select w-full" // Full width
-            onChange={(id) => setProduct(id)}
-            value={product}
-            style={{ width: "100%" }} // Backup full width style
-
           >
-            {productsData?.data?.map((p: any) => (
-              <Option key={p.id} value={p.key}>
-                {p.productName}
-              </Option>
-            ))}
+            <Select.Option value="Omaha">Omaha</Select.Option>
+            <Select.Option value="Product B">Product B</Select.Option>
           </Select>
         </div>
 

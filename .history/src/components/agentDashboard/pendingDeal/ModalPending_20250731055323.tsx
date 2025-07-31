@@ -3,10 +3,11 @@
 import { Modal, Input, Select, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useGetProductQueryQuery, useUpdateDealsMutation } from "../../../redux/features/deals/dealsApi";
-import { toast } from "sonner";
 import { useGetCompanyQuery } from "../../../redux/features/product/productApi";
+import { toast } from "sonner";
 
-const { TextArea } = Input;
+const { TextArea, Option } = Input;
+const { Option: SelectOption } = Select;
 
 export default function EditDealModal({
   visible,
@@ -15,32 +16,36 @@ export default function EditDealModal({
 }: any) {
   const [formData, setFormData] = useState({
     state: "",
-    company: "",
-    product: "",
+    companyId: "",
+    productId: "",
     clientFirstName: "",
     clientLastName: "",
     applicationNumber: "",
     annualPremium: "",
     note: "",
   });
-  const [company, setCompany] = useState("")
-  const [product, setProduct] = useState("")
 
   const [updateDeal, { isLoading }] = useUpdateDealsMutation();
-  const { data } = useGetCompanyQuery({ page: 1, limit: 10 })
-  const companies = data?.data || [];
-  const { data: productsData } = useGetProductQueryQuery(company)
 
+  // Fetch company list
+  const { data: companyData } = useGetCompanyQuery({ page: 1, limit: 50 });
+  const companies = companyData?.data || [];
+
+  // Fetch product list for selected company
+  const { data: productsData } = useGetProductQueryQuery(formData.companyId);
+  const products = productsData?.data || [];
+
+  // Load initial data
   useEffect(() => {
     if (initialData) {
       setFormData({
         state: initialData.state || "",
-        company: initialData.company || "",
-        product: initialData.product || "",
+        companyId: initialData.companyId || "",
+        productId: initialData.productId || "",
         clientFirstName: initialData.clientFirstName || "",
         clientLastName: initialData.clientLastName || "",
         applicationNumber: initialData.applicationNo || "",
-        annualPremium: initialData.annualPremi || "",
+        annualPremium: initialData.annualPremium ? String(initialData.annualPremium) : "",
         note: initialData.note || "",
       });
     }
@@ -64,12 +69,21 @@ export default function EditDealModal({
     try {
       const res = await updateDeal({
         id: initialData.key,
-        data: formData,
+        data: {
+          state: formData.state,
+          company: { connect: { id: formData.companyId } }, // ✅ Prisma relation
+          product: { connect: { id: formData.productId } }, // ✅ Prisma relation
+          clientFirstName: formData.clientFirstName,
+          clientLastName: formData.clientLastName,
+          applicationNumber: formData.applicationNumber,
+          annualPremium: parseFloat(formData.annualPremium || "0"), // ✅ Convert to Float
+          note: formData.note,
+        },
       }).unwrap();
-      console.log(res, "res");
+
       if (res?.success) {
         toast.success(res?.message || "Deal updated successfully");
-        onCancel(); // modal close
+        onCancel(); // Close modal
       } else {
         toast.error(res?.message || "Update failed");
       }
@@ -102,14 +116,15 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
-          <Input
+          <Select
             value={formData.state}
-            onChange={(e) =>
-              handleChange("state", e.target.value)
-            }
-            placeholder="State"
+            onChange={(val) => handleChange("state", val)}
+            className="w-full"
             size="large"
-          />
+          >
+            <SelectOption value="California">California</SelectOption>
+            <SelectOption value="New York">New York</SelectOption>
+          </Select>
         </div>
 
         {/* Company */}
@@ -117,19 +132,17 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             Select Company*
           </label>
-
           <Select
-            id="company"
             placeholder="Select Company"
-            className="w-full custom-select"
+            className="w-full"
             size="large"
-            onChange={(id) => setCompany(value.id)}
-            value={company ?? undefined}
+            onChange={(id) => handleChange("companyId", id)}
+            value={formData.companyId || undefined}
           >
             {companies.map((c: any) => (
-              <Option key={c.id} value={c.id}>
+              <SelectOption key={c.id} value={c.id}>
                 {c.companyName}
-              </Option>
+              </SelectOption>
             ))}
           </Select>
         </div>
@@ -140,19 +153,16 @@ export default function EditDealModal({
             Product*
           </label>
           <Select
-            id="product"
             placeholder="Select Product"
             size="large"
-            className="custom-select w-full" // Full width
-            onChange={(id) => setProduct(id)}
-            value={product}
-            style={{ width: "100%" }} // Backup full width style
-
+            className="w-full"
+            onChange={(id) => handleChange("productId", id)}
+            value={formData.productId || undefined}
           >
-            {productsData?.data?.map((p: any) => (
-              <Option key={p.id} value={p.key}>
+            {products.map((p: any) => (
+              <SelectOption key={p.id} value={p.id}>
                 {p.productName}
-              </Option>
+              </SelectOption>
             ))}
           </Select>
         </div>
@@ -165,17 +175,13 @@ export default function EditDealModal({
           <div className="grid grid-cols-2 gap-4">
             <Input
               value={formData.clientFirstName}
-              onChange={(e) =>
-                handleChange("clientFirstName", e.target.value)
-              }
+              onChange={(e) => handleChange("clientFirstName", e.target.value)}
               placeholder="First Name"
               size="large"
             />
             <Input
               value={formData.clientLastName}
-              onChange={(e) =>
-                handleChange("clientLastName", e.target.value)
-              }
+              onChange={(e) => handleChange("clientLastName", e.target.value)}
               placeholder="Last Name"
               size="large"
             />
@@ -189,9 +195,7 @@ export default function EditDealModal({
           </label>
           <Input
             value={formData.applicationNumber}
-            onChange={(e) =>
-              handleChange("applicationNumber", e.target.value)
-            }
+            onChange={(e) => handleChange("applicationNumber", e.target.value)}
             size="large"
           />
         </div>
@@ -202,10 +206,9 @@ export default function EditDealModal({
             Annual Premium*
           </label>
           <Input
+            type="number"
             value={formData.annualPremium}
-            onChange={(e) =>
-              handleChange("annualPremium", e.target.value)
-            }
+            onChange={(e) => handleChange("annualPremium", e.target.value)}
             size="large"
           />
         </div>

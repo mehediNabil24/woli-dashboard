@@ -102,14 +102,15 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
-          <Input
+          <Select
             value={formData.state}
-            onChange={(e) =>
-              handleChange("state", e.target.value)
-            }
-            placeholder="State"
+            onChange={(val) => handleChange("state", val)}
+            className="w-full"
             size="large"
-          />
+          >
+            <Select.Option value="California">California</Select.Option>
+            <Select.Option value="New York">New York</Select.Option>
+          </Select>
         </div>
 
         {/* Company */}
@@ -123,8 +124,8 @@ export default function EditDealModal({
             placeholder="Select Company"
             className="w-full custom-select"
             size="large"
-            onChange={(id) => setCompany(value.id)}
-            value={company ?? undefined}
+            onChange={(id) => setCompany(id)}
+            value={formData.company ?? undefined}
           >
             {companies.map((c: any) => (
               <Option key={c.id} value={c.id}>
@@ -145,12 +146,12 @@ export default function EditDealModal({
             size="large"
             className="custom-select w-full" // Full width
             onChange={(id) => setProduct(id)}
-            value={product}
+            value={f || undefined}
             style={{ width: "100%" }} // Backup full width style
 
           >
             {productsData?.data?.map((p: any) => (
-              <Option key={p.id} value={p.key}>
+              <Option key={p.id} value={p.id}>
                 {p.productName}
               </Option>
             ))}

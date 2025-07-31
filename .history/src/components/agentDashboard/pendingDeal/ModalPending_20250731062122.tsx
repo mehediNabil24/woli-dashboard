@@ -102,12 +102,15 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
+
+
+
           <Input
             value={formData.state}
             onChange={(e) =>
-              handleChange("state", e.target.value)
+              handleChange("clientFirstName", e.target.value)
             }
-            placeholder="State"
+            placeholder="First Name"
             size="large"
           />
         </div>

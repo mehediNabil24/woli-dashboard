@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useGetCompanyQuery } from "../../../redux/features/product/productApi";
 
 const { TextArea } = Input;
+const { Option } = Select;
 
 export default function EditDealModal({
   visible,
@@ -15,28 +16,29 @@ export default function EditDealModal({
 }: any) {
   const [formData, setFormData] = useState({
     state: "",
-    company: "",
-    product: "",
+    companyId: "",
+    productId: "",
     clientFirstName: "",
     clientLastName: "",
     applicationNumber: "",
     annualPremium: "",
     note: "",
   });
-  const [company, setCompany] = useState("")
-  const [product, setProduct] = useState("")
 
   const [updateDeal, { isLoading }] = useUpdateDealsMutation();
-  const { data } = useGetCompanyQuery({ page: 1, limit: 10 })
+  const { data } = useGetCompanyQuery({ page: 1, limit: 10 });
   const companies = data?.data || [];
-  const { data: productsData } = useGetProductQueryQuery(company)
 
+  const { data: productsData } = useGetProductQueryQuery(formData.companyId);
+  const products = productsData?.data || [];
+
+  // Initial Data load
   useEffect(() => {
     if (initialData) {
       setFormData({
         state: initialData.state || "",
-        company: initialData.company || "",
-        product: initialData.product || "",
+        companyId: initialData.companyId || "", // ✅ use ID not name
+        productId: initialData.productId || "",
         clientFirstName: initialData.clientFirstName || "",
         clientLastName: initialData.clientLastName || "",
         applicationNumber: initialData.applicationNo || "",
@@ -64,12 +66,21 @@ export default function EditDealModal({
     try {
       const res = await updateDeal({
         id: initialData.key,
-        data: formData,
+        data: {
+          state: formData.state,
+          company: { connect: { id: formData.companyId } }, // ✅ relation connect
+          product: { connect: { id: formData.productId } }, // ✅ relation connect
+          clientFirstName: formData.clientFirstName,
+          clientLastName: formData.clientLastName,
+          applicationNumber: formData.applicationNumber,
+          annualPremium: formData.annualPremium,
+          note: formData.note,
+        },
       }).unwrap();
-      console.log(res, "res");
+
       if (res?.success) {
         toast.success(res?.message || "Deal updated successfully");
-        onCancel(); // modal close
+        onCancel();
       } else {
         toast.error(res?.message || "Update failed");
       }
@@ -91,7 +102,6 @@ export default function EditDealModal({
       width={700}
       centered
       destroyOnClose
-      className="edit-deal-modal"
     >
       <form
         onSubmit={handleSubmit}
@@ -102,14 +112,15 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
-          <Input
+          <Select
             value={formData.state}
-            onChange={(e) =>
-              handleChange("state", e.target.value)
-            }
-            placeholder="State"
+            onChange={(val) => handleChange("state", val)}
+            className="w-full"
             size="large"
-          />
+          >
+            <Option value="California">California</Option>
+            <Option value="New York">New York</Option>
+          </Select>
         </div>
 
         {/* Company */}
@@ -117,14 +128,12 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             Select Company*
           </label>
-
           <Select
-            id="company"
             placeholder="Select Company"
-            className="w-full custom-select"
+            className="w-full"
             size="large"
-            onChange={(id) => setCompany(value.id)}
-            value={company ?? undefined}
+            onChange={(id) => handleChange("companyId", id)}
+            value={formData.companyId || undefined}
           >
             {companies.map((c: any) => (
               <Option key={c.id} value={c.id}>
@@ -140,17 +149,15 @@ export default function EditDealModal({
             Product*
           </label>
           <Select
-            id="product"
             placeholder="Select Product"
             size="large"
-            className="custom-select w-full" // Full width
-            onChange={(id) => setProduct(id)}
-            value={product}
-            style={{ width: "100%" }} // Backup full width style
-
+            className="w-full"
+            onChange={(id) => handleChange("productId", id)}
+            value={formData.productId || undefined}
+            disabled={!formData.companyId} // Disable if company not selected
           >
-            {productsData?.data?.map((p: any) => (
-              <Option key={p.id} value={p.key}>
+            {products.map((p: any) => (
+              <Option key={p.id} value={p.id}>
                 {p.productName}
               </Option>
             ))}

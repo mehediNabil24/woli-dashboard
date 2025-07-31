@@ -31,52 +31,62 @@ export default function EditDealModal({
   const companies = data?.data || [];
   const { data: productsData } = useGetProductQueryQuery(company)
 
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        state: initialData.state || "",
-        company: initialData.company || "",
-        product: initialData.product || "",
-        clientFirstName: initialData.clientFirstName || "",
-        clientLastName: initialData.clientLastName || "",
-        applicationNumber: initialData.applicationNo || "",
-        annualPremium: initialData.annualPremi || "",
-        note: initialData.note || "",
-      });
+useEffect(() => {
+  if (initialData) {
+    setFormData({
+      state: initialData.state || "",
+      companyId: initialData.company?.id || "", // backend থেকে relation এর id
+      productId: initialData.product?.id || "",
+      clientFirstName: initialData.clientFirstName || "",
+      clientLastName: initialData.clientLastName || "",
+      applicationNumber: initialData.applicationNo || "",
+      annualPremium: initialData.annualPremium ? String(initialData.annualPremium) : "",
+      note: initialData.note || "",
+    });
+  }
+}, [initialData]);
+
+const handleChange = (field: string, value: string) => {
+  setFormData((prev) => ({
+    ...prev,
+    [field]: value,
+  }));
+};
+
+const handleSubmit = async (e?: any) => {
+  if (e) e.preventDefault();
+
+  if (!initialData?.key) {
+    toast.error("No deal selected for update");
+    return;
+  }
+
+  try {
+    const res = await updateDeal({
+      id: initialData.key,
+      data: {
+        state: formData.state,
+        company: { connect: { id: formData.companyId } },
+        product: { connect: { id: formData.productId } },
+        clientFirstName: formData.clientFirstName,
+        clientLastName: formData.clientLastName,
+        applicationNumber: formData.applicationNumber,
+        annualPremium: parseFloat(formData.annualPremium || "0"),
+        note: formData.note,
+      },
+    }).unwrap();
+
+    if (res?.success) {
+      toast.success(res?.message || "Deal updated successfully");
+      onCancel(); // modal close
+    } else {
+      toast.error(res?.message || "Update failed");
     }
-  }, [initialData]);
+  } catch (error: any) {
+    toast.error(error?.data?.message || "Something went wrong");
+  }
+};
 
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleSubmit = async (e?: any) => {
-    if (e) e.preventDefault();
-
-    if (!initialData?.key) {
-      toast.error("No deal selected for update");
-      return;
-    }
-
-    try {
-      const res = await updateDeal({
-        id: initialData.key,
-        data: formData,
-      }).unwrap();
-      console.log(res, "res");
-      if (res?.success) {
-        toast.success(res?.message || "Deal updated successfully");
-        onCancel(); // modal close
-      } else {
-        toast.error(res?.message || "Update failed");
-      }
-    } catch (error: any) {
-      toast.error(error?.data?.message || "Something went wrong");
-    }
-  };
 
   return (
     <Modal
@@ -102,60 +112,61 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
-          <Input
+          <Select
             value={formData.state}
-            onChange={(e) =>
-              handleChange("state", e.target.value)
-            }
-            placeholder="State"
+            onChange={(val) => handleChange("state", val)}
+            className="w-full"
             size="large"
-          />
+          >
+            <Select.Option value="California">California</Select.Option>
+            <Select.Option value="New York">New York</Select.Option>
+          </Select>
         </div>
 
         {/* Company */}
-        <div>
-          <label className="block text-sm font-bold text-gray-800 mb-1">
-            Select Company*
-          </label>
+       {/* Company */}
+<div>
+  <label className="block text-sm font-bold text-gray-800 mb-1">
+    Select Company*
+  </label>
 
-          <Select
-            id="company"
-            placeholder="Select Company"
-            className="w-full custom-select"
-            size="large"
-            onChange={(id) => setCompany(value.id)}
-            value={company ?? undefined}
-          >
-            {companies.map((c: any) => (
-              <Option key={c.id} value={c.id}>
-                {c.companyName}
-              </Option>
-            ))}
-          </Select>
-        </div>
+  <Select
+    placeholder="Select Company"
+    className="w-full custom-select"
+    size="large"
+    value={formData.companyId || undefined}
+    onChange={(id) => handleChange("companyId", id)}
+  >
+    {companies.map((c: any) => (
+      <Select.Option key={c.id} value={c.id}>
+        {c.companyName}
+      </Select.Option>
+    ))}
+  </Select>
+</div>
+
 
         {/* Product */}
-        <div>
-          <label className="block text-sm font-bold text-gray-800 mb-1">
-            Product*
-          </label>
-          <Select
-            id="product"
-            placeholder="Select Product"
-            size="large"
-            className="custom-select w-full" // Full width
-            onChange={(id) => setProduct(id)}
-            value={product}
-            style={{ width: "100%" }} // Backup full width style
+       
+<div>
+  <label className="block text-sm font-bold text-gray-800 mb-1">
+    Product*
+  </label>
+  <Select
+    placeholder="Select Product"
+    size="large"
+    className="custom-select w-full"
+    value={formData.productId || undefined}
+    onChange={(id) => handleChange("productId", id)}
+  >
+    {productsData?.data?.map((p: any) => (
+      <Select.Option key={p.id} value={p.id}>
+        {p.productName}
+      </Select.Option>
+    ))}
+  </Select>
+</div>
 
-          >
-            {productsData?.data?.map((p: any) => (
-              <Option key={p.id} value={p.key}>
-                {p.productName}
-              </Option>
-            ))}
-          </Select>
-        </div>
 
         {/* Client Name */}
         <div className="col-span-full">

@@ -102,14 +102,17 @@ export default function EditDealModal({
           <label className="block text-sm font-bold text-gray-800 mb-1">
             State*
           </label>
-          <Input
-            value={formData.state}
-            onChange={(e) =>
-              handleChange("state", e.target.value)
-            }
-            placeholder="State"
-            size="large"
-          />
+          
+           
+          </input>
+           <Input
+              value={formData.state}
+              onChange={(e) =>
+                handleChange("clientFirstName", e.target.value)
+              }
+              placeholder="First Name"
+              size="large"
+            />
         </div>
 
         {/* Company */}
@@ -145,7 +148,7 @@ export default function EditDealModal({
             size="large"
             className="custom-select w-full" // Full width
             onChange={(id) => setProduct(id)}
-            value={product}
+            value={product }
             style={{ width: "100%" }} // Backup full width style
 
           >
