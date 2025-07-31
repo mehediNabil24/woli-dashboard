@@ -5,6 +5,7 @@ import {   CiSettings} from 'react-icons/ci';
 
 import {  FaHandHolding, FaHandshake,  FaRankingStar,  FaUser, FaUsers, FaUsersLine,} from 'react-icons/fa6';
 import { FiUserPlus } from "react-icons/fi";
+import { TbReportSearch } from "react-icons/tb";
 
 
 import { GoPlus} from 'react-icons/go';
@@ -35,6 +36,11 @@ export const navLink = [
     name: "My Teams",
     href: "/dashboard/agent/myTeams",
     icon: FiUserPlus,
+  },
+  {
+    name: "Teams Report",
+    href: "/dashboard/agent/teamReport",
+    icon: TbReportSearch,
   },
   {
     name: "Add Deal",

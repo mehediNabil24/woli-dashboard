@@ -5,10 +5,6 @@ import { LuMenu, LuX } from "react-icons/lu";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
-
-
-
-
 export default function TopBar({
     isOpen,
     setIsOpen,
@@ -51,7 +47,7 @@ export default function TopBar({
                 {/* User Info */}
                 <div className="flex items-center gap-3 px-3 py-3">
                     {/* Avatar */}
-                  <img src={user?.imageUrl} alt="Avatar" />
+                  <img src={user?.imageUrl} alt="Avatar" className="w-10 h-10 rounded-full" />
                     <div className="flex-1">
                         <div className={`font-medium ${dark ? "text-black" : "text-gray-500"}`}>
                             {`${user?.firstName}` ||`${user?.lastName}` || "John Doe"}

@@ -1,13 +1,11 @@
 "use client"
-import { Table, Input, Pagination, Avatar, Button } from "antd"
+import { Table, Input, Pagination, Avatar } from "antd"
 import { SearchOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
-import "./myTeams.css"
-import img1 from '../../../assets/Rectangle 41.png'
-import { Plus } from "lucide-react"
-import { useState } from "react"
-import InviteTeamForm from "./Invite_Team"
 
+import img1 from '../../../assets/Rectangle 41.png'
+
+import "./team_report.css"
 interface AgentRecord {
   key: string
   agentProfile: {
@@ -16,39 +14,77 @@ interface AgentRecord {
     flag: string
   }
   levels: string
-  action: string
+  expenses: string
+  sale: string
+  annualPrime: string
+  income: string
+ 
 }
 
 const data: AgentRecord[] = Array.from({ length: 5 }, (_, index) => ({
   key: `${index + 1}`,
   agentProfile: {
     name: "Wilson Levin",
-    avatar: img1,
-    flag: img1,
+    avatar: img1, 
+    flag: img1,  
   },
-  levels: "Agent(Level 1)",
-  action: "....",
+   levels: "Agent(Level 1)",
+  expenses: "$1234",
+  annualPrime: "$1234", // Changed to match image
+  sale: "$1234",
+  income: "$1234",
 }))
 
-export default function MyTeams() {
-  const [openModal, setOpenModal] = useState(false)
+export default function TeamReport() {
 
-  const columns: ColumnsType<AgentRecord> = [
+const columns: ColumnsType<AgentRecord> = [
+ 
     {
       title: "Agent Profile",
       dataIndex: "agentProfile",
       key: "agentProfile",
       className: "text-gray-700 font-medium",
-      render: (profile) => (
+      render: (profile: { name: string; avatar: string; flag: string }) => (
         <div className="flex items-center space-x-2">
           <Avatar src={profile.avatar} size="large" />
+          {/* Using standard <img> tag for flags */}
           <img src={profile.flag || "/placeholder.svg"} alt="Flag" width={16} height={16} />
           <span>{profile.name}</span>
         </div>
       ),
     },
-    { title: "Levels", dataIndex: "levels", key: "levels" },
-    { title: "Action", dataIndex: "action", key: "action" },
+    {
+      title: "Levels",
+      dataIndex: "levels",
+      key: "levels",
+      className: "text-gray-700 font-medium",
+    },
+    {
+      title: "Expenses",
+      dataIndex: "expenses",
+      key: "expenses",
+      className: "text-gray-700 font-medium",
+    },
+    {
+      title: "Annual Prime",
+      dataIndex: "annualPrime",
+      key: "annualPrime",
+      // Apply class for header and cell styling
+      className: "text-gray-700 font-medium",
+      
+    },
+    {
+      title: "Sales",
+      dataIndex: "sales",
+      key: "sales",
+      className: "text-gray-700 font-medium",
+    },
+    {
+      title: "Income",
+      dataIndex: "income",
+      key: "income",
+      className: "text-gray-700 font-medium",
+    },
   ]
 
   return (
@@ -62,11 +98,7 @@ export default function MyTeams() {
                        className="rounded-md !border-gray-300 lg:!w-75 focus:!border-yellow-400 focus:!ring-yellow-400 !py-3"
                         size="middle"
                     />
-                    <Button onClick={() => setOpenModal(true)} className="!text-[16px] flex items-center gap-2 bg-transparent !border-[#FECD1C] !text-black font-medium !py-6">
-                        <Plus className="h-4 w-4" />
-                        Invite Team Members
-                    </Button>
-                    <Button className="!py-6 !bg-yellow-400 hover:bg-yellow-500 text-black hover:!text-black !font-semibold">Create Team</Button>
+                   
                 </div>
                 {/* Table Section */}
                 <div className="overflow-x-auto">
@@ -106,8 +138,7 @@ export default function MyTeams() {
                 </div>
             </div>
 
-      {/* Invite Team Modal */}
-      <InviteTeamForm openModal={openModal} setOpenModal={setOpenModal} />
+      
     </div>
   )
 }

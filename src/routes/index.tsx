@@ -39,6 +39,7 @@ import SetNewPassword from "../components/pages/auth/SetNewPassword";
 import AddLevelForm from "../components/level/addLevel";
 import CompanyListPage from "../components/dealList/CompanyList";
 import MyTeams from "../components/agentDashboard/myTeams/MyTeams";
+import TeamReport from "../components/agentDashboard/teamReport/TeamReport";
 
 
 
@@ -66,6 +67,7 @@ const RouterProvider: React.FC = () => {
               
               <Route path="scoreboard" element={<ScoreBoard />} />
               <Route path="myTeams" element={<MyTeams />} />
+              <Route path="teamReport" element={<TeamReport />} />
               <Route path="addDeal" element={<AddDeal />} />
               <Route path="pendingDeal" element={<PendingDeal />} />
               
