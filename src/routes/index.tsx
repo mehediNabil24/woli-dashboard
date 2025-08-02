@@ -31,7 +31,7 @@ import AgentListPage from "../components/agent/Agent";
 import SignInPage from "../components/pages/auth/SignIn";
 import ScoreBoard from "../components/agentDashboard/scoreBoard/Scorebaord";
 import SalesPage from "../components/sales/Sales";
-import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
+// import AdminScoreBoard from "../components/adminScoreBoard/AdminScoreboard";
 import AgentRequest from "../components/pages/auth/AgentRequest";
 import ForgetPassword from "../components/pages/auth/ForgetPassword";
 import VerificationCode from "../components/pages/auth/VerificationCode";
@@ -41,6 +41,7 @@ import CompanyListPage from "../components/dealList/CompanyList";
 import MyTeams from "../components/agentDashboard/myTeams/MyTeams";
 import TeamReport from "../components/agentDashboard/teamReport/TeamReport";
 import AgentDetailsPage from "../components/agent/AgentDeatils";
+import TeamScoreBoard from "../components/agentDashboard/scoreBoard/TeamScorbaord";
 
 
 
@@ -67,6 +68,7 @@ const RouterProvider: React.FC = () => {
               
               
               <Route path="scoreboard" element={<ScoreBoard />} />
+              <Route path="team-scoreboard" element={<TeamScoreBoard />} />
               <Route path="myTeams" element={<MyTeams />} />
               <Route path="teamReport" element={<TeamReport />} />
               <Route path="addDeal" element={<AddDeal />} />
@@ -97,11 +99,11 @@ const RouterProvider: React.FC = () => {
               <Route path="add-level" element={<AddLevelForm />} />
               <Route path="level" element={<LevelPage />} />
               <Route path="closers" element={<ClosersPage />} />
-              <Route path="scoreboard" element={<AdminScoreBoard />} />
+             
+              <Route path="scoreboard" element={<ScoreBoard />} />
+              <Route path="team-scoreboard" element={<TeamScoreBoard />} />
               <Route path="sales" element={<SalesPage />} />
-              <Route path="all-blog" element={<UnderConstruction name='this' />} />
-              <Route path="blog-details" element={<UnderConstruction name='this' />} />
-              <Route path="reviews" element={<UnderConstruction name='this' />} />
+             
               <Route path="admin-profile" element={<AdminProfile />} />
               <Route path="password" element={<AdminPasswordChange />} />
               

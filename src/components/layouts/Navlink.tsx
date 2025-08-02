@@ -27,11 +27,26 @@ export const navLink = [
     href: "/dashboard/agent",
     icon: MdReport,
   },
-  {
-    name: "Scoreboard",
-    href: "/dashboard/agent/scoreboard",
+  
+   {
+     name: "Scoreboard",
+    href: "#",
     icon: MdLeaderboard,
-  },
+    subItems: [
+
+      {
+        name: "Agent Scoreboard",
+        href: "/dashboard/agent/scoreboard",
+        icon: MdLeaderboard,
+
+      },
+      {
+    name: "Team Scoreboard",
+    href: "/dashboard/agent/team-scoreboard",
+    icon: MdLeaderboard,
+      },
+]
+},
   {
     name: "My Teams",
     href: "/dashboard/agent/myTeams",
@@ -118,11 +133,25 @@ export const AdminNavLink = [
     href: "/dashboard/admin/report",
     icon: File,
   },
-    {
-    name: "Scoreboard",
-    href: "/dashboard/admin/scoreboard",
+   {
+     name: "Scoreboard",
+    href: "#",
     icon: MdLeaderboard,
-  },
+    subItems: [
+
+      {
+        name: "Agent Scoreboard",
+        href: "/dashboard/admin/scoreboard",
+        icon: MdLeaderboard,
+
+      },
+      {
+    name: "Team Scoreboard",
+    href: "/dashboard/admin/team-scoreboard",
+    icon: MdLeaderboard,
+      },
+]
+},
   {
      name: "Level",
     href: "#",

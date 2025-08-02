@@ -3,61 +3,46 @@
 import { Table,  Select, Pagination } from "antd"
 // import { SearchOutlined } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
-import { useState, useEffect } from "react"
-import { useGetAgentScoreboardQuery } from "../../../redux/features/team/teamApi"
-
+import { useState } from "react"
+import { useGetTeamScoreboardQuery } from "../../../redux/features/team/teamApi"
 
 const { Option } = Select
 
-interface AgentRecord {
+interface TeamRecord {
   key: string
   position: number
-  name: string
-  totalSales: number
+  teamName: string
+  builderName: string
+  totalAnnualPremium: number
   totalIncome: number
-  totalChargeback: number
-  netSales: number
 }
 
-export default function AgentScoreBoard() {
+export default function ScoreBoard() {
   const [page, setPage] = useState(1)
   const [limit] = useState(10)
   const [month, setMonth] = useState<number | undefined>(undefined)
   const [sortBy, setSortBy] = useState<string | undefined>(undefined)
 
-  // ✅ Fetch leaderboard data
-  const { data, isLoading } = useGetAgentScoreboardQuery({
-    sortBy: sortBy || undefined,
-    month: month || undefined,
+  // ✅ Fetch from API
+  const { data, isLoading } = useGetTeamScoreboardQuery({
+    sortBy,
+    month,
     page,
     limit,
   })
+  console.log("Team Scoreboard Data:", data)
 
-  // ✅ Debug: See what params are being sent
-  useEffect(() => {
-    console.log("Fetching Agent Board:", {
-      sortBy,
-      month,
-      page,
-      limit,
-    })
-  }, [sortBy, month, page, limit])
-
-  // ✅ Map API data safely
-  const agentData: AgentRecord[] =
+  const teamData: TeamRecord[] =
     data?.data?.data.map((item: any) => ({
-      key: item.id,
+      key: item.teamId,
       position: item.position,
-      name: item.name,
-      totalSales: item.totalSales,
+      teamName: item.teamName,
+      builderName: item.builderName,
+      totalAnnualPremium: item.totalAnnualPremium,
       totalIncome: item.totalIncome,
-      totalChargeback: item.totalChargeback,
-      netSales: item.netSales,
     })) || []
 
-  const totalItems = data?.data?.meta?.total || 0
-
-  const columns: ColumnsType<AgentRecord> = [
+  const columns: ColumnsType<TeamRecord> = [
     {
       title: "Rank",
       dataIndex: "position",
@@ -68,29 +53,18 @@ export default function AgentScoreBoard() {
         </div>
       ),
     },
-    { title: "Agent Name", dataIndex: "name", key: "name" },
+    { title: "Team Name", dataIndex: "teamName", key: "teamName" },
+    { title: "Builder Name", dataIndex: "builderName", key: "builderName" },
     {
-      title: "Total Sales",
-      dataIndex: "totalSales",
-      key: "totalSales",
+      title: "Total Annual Premium",
+      dataIndex: "totalAnnualPremium",
+      key: "totalAnnualPremium",
       render: (value: number) => `$${value.toLocaleString()}`,
     },
     {
       title: "Total Income",
       dataIndex: "totalIncome",
       key: "totalIncome",
-      render: (value: number) => `$${value.toLocaleString()}`,
-    },
-    {
-      title: "Total Chargebacks",
-      dataIndex: "totalChargeback",
-      key: "totalChargeback",
-      render: (value: number) => `$${value.toLocaleString()}`,
-    },
-    {
-      title: "Total NET",
-      dataIndex: "netSales",
-      key: "netSales",
       render: (value: number) => `$${value.toLocaleString()}`,
     },
   ]
@@ -110,10 +84,7 @@ export default function AgentScoreBoard() {
             placeholder="Select Month"
             style={{ width: 120 }}
             size="middle"
-            onChange={(val) => {
-              setMonth(val)
-              setPage(1) // reset to first page
-            }}
+            onChange={(val) => setMonth(val)}
             allowClear
           >
             {[...Array(12)].map((_, i) => (
@@ -126,15 +97,12 @@ export default function AgentScoreBoard() {
             placeholder="Sort By"
             style={{ width: 160 }}
             size="middle"
-            onChange={(val) => {
-              setSortBy(val)
-              setPage(1)
-            }}
+            onChange={(val) => setSortBy(val)}
             allowClear
           >
-            <Option value="sales">Rank by Sales</Option>
-            <Option value="chargeback">Rank by Chargeback</Option>
-            <Option value="income">Rank by Income</Option>
+            <Option value="sales">Sales</Option>
+            <Option value="chargeback">Chargeback</Option>
+            <Option value="income">Income</Option>
             
           </Select>
         </div>
@@ -143,7 +111,7 @@ export default function AgentScoreBoard() {
         <div className="overflow-x-auto">
           <Table
             columns={columns}
-            dataSource={agentData}
+            dataSource={teamData}
             loading={isLoading}
             pagination={false}
             rowClassName={(_, index) => (index % 2 === 0 ? "bg-white" : "bg-gray-50")}
@@ -153,12 +121,13 @@ export default function AgentScoreBoard() {
         {/* Pagination */}
         <div className="flex items-center justify-between p-4 border-t border-gray-200">
           <div className="text-sm text-gray-600">
-            Showing {agentData.length > 0 ? (page - 1) * limit + 1 : 0}-
-            {Math.min(page * limit, totalItems)} of {totalItems}
+            Showing {((page - 1) * limit) + 1}-
+            {Math.min(page * limit, data?.data?.meta?.total || 0)} of{" "}
+            {data?.data?.meta?.total || 0}
           </div>
           <Pagination
             current={page}
-            total={totalItems}
+            total={data?.data?.meta?.total || 0}
             pageSize={limit}
             showSizeChanger={false}
             onChange={(p) => setPage(p)}
